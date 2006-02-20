@@ -35,7 +35,7 @@ namespace UOXData.Script
 		{
 			return Conversion.ToUInt08( actualValue );
 		}
-		public sbyte ToInt8()
+		public sbyte ToInt08()
 		{
 			return Conversion.ToInt08( actualValue );
 		}
@@ -66,7 +66,6 @@ namespace UOXData.Script
 		{
 			tag			= t;
 			data		= new DataValue( d );
-//			data.Value	= d;
 		}
 		public string Tag
 		{
