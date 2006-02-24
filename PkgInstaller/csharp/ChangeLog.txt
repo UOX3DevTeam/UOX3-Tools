@@ -1,0 +1,2 @@
+24th February, 2006 - Maarc
+	Updated to include a Package class, to help abstract it more, and help with future processing of multiple packages

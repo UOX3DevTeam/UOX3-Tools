@@ -37,6 +37,7 @@ namespace PkgInstaller
 		protected string dfnPath					= "";
 		protected string currentZip					= "";
 		protected SetupInfo pkgConfig				= null;
+		protected Package mPackage					= null;
 
 		public frmPkgInstaller()
 		{
@@ -312,6 +313,7 @@ namespace PkgInstaller
 						pkgConfig.Parse( setupInfo );
 					}
 				}
+				mPackage = new Package( zipFile, pkgConfig );
 				if( setupInfo == null )
 				{
 					System.Windows.Forms.MessageBox.Show( "Zip file does not contain a setup.info!  Likely an invalid package" );
@@ -358,6 +360,23 @@ namespace PkgInstaller
 			}
 		}
 
+		private void cmdInstallPackage_Click(object sender, System.EventArgs e)
+		{
+			if( zipFile != null && iniScript != null )
+			{	// okay, we have a zip, time to do our install.  Isn't this just grand?
+				mPackage.Process();
+			}
+		}
+	}
+
+	public class Package
+	{
+		protected ICSCZL.Zip.ZipFile zipFile		= null;
+		protected SetupInfo pkgConfig				= null;
+
+		protected Hashtable	dfnFiles				= null;
+		protected Hashtable	jsFiles					= null;
+
 		private string GetPath( string fullPath )
 		{
 			int lastIdx = fullPath.LastIndexOf( "\\" );
@@ -380,10 +399,71 @@ namespace PkgInstaller
 				return fullPath.Substring( lastIdx );
 		}
 
-		private void ProcessDFNFile( ICSCZL.Zip.ZipEntry ze, System.IO.Stream s )
+		public Package( ICSCZL.Zip.ZipFile zFile, SetupInfo pkgConfg )
 		{
-			// Load our script from the stream
-			UOXData.Script.Script myFile	= new UOXData.Script.Script( s );
+			zipFile		=	zFile;
+			pkgConfig	=	pkgConfg;
+			dfnFiles	=	new Hashtable();
+			jsFiles		=	new Hashtable();
+			Parse();
+		}
+
+		protected void Parse()
+		{
+			System.Collections.IEnumerator blah	= zipFile.GetEnumerator();
+
+			while( blah.MoveNext() )
+			{
+				ICSCZL.Zip.ZipEntry theEntry = (ICSCZL.Zip.ZipEntry)blah.Current;
+
+				if( theEntry.IsFile )
+				{	// if it's a file
+					string extension = theEntry.Name.Substring( theEntry.Name.LastIndexOf( "." ) );
+					if( extension == ".dfn" )
+					{	// if it's a definition, let's do something with it
+						dfnFiles.Add( theEntry.Name, new UOXData.Script.Script( zipFile.GetInputStream( theEntry ) ) );
+					}
+					else if( extension == ".js" )
+					{	// if it's a JS, time to copy over
+						jsFiles.Add( theEntry.Name, ReadString( zipFile.GetInputStream( theEntry ), theEntry.Size ) );
+					}
+				}
+			}
+		}
+		protected byte[] ReadString( System.IO.Stream s, long mSize )
+		{
+			byte[] retVal	= new byte[mSize];
+			int offset		= 0;
+			int readSize	= Math.Min( (int)mSize, 2048 );
+			while( true )
+			{
+				int size = s.Read( retVal, offset, readSize );
+				if( size > 0 )
+					offset += size;
+				else
+					break;
+			}
+			return retVal;
+		}
+		public void Process()
+		{
+			pkgConfig.WriteConfigs();
+
+			IDictionaryEnumerator myEnumerator = dfnFiles.GetEnumerator();
+			while( myEnumerator.MoveNext() )
+			{
+				ProcessDFNFile( (UOXData.Script.Script)myEnumerator.Value, (string)myEnumerator.Key );
+			}
+
+			myEnumerator = jsFiles.GetEnumerator();
+			while( myEnumerator.MoveNext() )
+			{
+				ProcessJSFile( (byte[])myEnumerator.Value, (string)myEnumerator.Key );
+			}
+		}
+
+		private void ProcessDFNFile( UOXData.Script.Script myFile, string sName )
+		{
 			// In each section, check for any SCRIPT tags
 			// If we find any, and they're of the format [[x]], replace the x
 			// with the valid script number found in the earlier lookup
@@ -406,8 +486,8 @@ namespace PkgInstaller
 			// Create a new text file with the appropriate name
 			// and then pass the stream to myFile.Save()
 
-			string dfnPath		= pkgConfig.DFNPath + pkgConfig.GetDFNSection( ze.Name.Replace( "\\", "/" ) ) + pkgConfig.DirPath;
-			string filePath		= GetPath( ze.Name.Replace( "\\", "/" ) );
+			string dfnPath		= pkgConfig.DFNPath + pkgConfig.GetDFNSection( sName.Replace( "\\", "/" ) ) + pkgConfig.DirPath;
+			string filePath		= GetPath( sName.Replace( "\\", "/" ) );
 			string [] paths		= filePath.Split( '/' );
 			string buildingPath	= dfnPath;
 			if( !Directory.Exists( dfnPath ) )
@@ -421,17 +501,17 @@ namespace PkgInstaller
 						Directory.CreateDirectory( buildingPath );
 				}
 			}
-			System.IO.StreamWriter ioStream = File.CreateText( buildingPath + GetFile( ze.Name ) );
+			System.IO.StreamWriter ioStream = File.CreateText( buildingPath + GetFile( sName ) );
 			myFile.Save( ioStream );
 			ioStream.Flush();
 			ioStream.Close();
 		}
 
-		private void ProcessJSFile( ICSCZL.Zip.ZipEntry ze, System.IO.Stream s )
+		private void ProcessJSFile( byte[] toWrite, string sName )
 		{
 			// Essentially, this is just a straight copy, no changes need to be made
-			string dfnPath		= pkgConfig.JSPath + pkgConfig.GetDFNSection( ze.Name.Replace( "\\", "/" ) ) + pkgConfig.DirPath;
-			string filePath		= GetPath( ze.Name.Replace( "\\", "/" ) );
+			string dfnPath		= pkgConfig.JSPath + pkgConfig.GetDFNSection( sName.Replace( "\\", "/" ) ) + pkgConfig.DirPath;
+			string filePath		= GetPath( sName.Replace( "\\", "/" ) );
 			string [] paths		= filePath.Split( '/' );
 			string buildingPath	= dfnPath;
 			if( !Directory.Exists( dfnPath ) )
@@ -445,41 +525,10 @@ namespace PkgInstaller
 						Directory.CreateDirectory( buildingPath );
 				}
 			}
-			System.IO.FileStream ioStream = File.Create( buildingPath + GetFile( ze.Name ) );
-			byte[] toDisp					= new byte[2048];
-			while( true )
-			{
-				int size = s.Read( toDisp, 0, toDisp.Length );
-				if( size > 0 )
-					ioStream.Write( toDisp, 0, size );
-				else
-					break;
-			}
+			System.IO.FileStream ioStream = File.Create( buildingPath + GetFile( sName ) );
+			ioStream.Write( toWrite, 0, toWrite.Length );
 			ioStream.Flush();
 			ioStream.Close();
-		}
-
-		private void cmdInstallPackage_Click(object sender, System.EventArgs e)
-		{
-			if( zipFile != null && iniScript != null )
-			{	// okay, we have a zip, time to do our install.  Isn't this just grand?
-				pkgConfig.WriteConfigs();
-				foreach( ICSCZL.Zip.ZipEntry ze in this.listPackageFiles.Items )
-				{
-					if( ze.IsFile )
-					{	// if it's a file
-						string extension = ze.Name.Substring( ze.Name.LastIndexOf( "." ) );
-						if( extension == ".dfn" )
-						{	// if it's a definition, let's do something with it
-							ProcessDFNFile( ze, zipFile.GetInputStream( ze ) );
-						}
-						else if( extension == ".js" )
-						{	// if it's a JS, time to copy over
-							ProcessJSFile( ze, zipFile.GetInputStream( ze )  );
-						}
-					}
-				}
-			}
 		}
 	}
 
