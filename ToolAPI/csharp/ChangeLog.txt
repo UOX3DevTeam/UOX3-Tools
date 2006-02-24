@@ -1,0 +1,16 @@
+24th February, 2006 - Maarc
+	Added SpawnRegion.cs, DefinitionCollection.cs, and DefinitionTree.cs
+	Updated TownRegion parsing code so that it parsees a WorldSection and a ScriptSection separately
+	DefinitionContainer = all the definitions dealing with a particular category of DFN
+	DefinitionTree = one DefinitionContainer per DFN Cat collection
+
+	eg code for DefinitionTree
+
+		UOXData.Script.DefinitionTree dfnTree = new UOXData.Script.DefinitionTree( dfnPath );
+		UOXData.Script.ScriptSection mSect = dfnTree.FindEntry( "RACE 1", UOXData.Script.DFN_Categories.race );
+		if( mSect != null )
+			System.Windows.Forms.MessageBox.Show( "Hooray!  Race found" );
+
+
+21st February, 2006 - Maarc
+	Updated the ToolAPI so that it now reads/parses TownRegions, from either a worldfile or dfn file

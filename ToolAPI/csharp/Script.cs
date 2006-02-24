@@ -1,4 +1,5 @@
 // created on 12/02/2003 at 7:16 PM
+using System;
 using System.IO;
 using System.Collections;
 
@@ -34,6 +35,20 @@ namespace UOXData.Script
 		maps		=	23,
 		NUM_DEFS	=	24
 	};
+
+	public interface ScriptSectionLoadable
+	{
+		void Load( ScriptSection toLoad );
+	}
+
+	public abstract class HasDFNLookup
+	{
+		protected DefinitionTree dfnTree;
+		public HasDFNLookup( DefinitionTree dTree )
+		{
+			dfnTree = dTree;
+		}
+	}
 
 	public abstract class BaseScript
 	{
@@ -96,9 +111,14 @@ namespace UOXData.Script
 					if( curLine[0] == '[' )
 					{
 						int brackPos		= curLine.IndexOf( ']' );
-						string sectionName	= curLine.Remove( brackPos, curLine.Length - brackPos ).Substring( 1 );
-						ScriptSection toAdd	= new ScriptSection( sectionName, ioStream );
-						sectionCollection.Add( toAdd );
+						if( brackPos != -1 )
+						{
+							string sectionName	= curLine.Remove( brackPos, curLine.Length - brackPos ).Substring( 1 );
+							ScriptSection toAdd	= new ScriptSection( sectionName, ioStream );
+							sectionCollection.Add( toAdd );
+						}
+						else
+							System.Windows.Forms.MessageBox.Show( "Error!  Invalid section format (missing closing bracket), in " + ((System.IO.FileStream)toRead).Name + " line: " + curLine );
 					}
 				}
 			}

@@ -128,7 +128,7 @@ namespace UOXData.Region
 	/// <summary>
 	/// Summary description for TownRegion.
 	/// </summary>
-	public class TownRegion
+	public class TownRegion : Script.ScriptSectionLoadable
 	{
 		#region "Protected Data"
 		protected byte			regionNum;
@@ -254,9 +254,8 @@ namespace UOXData.Region
 			guardowner				= "the Gods themselves";
 		}
 
-		public void Parse( Script.Section toParse )
+		public void Load( Script.ScriptSection toParse )
 		{
-			int location	= -1;
 			int actgood		= -1;
 			short x1		= -1;
 			short x2		= -1;
@@ -268,9 +267,7 @@ namespace UOXData.Region
 				switch( t.Tag[0] )
 				{
 					case 'A':
-						if( UTag == "ALLYTOWN" )
-							alliedTowns.Add( t.Data.ToUInt08() );
-						else if( UTag == "ABWEATH" )
+						if( UTag == "ABWEATH" )
 							weather = t.Data.ToUInt08();
 						else if( UTag == "APPEARANCE" )
 						{
@@ -312,9 +309,7 @@ namespace UOXData.Region
 							IsDungeon = (t.Data.ToInt32() == 1);
 						break;
 					case 'E':
-						if( UTag == "ELECTIONTIME" )
-							timeToElectionClose = t.Data.ToInt32();
-						else if( UTag == "ESCORTS" ) 
+						if( UTag == "ESCORTS" ) 
 						{
 							// Load the region number in the global array of valid escortable regions
 //							if( t.Data.ToInt32() == 1 )
@@ -324,10 +319,6 @@ namespace UOXData.Region
 					case 'G':
 						if( UTag == "GUARDOWNER" )
 							guardowner = t.Data;
-						else if( UTag == "GUARD" )	// load our purchased guard
-							++numGuards;
-						else if( UTag == "GUARDSBOUGHT" ) // num guards bought
-							guardsPurchased = t.Data.ToInt16();
 						else if( UTag == "GUARDNUM" )
 							break;
 						else if( UTag == "GUARDLIST" )
@@ -339,18 +330,7 @@ namespace UOXData.Region
 						else if( UTag == "GOOD" )
 							actgood = t.Data.ToInt32();
 						break;
-					case 'H':
-						if( UTag == "HEALTH" )
-							health = t.Data.ToInt16();
-						break;
 					case 'M':
-						if( UTag == "MEMBER" )
-						{
-							location	= townMember.Count;
-							townMember.Add( new TownPerson( 0xFFFFFFFF, t.Data.ToUInt32() ) );
-						}
-						else if( UTag == "MAYOR" )
-							mayorSerial = t.Data.ToUInt32();
 						if( UTag == "MIDILIST" )
 							midiList = t.Data.ToUInt16();
 						else if( UTag == "MAGICDAMAGE" )
@@ -389,29 +369,9 @@ namespace UOXData.Region
 //								Console.Error( 2, "Invalid ore preference in region %i as %s", regionNum, oreName.c_str() );
 						}
 						break;
-					case 'P':
-						if( UTag == "PRIV" )
-						{
-							byte tempData	= t.Data.ToUInt08();
-							int multVal		= 1;
-							for( int i = 0; i < 8; i++ )
-							{
-								if( (tempData&multVal) == multVal )
-									priv[i] = true;
-								multVal *= 2;
-							}
-//							priv.Data		= t.Data.ToUInt08();
-						}
-						else if( UTag == "POLLTIME" )
-							timeToNextPoll = t.Data.ToInt32();
-						break;
 					case 'R':
 						if( UTag == "RACE" )
 							race = t.Data.ToUInt16();
-						else if( UTag == "RESOURCEAMOUNT" )
-							goldReserved = t.Data.ToInt32();
-						else if( UTag == "RESOURCECOLLECTED" )
-							resourceCollected = t.Data.ToInt32();
 						else if( UTag == "RECALL" )
 							CanRecall = (t.Data.ToInt32() == 1);
 						else if( UTag == "RANDOMVALUE" )
@@ -479,20 +439,6 @@ namespace UOXData.Region
 						else if( UTag == "SCRIPT" )
 							jsScript = t.Data.ToUInt16();
 						break;
-					case 'T':
-						if( UTag == "TAXEDID" )
-							taxedResource = t.Data.ToUInt16();
-						else if( UTag == "TAXEDAMOUNT" )
-							taxedAmount = t.Data.ToUInt16();
-						else if( UTag == "TIMET" )
-							timeSinceTaxedMembers = t.Data.ToInt32();
-						else if( UTag == "TIMEG" )
-							timeSinceGuardsPaid = t.Data.ToInt32();
-						break;
-					case 'V':
-						if( UTag == "VOTE" && location != -1 )
-							((TownPerson)townMember[location]).TargVote = t.Data.ToUInt32();
-						break;
 					case 'W':
 						if( UTag == "WORLD" )
 							worldNumber = t.Data.ToUInt08();
@@ -513,6 +459,93 @@ namespace UOXData.Region
 							y2 = t.Data.ToInt16();
 							locations.Add( new Box( x1, x2, y1, y2 ) );
 						}
+						break;
+				}
+			}
+		}
+		public void Load( Script.WorldSection toParse )
+		{
+			int location	= -1;
+			foreach( Script.TagDataPair t in toParse.TagDataPairs )
+			{
+				string UTag	= t.Tag.ToUpper();
+				switch( t.Tag[0] )
+				{
+					case 'A':
+						if( UTag == "ALLYTOWN" )
+							alliedTowns.Add( t.Data.ToUInt08() );
+						break;
+					case 'E':
+						if( UTag == "ELECTIONTIME" )
+							timeToElectionClose = t.Data.ToInt32();
+						break;
+					case 'G':
+						if( UTag == "GUARDOWNER" )
+							guardowner = t.Data;
+						else if( UTag == "GUARD" )	// load our purchased guard
+							++numGuards;
+						else if( UTag == "GUARDSBOUGHT" ) // num guards bought
+							guardsPurchased = t.Data.ToInt16();
+						break;
+					case 'H':
+						if( UTag == "HEALTH" )
+							health = t.Data.ToInt16();
+						break;
+					case 'M':
+						if( UTag == "MEMBER" )
+						{
+							location	= townMember.Count;
+							townMember.Add( new TownPerson( 0xFFFFFFFF, t.Data.ToUInt32() ) );
+						}
+						else if( UTag == "MAYOR" )
+							mayorSerial = t.Data.ToUInt32();
+						break;
+					case 'N':
+						if( UTag == "NAME" )
+							name = t.Data.Value;	// was Substring( 0, 49 )
+						else if( UTag == "NUMGUARDS" )
+							numGuards = t.Data.ToUInt16();
+						break;
+					case 'P':
+						if( UTag == "PRIV" )
+						{
+							byte tempData	= t.Data.ToUInt08();
+							int multVal		= 1;
+							for( int i = 0; i < 8; i++ )
+							{
+								if( (tempData&multVal) == multVal )
+									priv[i] = true;
+								multVal *= 2;
+							}
+						}
+						else if( UTag == "POLLTIME" )
+							timeToNextPoll = t.Data.ToInt32();
+						break;
+					case 'R':
+						if( UTag == "RACE" )
+							race = t.Data.ToUInt16();
+						else if( UTag == "RESOURCEAMOUNT" )
+							goldReserved = t.Data.ToInt32();
+						else if( UTag == "RESOURCECOLLECTED" )
+							resourceCollected = t.Data.ToInt32();
+						break;
+					case 'T':
+						if( UTag == "TAXEDID" )
+							taxedResource = t.Data.ToUInt16();
+						else if( UTag == "TAXEDAMOUNT" )
+							taxedAmount = t.Data.ToUInt16();
+						else if( UTag == "TIMET" )
+							timeSinceTaxedMembers = t.Data.ToInt32();
+						else if( UTag == "TIMEG" )
+							timeSinceGuardsPaid = t.Data.ToInt32();
+						break;
+					case 'V':
+						if( UTag == "VOTE" && location != -1 )
+							((TownPerson)townMember[location]).TargVote = t.Data.ToUInt32();
+						break;
+					case 'W':
+						if( UTag == "WORLD" )
+							worldNumber = t.Data.ToUInt08();
 						break;
 				}
 			}

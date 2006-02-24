@@ -79,6 +79,11 @@
                     AssemblyName = "System.Xml"
                     HintPath = "..\..\..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                    HintPath = "..\..\..\..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
+                />
             </References>
         </Build>
         <Files>
@@ -99,6 +104,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DefinitionCollection.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DefinitionTree.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Script.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -110,6 +125,11 @@
                 />
                 <File
                     RelPath = "skills.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SpawnRegion.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
