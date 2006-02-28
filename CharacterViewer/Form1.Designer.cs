@@ -30,6 +30,7 @@ namespace CharacterExporter
         /// </summary>
         private void InitializeComponent()
         {
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CharacterViewer));
 			this.btnBrowse = new System.Windows.Forms.Button();
 			this.btnImport = new System.Windows.Forms.Button();
 			this.btnExport = new System.Windows.Forms.Button();
@@ -230,6 +231,7 @@ namespace CharacterExporter
 			this.Controls.Add(this.btnExport);
 			this.Controls.Add(this.btnImport);
 			this.Controls.Add(this.btnBrowse);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "CharacterViewer";
 			this.Text = "UOX3 Character Viewer";
 			this.ResumeLayout(false);
