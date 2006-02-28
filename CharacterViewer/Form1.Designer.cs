@@ -46,6 +46,8 @@ namespace CharacterExporter
 			this.radioWearables = new System.Windows.Forms.RadioButton();
 			this.radioPack = new System.Windows.Forms.RadioButton();
 			this.lblKeepItems = new System.Windows.Forms.Label();
+			this.progressBar = new System.Windows.Forms.ProgressBar();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// btnBrowse
@@ -135,7 +137,7 @@ namespace CharacterExporter
 			// radioAll
 			// 
 			this.radioAll.AutoSize = true;
-			this.radioAll.Location = new System.Drawing.Point(12, 129);
+			this.radioAll.Location = new System.Drawing.Point(12, 117);
 			this.radioAll.Name = "radioAll";
 			this.radioAll.Size = new System.Drawing.Size(36, 17);
 			this.radioAll.TabIndex = 18;
@@ -147,7 +149,7 @@ namespace CharacterExporter
 			// radioNone
 			// 
 			this.radioNone.AutoSize = true;
-			this.radioNone.Location = new System.Drawing.Point(11, 151);
+			this.radioNone.Location = new System.Drawing.Point(12, 140);
 			this.radioNone.Name = "radioNone";
 			this.radioNone.Size = new System.Drawing.Size(51, 17);
 			this.radioNone.TabIndex = 19;
@@ -159,7 +161,7 @@ namespace CharacterExporter
 			// radioWearables
 			// 
 			this.radioWearables.AutoSize = true;
-			this.radioWearables.Location = new System.Drawing.Point(12, 175);
+			this.radioWearables.Location = new System.Drawing.Point(12, 163);
 			this.radioWearables.Name = "radioWearables";
 			this.radioWearables.Size = new System.Drawing.Size(76, 17);
 			this.radioWearables.TabIndex = 20;
@@ -171,7 +173,7 @@ namespace CharacterExporter
 			// radioPack
 			// 
 			this.radioPack.AutoSize = true;
-			this.radioPack.Location = new System.Drawing.Point(12, 198);
+			this.radioPack.Location = new System.Drawing.Point(12, 186);
 			this.radioPack.Name = "radioPack";
 			this.radioPack.Size = new System.Drawing.Size(78, 17);
 			this.radioPack.TabIndex = 21;
@@ -183,17 +185,37 @@ namespace CharacterExporter
 			// lblKeepItems
 			// 
 			this.lblKeepItems.AutoSize = true;
-			this.lblKeepItems.Location = new System.Drawing.Point(6, 113);
+			this.lblKeepItems.Location = new System.Drawing.Point(6, 101);
 			this.lblKeepItems.Name = "lblKeepItems";
 			this.lblKeepItems.Size = new System.Drawing.Size(65, 13);
 			this.lblKeepItems.TabIndex = 22;
 			this.lblKeepItems.Text = "Export Items";
+			// 
+			// progressBar
+			// 
+			this.progressBar.Location = new System.Drawing.Point(9, 237);
+			this.progressBar.Name = "progressBar";
+			this.progressBar.Size = new System.Drawing.Size(84, 23);
+			this.progressBar.TabIndex = 23;
+			this.progressBar.UseWaitCursor = true;
+			this.progressBar.Click += new System.EventHandler(this.progressBar_Click);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(6, 221);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(48, 13);
+			this.label1.TabIndex = 24;
+			this.label1.Text = "Progress";
 			// 
 			// CharacterViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(507, 296);
+			this.Controls.Add(this.label1);
+			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.lblKeepItems);
 			this.Controls.Add(this.radioPack);
 			this.Controls.Add(this.radioWearables);
@@ -213,10 +235,6 @@ namespace CharacterExporter
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
-			this.worldFiles		= new ArrayList();
-			this.worldObjects	= new ObjectHandler();
-
-			radioAll.Select();
         }
 
         #endregion
@@ -237,9 +255,11 @@ namespace CharacterExporter
 		private System.Windows.Forms.Label lblKeepItems;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
 		private System.Windows.Forms.OpenFileDialog fileBrowserDialog;
-		protected ArrayList worldFiles;
-		protected ObjectHandler worldObjects;
+		private System.Windows.Forms.ProgressBar progressBar;
+		protected ArrayList worldFiles			= new ArrayList();
+		protected ObjectHandler worldObjects	= new ObjectHandler();
 		private KeepItemsState keepItemState;
+		private System.Windows.Forms.Label label1;
     }
 }
 

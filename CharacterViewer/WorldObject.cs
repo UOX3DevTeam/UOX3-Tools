@@ -36,6 +36,12 @@ namespace CharacterExporter
             importItemList = new ArrayList();
         }
 
+		public void Clear()
+		{
+			charList.Clear();
+			itemList.Clear();
+		}
+
         public WorldObject FindObjectBySerial( uint toFind, bool doImport )
         {
             if( toFind == 0xFFFFFFFF )

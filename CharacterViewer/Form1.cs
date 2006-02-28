@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -27,6 +27,7 @@ namespace CharacterExporter
         private void txtDirPath_TextChanged(object sender, EventArgs e)
         {
 			folderBrowserDialog.SelectedPath = txtDirPath.Text;
+			fileBrowserDialog.InitialDirectory = txtDirPath.Text;
         }
 
         private void comboCharList_SelectedIndexChanged(object sender, EventArgs e)
@@ -117,6 +118,7 @@ namespace CharacterExporter
                 CharObject mChar = ( CharObject )worldObjects.CharList[comboCharList.SelectedIndex];
                 if( mChar != null )
                 {
+					folderBrowserDialog.Description = "Select the Location to Export your character to.";
                     if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
                     {
                         string fileName = mChar.Name + ".cef";
@@ -127,7 +129,7 @@ namespace CharacterExporter
 						if( keepItemState != KeepItemsState.KEEP_NONE )
 		                    SaveItemsInCont( mChar, fileOut );
                         fileOut.Close();
-                        MessageBox.Show( "Successfully exported " + fileName );
+                        MessageBox.Show( "Successfully exported " + fileName, "Success" );
                     }
                 }
             }
@@ -156,7 +158,7 @@ namespace CharacterExporter
                     mWorld.Save( fileOut );
                 }
                 fileOut.Close();
-                MessageBox.Show("Successfully saved as 0.0.wsc");
+                MessageBox.Show("Successfully saved as 0.0.wsc", "Success");
             }
         }
 
@@ -201,33 +203,50 @@ namespace CharacterExporter
 		}
         private void btnBrowse_Click(object sender, EventArgs e)
         {
+			folderBrowserDialog.Description = "Please Select the UOX3 Save File Directory to Load.";
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK )
             {
+				string dirPath = folderBrowserDialog.SelectedPath;
                 worldFiles.Clear();
-
-                string dirPath = folderBrowserDialog.SelectedPath;
+				worldObjects.Clear();
+				comboCharList.Items.Clear();
+				comboItemList.Items.Clear();
                 txtDirPath.Text = dirPath;
-                MessageBox.Show("Loading worldfile, this may take a moment");
-                foreach( string mFile in Directory.GetFiles( dirPath, "*.*.wsc" ) )
-                {
-                    UOXData.Script.WorldFile90 toAdd = new UOXData.Script.WorldFile90( mFile );
-					LoadWorldFile( toAdd, false );
-					worldFiles.Add(toAdd);
-                }
+				comboCharList.Update();
+				comboItemList.Update();
+				txtDirPath.Update();
 
-                foreach( ItemObject mItem in worldObjects.ItemList )
-                {
-                    WorldObject mObj = worldObjects.FindObjectBySerial( mItem.Container, false );
-                    if( mObj != null )
-                        mObj.ContainsList.Add( mItem );
-                }
-                foreach( CharObject mChar in worldObjects.CharList )
-                {
-                    comboCharList.Items.Add(mChar.Name + " (" + UOXData.Conversion.ToHexString(mChar.Serial) + ")" );
-                }
+				string[] fileList = Directory.GetFiles( dirPath, "*.*.wsc" );
+				if( fileList.Length > 0 )
+				{
+					progressBar.Minimum = 0;
+					progressBar.Value = 1;
+					foreach( string mFile in fileList )
+					{
+						UOXData.Script.WorldFile90 toAdd = new UOXData.Script.WorldFile90( mFile );
+						LoadWorldFile( toAdd, false );
+						worldFiles.Add(toAdd);
+					}
+					progressBar.Maximum = 1 + worldObjects.CharList.Count + worldObjects.ItemList.Count;
+					foreach (CharObject mChar in worldObjects.CharList)
+					{
+						comboCharList.Items.Add(mChar.Name + " (" + UOXData.Conversion.ToHexString(mChar.Serial) + ")");
+						progressBar.PerformStep();
+					}
+					foreach( ItemObject mItem in worldObjects.ItemList )
+					{
+						WorldObject mObj = worldObjects.FindObjectBySerial( mItem.Container, false );
+						if( mObj != null )
+							mObj.ContainsList.Add( mItem );
+						progressBar.PerformStep();
+					}
 
-                if( comboCharList.Items.Count > 0 )
-                    comboCharList.SelectedIndex = 0;
+					if( comboCharList.Items.Count > 0 )
+						comboCharList.SelectedIndex = 0;
+				}
+				else
+					MessageBox.Show("No worldfile found, please select a valid directory", "File Not Found" );
+
             }
         }
 
@@ -254,6 +273,11 @@ namespace CharacterExporter
 		private void radioPack_CheckedChanged(object sender, EventArgs e)
 		{
 			keepItemState = KeepItemsState.KEEP_PACKITEMS;
+		}
+
+		private void progressBar_Click(object sender, EventArgs e)
+		{
+
 		}
     }
 }
