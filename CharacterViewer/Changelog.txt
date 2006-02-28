@@ -1,0 +1,15 @@
+02/28/2006 - giwo (v0.2)
+	Added a progress bar for worldfile loading.
+	Modified the openFileDialog to default to the same directory as the openFolderDialog.
+	Cleared out all current world data before loading new world.
+	Added Caption text to message boxes.
+	Added description text to openFolderDialogs.
+	Minor updates/improvements.
+	Added UOX3 icon to the GUI Window.
+
+02/27/2006 - giwo (v0.1 - Initial Release)
+	Current Featureset:
+	Full Worldfile loading Displaying Characters & Items they hold (on them and in pack).
+	Full Worldfile saving, as one large file which UOX3 will read and later spit out as the many files we use.
+	Character Exporting to a file based on characters name.
+	Character Importing from said file into loaded world, checking for valid serial numbers.
