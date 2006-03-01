@@ -93,6 +93,7 @@ namespace CharacterExporter
 			// 
 			// btnCancel
 			// 
+			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.btnCancel.Location = new System.Drawing.Point(426, 266);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -106,6 +107,7 @@ namespace CharacterExporter
 			this.comboCharList.FormattingEnabled = true;
 			this.comboCharList.Location = new System.Drawing.Point(99, 35);
 			this.comboCharList.Name = "comboCharList";
+			this.comboCharList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.comboCharList.Size = new System.Drawing.Size(143, 225);
 			this.comboCharList.TabIndex = 14;
 			this.comboCharList.SelectedIndexChanged += new System.EventHandler(this.comboCharList_SelectedIndexChanged);
@@ -115,6 +117,7 @@ namespace CharacterExporter
 			this.comboItemList.FormattingEnabled = true;
 			this.comboItemList.Location = new System.Drawing.Point(248, 35);
 			this.comboItemList.Name = "comboItemList";
+			this.comboItemList.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.comboItemList.Size = new System.Drawing.Size(253, 225);
 			this.comboItemList.TabIndex = 15;
 			// 
@@ -134,6 +137,10 @@ namespace CharacterExporter
 			this.txtDirPath.Size = new System.Drawing.Size(335, 20);
 			this.txtDirPath.TabIndex = 17;
 			this.txtDirPath.TextChanged += new System.EventHandler(this.txtDirPath_TextChanged);
+			// 
+			// fileBrowserDialog
+			// 
+			this.fileBrowserDialog.Multiselect = true;
 			// 
 			// radioAll
 			// 
@@ -194,12 +201,11 @@ namespace CharacterExporter
 			// 
 			// progressBar
 			// 
+			this.progressBar.BackColor = System.Drawing.SystemColors.Control;
 			this.progressBar.Location = new System.Drawing.Point(9, 237);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(84, 23);
 			this.progressBar.TabIndex = 23;
-			this.progressBar.UseWaitCursor = true;
-			this.progressBar.Click += new System.EventHandler(this.progressBar_Click);
 			// 
 			// label1
 			// 
@@ -214,6 +220,7 @@ namespace CharacterExporter
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(507, 296);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.progressBar);
@@ -232,8 +239,10 @@ namespace CharacterExporter
 			this.Controls.Add(this.btnImport);
 			this.Controls.Add(this.btnBrowse);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
+			this.MaximumSize = new System.Drawing.Size(515, 326);
 			this.Name = "CharacterViewer";
-			this.Text = "UOX3 Character Viewer";
+			this.Text = "UOX3 Character Viewer v0.3";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

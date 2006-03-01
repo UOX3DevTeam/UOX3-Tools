@@ -1,3 +1,12 @@
+03/01/2006 - giwo (v0.3)
+	Locked the "Maximize" button.
+	Set the "Maximum Size" property for resizing.
+	Added the version number to the title bar.
+	Added support for exporting multiple characters.
+	Added support for importing multiple character files.
+	Modified character exporting to include serial numbers in filenames thus reducing chances of duplication.
+	Added error-checking when importing files to ensure they actually have valid data in them.
+
 02/28/2006 - giwo (v0.2)
 	Added a progress bar for worldfile loading.
 	Modified the openFileDialog to default to the same directory as the openFolderDialog.

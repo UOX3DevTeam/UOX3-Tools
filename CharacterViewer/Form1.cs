@@ -53,37 +53,42 @@ namespace CharacterExporter
             fileBrowserDialog.Filter = "Character Export Files (*.cef)|*.cef|All Files (*.*)|*.*";
             if( fileBrowserDialog.ShowDialog() == DialogResult.OK )
             {
-                string filePath = fileBrowserDialog.FileName;
-                if( File.Exists( filePath ) )
+				foreach( string filePath in fileBrowserDialog.FileNames )
                 {
-                    UOXData.Script.WorldFile90 importWorld = new UOXData.Script.WorldFile90( filePath );
-					LoadWorldFile( importWorld, true );
+					if( File.Exists( filePath ) )
+					{
+						UOXData.Script.WorldFile90 importWorld = new UOXData.Script.WorldFile90( filePath );
+						if( importWorld.Sections.Count > 0 )
+						{
+							LoadWorldFile( importWorld, true );
+							worldFiles.Add(importWorld);
+						}
+					}
+				}
 
-                    foreach( ItemObject mItem in worldObjects.ImportItemList )
-                    {
-						WorldObject mObj = worldObjects.FindObjectBySerial(mItem.Container, true);
-						if (mObj != null)
-							mObj.ContainsList.Add(mItem);
-                    }
-                    foreach( CharObject mChar in worldObjects.ImportCharList )
-                    {
-                        bool contChanged = false;
-                        if( mChar.Serial < worldObjects.NextCharSer )
-                        {
-                            contChanged = true;
-                            mChar.Serial = worldObjects.NextCharSer;
-                            UOXData.Script.TagDataPair serTag = mChar.Section.GetDataPair( "Serial" );
-                            serTag.Data = new UOXData.Script.DataValue( UOXData.Conversion.ToHexString( mChar.Serial ) );
-                            ++worldObjects.NextCharSer;
-                        }
-                        CheckItemsInCont( mChar, contChanged );
-                        worldObjects.CharList.Add(mChar);
-                        comboCharList.Items.Add(mChar.Name + " (" + UOXData.Conversion.ToHexString(mChar.Serial) + ")");
-                    }
-                    worldObjects.ImportCharList.Clear();
-					worldObjects.ImportItemList.Clear();
-                    worldFiles.Add( importWorld );
+                foreach( ItemObject mItem in worldObjects.ImportItemList )
+                {
+					WorldObject mObj = worldObjects.FindObjectBySerial(mItem.Container, true);
+					if (mObj != null)
+						mObj.ContainsList.Add(mItem);
+				}
+				foreach( CharObject mChar in worldObjects.ImportCharList )
+				{
+					bool contChanged = false;
+					if( mChar.Serial < worldObjects.NextCharSer )
+					{
+						contChanged = true;
+						mChar.Serial = worldObjects.NextCharSer;
+						UOXData.Script.TagDataPair serTag = mChar.Section.GetDataPair( "Serial" );
+						serTag.Data = new UOXData.Script.DataValue( UOXData.Conversion.ToHexString( mChar.Serial ) );
+                        ++worldObjects.NextCharSer;
+					}
+					CheckItemsInCont( mChar, contChanged );
+					worldObjects.CharList.Add(mChar);
+					comboCharList.Items.Add(mChar.Name + " (" + UOXData.Conversion.ToHexString(mChar.Serial) + ")");
                 }
+				worldObjects.ImportCharList.Clear();
+				worldObjects.ImportItemList.Clear();
             }
         }
 
@@ -113,25 +118,31 @@ namespace CharacterExporter
 
         private void btnExport_Click(object sender, EventArgs e)
         {
-            if( comboCharList.Items.Count > 0 )
+            if( comboCharList.Items.Count > 0 && comboCharList.SelectedIndices.Count > 0 )
             {
-                CharObject mChar = ( CharObject )worldObjects.CharList[comboCharList.SelectedIndex];
-                if( mChar != null )
-                {
-					folderBrowserDialog.Description = "Select the Location to Export your character to.";
-                    if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        string fileName = mChar.Name + ".cef";
-                        string filePath = folderBrowserDialog.SelectedPath + "\\" + fileName;
+				folderBrowserDialog.Description = "Select the Location to Export your character(s) to.";
+				if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+				{
+					progressBar.Minimum = 0;
+					progressBar.Value = 0;
+					progressBar.Maximum = comboCharList.SelectedIndices.Count;
+					foreach( int mSelection in comboCharList.SelectedIndices )
+					{
+						CharObject mChar = ( CharObject )worldObjects.CharList[mSelection];
+						if( mChar != null )
+						{
+							string fileName = mChar.Name + "_" + UOXData.Conversion.ToHexString(mChar.Serial) + ".cef";
+							string filePath = folderBrowserDialog.SelectedPath + "\\" + fileName;
 
-                        StreamWriter fileOut = File.CreateText(filePath);
-                        mChar.Section.Save( fileOut );
-						if( keepItemState != KeepItemsState.KEEP_NONE )
-		                    SaveItemsInCont( mChar, fileOut );
-                        fileOut.Close();
-                        MessageBox.Show( "Successfully exported " + fileName, "Success" );
-                    }
-                }
+							StreamWriter fileOut = File.CreateText(filePath);
+							mChar.Section.Save( fileOut );
+							if( keepItemState != KeepItemsState.KEEP_NONE )
+								SaveItemsInCont( mChar, fileOut );
+							fileOut.Close();
+							progressBar.PerformStep();
+						}
+					}
+				}
             }
         }
 
@@ -273,11 +284,6 @@ namespace CharacterExporter
 		private void radioPack_CheckedChanged(object sender, EventArgs e)
 		{
 			keepItemState = KeepItemsState.KEEP_PACKITEMS;
-		}
-
-		private void progressBar_Click(object sender, EventArgs e)
-		{
-
 		}
     }
 }
