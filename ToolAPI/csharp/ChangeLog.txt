@@ -1,3 +1,13 @@
+1st March, 2006 - Maarc
+	Added a AccountScript and AccountSection class, for dealing with Accounts files
+	Fixed a possible bug with script parsing that only became apparent with AccountScript (if the delimiter appeared more than once, we weren't adding it in properly for the value part)
+	Added an AddSection routine to BaseScript, so one you create you can readily add in
+
+
+28th February, 2006 - Maarc
+	Updated DefinitionTree so you can get a Collection based on the DFN Category you want (GetCollection() method)
+	Added empty constructors for BaseScript(), WorldFile90() and Script(), so that we can create empty ones for populating later (not forced reads)
+
 24th February, 2006 - Maarc
 	Added SpawnRegion.cs, DefinitionCollection.cs, and DefinitionTree.cs
 	Updated TownRegion parsing code so that it parsees a WorldSection and a ScriptSection separately

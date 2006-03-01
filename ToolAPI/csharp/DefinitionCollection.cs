@@ -9,8 +9,9 @@ namespace UOXData.Script
 	/// </summary>
 	public class DefinitionCollection
 	{
-		protected Hashtable			files;
-		protected DFN_Categories	mCat;
+		protected Hashtable				files;
+		protected DFN_Categories		mCat;
+
 		public DefinitionCollection( DFN_Categories toSet )
 		{
 			//

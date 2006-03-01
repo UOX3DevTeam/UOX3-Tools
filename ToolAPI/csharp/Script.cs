@@ -63,6 +63,10 @@ namespace UOXData.Script
 			sectionCollection = new ArrayList();
 			Retrieve( toRead );
 		}
+		public BaseScript()
+		{
+			sectionCollection = new ArrayList();
+		}
 		public abstract void Retrieve( string targFile );
 		public abstract void Retrieve( System.IO.Stream toRead );
 		public abstract void Save( StreamWriter ioStream );
@@ -78,6 +82,10 @@ namespace UOXData.Script
 					return s;
 			}
 			return null;
+		}
+		public void AddSection( Section toAdd )
+		{
+			sectionCollection.Add( toAdd );
 		}
 	}
 	public class Script : BaseScript
@@ -96,6 +104,10 @@ namespace UOXData.Script
 			category = DFN_Categories.NUM_DEFS;
 		}
 		public Script( System.IO.Stream targFile ) : base( targFile )
+		{
+			category = DFN_Categories.NUM_DEFS;
+		}
+		public Script() : base()
 		{
 			category = DFN_Categories.NUM_DEFS;
 		}
@@ -158,6 +170,9 @@ namespace UOXData.Script
 		public WorldFile90( System.IO.Stream targFile ) : base( targFile )
 		{
 		}
+		public WorldFile90() : base()
+		{
+		}
 		public override void Retrieve( System.IO.Stream toRead )
 		{
 			StreamReader ioStream	= new StreamReader( toRead );
@@ -192,5 +207,56 @@ namespace UOXData.Script
 				ioStream.WriteLine();
 			}
 		}
+	}
+
+	public class AccountScript : BaseScript
+	{
+		public AccountScript( string targFile ) : base( targFile )
+		{
+		}
+		public AccountScript( System.IO.Stream targFile ) : base( targFile )
+		{
+		}
+		public AccountScript() : base()
+		{
+		}
+		public override void Retrieve( System.IO.Stream toRead )
+		{
+			StreamReader ioStream	= new StreamReader( toRead );
+			string curLine			= "";
+			while( curLine != null )
+			{
+				curLine = ioStream.ReadLine();
+				if( curLine != null && curLine != "" )
+				{
+					if( curLine.StartsWith( "SECTION ACCOUNT" ) )
+					{
+						string sectionName		= curLine.Substring( "SECTION ACCOUNT ".Length );
+						AccountSection toAdd	= new AccountSection( sectionName, ioStream );
+						sectionCollection.Add( toAdd );
+					}
+				}
+			}
+		}
+		public override void Save( StreamWriter ioStream )
+		{
+			foreach( AccountSection s in Sections )
+			{
+				s.Save( ioStream );
+				ioStream.Flush();
+			}
+		}
+
+		public override void Retrieve( string targFile )
+		{
+			FileStream ourIO = File.OpenRead( targFile );
+			Retrieve( ourIO );
+			ourIO.Close();
+		}
+		public new AccountSection FindSection( string sectionName )
+		{
+			return (AccountSection)base.FindSection( sectionName );
+		}
+
 	}
 }

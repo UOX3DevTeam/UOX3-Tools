@@ -33,5 +33,10 @@ namespace UOXData.Script
 				dfnCollection[(int)i].Load( updPath );
 			}
 		}
+
+		public DefinitionCollection GetCollection( UOXData.Script.DFN_Categories toGet )
+		{
+			return dfnCollection[(int)toGet];
+		}
 	}
 }

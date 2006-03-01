@@ -88,10 +88,15 @@ namespace UOXData.Script
 		{ 
 			tagDataPairs = new ArrayList();
 		}
+		public Section( string sectName )
+		{
+			tagDataPairs	= new ArrayList();
+			sectionName		= sectName;
+		}
 		public Section( string sectName, StreamReader ioStream )
 		{
 			tagDataPairs	= new ArrayList();
-			SectionName		= sectName;	
+			sectionName		= sectName;	
 			Retrieve( ioStream );
 		}
 		
@@ -141,6 +146,9 @@ namespace UOXData.Script
 		public ScriptSection() : base()
 		{ 
 		}
+		public ScriptSection( string sectName ) : base( sectName )
+		{
+		}
 		public ScriptSection( string sectName, StreamReader ioStream ) : base( sectName, ioStream )
 		{
 		}
@@ -153,13 +161,11 @@ namespace UOXData.Script
 					return t;
 			}
 			return null;
-//			return base.GetDataPair( tagName.ToUpper() );
 		}
 		
 		public new void Add( string tag, string data )
 		{
 			base.Add( tag, data );
-//			base.Add( tag.ToUpper(), data );
 		}
 		public override void Retrieve( StreamReader ioStream )
 		{
@@ -177,7 +183,11 @@ namespace UOXData.Script
 						string tag		= split[0];
 						string data		= "";
 						for( int i = 1; i < split.Length; i++ )
+						{
+							if( i > 1 )
+								data += "=";
 							data += split[i];
+						}
 						data = Conversion.TrimCommentAndWhitespace( data );
 						Add( tag, data );
 					}
@@ -204,6 +214,9 @@ namespace UOXData.Script
 		public WorldSection() : base()
 		{ 
 		}
+		public WorldSection( string sectName ) : base( sectName )
+		{
+		}
 		public WorldSection( string sectName, StreamReader ioStream ) : base( sectName, ioStream )
 		{
 		}
@@ -223,7 +236,11 @@ namespace UOXData.Script
 						string tag		= split[0];
 						string data		= "";
 						for( int i = 1; i < split.Length; i++ )
+						{
+							if( i > 1 )
+								data += "=";
 							data += split[i];
+						}
 						Add( tag, data );
 					}
 				}
@@ -240,4 +257,74 @@ namespace UOXData.Script
 			ioStream.WriteLine( "o---o" );
 		}
 	}
+
+
+	public class AccountSection : Section
+	{
+		public AccountSection() : base()
+		{ 
+		}
+		public AccountSection( string sectName ) : base( sectName )
+		{
+		}
+		public AccountSection( string sectName, StreamReader ioStream ) : base( sectName, ioStream )
+		{
+		}
+		
+		public new TagDataPair GetDataPair( string tagName )
+		{
+			foreach( TagDataPair t in tagDataPairs )
+			{
+				if( t.Tag.ToUpper() == tagName.ToUpper() )
+					return t;
+			}
+			return null;
+		}
+		
+		public new void Add( string tag, string data )
+		{
+			base.Add( tag, data );
+		}
+		public override void Retrieve( StreamReader ioStream )
+		{
+			string curLine = "";
+			while( curLine != null )
+			{
+				if( curLine != "" && curLine[0] == '}' )
+					break;
+				curLine = ioStream.ReadLine();
+				if( curLine != null && curLine != "" )
+				{
+					if( curLine[0] != '}' && curLine[0] != '{' && curLine != "" && !curLine.StartsWith( "//" ) )
+					{
+						string [] split	= curLine.Split( ' ' );
+						string tag		= split[0];
+						string data		= "";
+						for( int i = 1; i < split.Length; i++ )
+						{
+							if( i > 1 )
+								data += " ";
+							data += split[i];
+						}
+						data = Conversion.TrimCommentAndWhitespace( data );
+						Add( tag, data );
+					}
+				}
+			}
+		}
+		public override void Save( StreamWriter ioStream )
+		{
+			ioStream.WriteLine( "SECTION ACCOUNT " + sectionName );
+			ioStream.WriteLine( "{" );
+			foreach( TagDataPair t in TagDataPairs )
+			{
+				ioStream.WriteLine( t.Tag + " " + t.Data );
+			}
+			ioStream.WriteLine( "}" );
+			ioStream.WriteLine();
+			ioStream.Flush();
+		}
+		
+	}
+
 }
