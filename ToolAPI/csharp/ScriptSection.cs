@@ -258,7 +258,6 @@ namespace UOXData.Script
 		}
 	}
 
-
 	public class AccountSection : Section
 	{
 		public AccountSection() : base()
@@ -327,4 +326,54 @@ namespace UOXData.Script
 		
 	}
 
+	public class ClassicBookSection : Section
+	{
+		protected void InternalReset()
+		{
+			for( int i = 0; i < 8; i++ )
+				tagDataPairs.Add( "" );
+		}
+		public ClassicBookSection() : base()
+		{ 
+		}
+		public ClassicBookSection( string sectName ) : base( sectName )
+		{
+		}
+		public ClassicBookSection( string sectName, StreamReader ioStream ) : base( sectName, ioStream )
+		{
+		}
+		
+		protected new TagDataPair GetDataPair( string tagName )
+		{
+			return null;
+		}
+		
+		protected new void Add( string tag, string data )
+		{
+		}
+		public override void Retrieve( StreamReader ioStream )
+		{
+			char [] lineBytes	= new char[34];
+			for( int i = 0; i < 8; ++i )
+			{
+				ioStream.Read( lineBytes, 0, 34 );
+				tagDataPairs[i] = lineBytes.ToString();
+			}
+		}
+		public override void Save( StreamWriter ioStream )
+		{
+			/*
+			ioStream.WriteLine( "[" + SectionName + "]" );
+			ioStream.WriteLine( "{" );
+			foreach( TagDataPair t in TagDataPairs )
+			{
+				ioStream.WriteLine( t.Tag + "=" + t.Data );
+			}
+			ioStream.WriteLine( "}" );
+			ioStream.WriteLine();
+			ioStream.Flush();
+			*/
+		}
+		
+	}
 }

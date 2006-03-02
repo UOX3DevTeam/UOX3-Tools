@@ -1,3 +1,7 @@
+2nd March, 2006 - Maarc
+	Added a basic ClassicBookScript and ClassicBookSection class.  Note that this is *incomplete*, and requires testing against real data (which I don't have at the moment).
+	Added a very basic DictionaryScript and UOXIni class.  They are a subclass of Script, with no additional information.  Essentially, they just *are* normal Scripts, but this way, we can conceptualise it a bit better.
+
 1st March, 2006 - Maarc
 	Added a AccountScript and AccountSection class, for dealing with Accounts files
 	Fixed a possible bug with script parsing that only became apparent with AccountScript (if the delimiter appeared more than once, we weren't adding it in properly for the value part)

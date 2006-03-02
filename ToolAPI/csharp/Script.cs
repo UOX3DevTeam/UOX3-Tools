@@ -259,4 +259,112 @@ namespace UOXData.Script
 		}
 
 	}
+	public class DictionaryScript : Script
+	{
+	}
+	public class UOXIni : Script
+	{
+	}
+	public class ClassicBookScript : BaseScript
+	{
+		protected uint		bookSerial;
+		protected string	title;
+		protected string	author;
+		protected int		numPages;
+		protected ArrayList	pageList;
+
+		protected void InternalReset()
+		{
+			title		= "";
+			author		= "";
+			numPages	= 0;
+			pageList	= new ArrayList();
+		}
+		public ClassicBookScript( string targFile, uint bSerial ) : base( targFile )
+		{
+			bookSerial = bSerial;
+			InternalReset();
+		}
+		public ClassicBookScript( System.IO.Stream targFile, uint bSerial ) : base( targFile )
+		{
+			bookSerial = bSerial;
+			InternalReset();
+		}
+		public ClassicBookScript( string targFile ) : base( targFile )
+		{
+			bookSerial = 0xFFFFFFFF;
+			InternalReset();
+		}
+		public ClassicBookScript( System.IO.Stream targFile ) : base( targFile )
+		{
+			bookSerial = 0xFFFFFFFF;
+			InternalReset();
+		}
+		public ClassicBookScript() : base()
+		{
+			bookSerial = 0xFFFFFFFF;
+			InternalReset();
+		}
+		public override void Retrieve( System.IO.Stream toRead )
+		{
+			byte [] bTitle	= new byte[62];
+			byte [] bAuthor	= new byte[32];
+			byte [] nPages	= new byte[2];
+
+			toRead.Read( bTitle,  0, 62 );
+			toRead.Read( bAuthor, 0, 32 );
+			toRead.Read( nPages,  0, 2  );
+
+			title		= bTitle.ToString();
+			author		= bAuthor.ToString();
+			numPages	= nPages[0] * 256 + nPages[1];
+
+			StreamReader ioStream	= new StreamReader( toRead );
+			for( int i = 0; i < numPages; ++i )
+			{
+				ClassicBookSection mySection = new ClassicBookSection( "PAGE " + numPages.ToString(), ioStream );
+				sectionCollection.Add( mySection );
+			}
+		}
+		public override void Save( StreamWriter ioStream )
+		{
+/*			foreach( ScriptSection s in Sections )
+			{
+				s.Save( ioStream );
+				ioStream.Flush();
+			}
+			*/
+		}
+
+		public override void Retrieve( string targFile )
+		{
+			FileStream ourIO		= File.OpenRead( targFile );
+			Retrieve( ourIO );
+			ourIO.Close();
+		}
+		public new ClassicBookSection FindSection( string sectionName )
+		{
+			return (ClassicBookSection)base.FindSection( sectionName );
+		}
+
+		public string Title
+		{
+			get	{	return title;	}
+			set	{	title = value;	}
+		}
+		public string Author
+		{
+			get	{	return author;	}
+			set	{	author = value;	}
+		}
+		public int NumPages
+		{
+			get {	return numPages;	}
+		}
+		public ArrayList Pages
+		{
+			get {	return pageList;	}
+		}
+	}
+
 }
