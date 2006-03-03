@@ -350,12 +350,12 @@ namespace UOXData.Script
 		{
 		}
 		
-		protected new TagDataPair GetDataPair( string tagName )
+		private new TagDataPair GetDataPair( string tagName )
 		{
 			return null;
 		}
 		
-		protected new void Add( string tag, string data )
+		private new void Add( string tag, string data )
 		{
 		}
 		public override void Retrieve( StreamReader ioStream )
@@ -369,17 +369,11 @@ namespace UOXData.Script
 		}
 		public override void Save( StreamWriter ioStream )
 		{
-			/*
-			ioStream.WriteLine( "[" + SectionName + "]" );
-			ioStream.WriteLine( "{" );
-			foreach( TagDataPair t in TagDataPairs )
+			for( int i = 0; i < 8; ++i )
 			{
-				ioStream.WriteLine( t.Tag + "=" + t.Data );
+				byte[] toWrite = Conversion.ToByteArray( ((string)tagDataPairs[i]), 34 );
+				ioStream.BaseStream.Write( toWrite, 0, 34 );
 			}
-			ioStream.WriteLine( "}" );
-			ioStream.WriteLine();
-			ioStream.Flush();
-			*/
 		}
 		public string this[int index]
 		{

@@ -276,7 +276,7 @@ namespace UOXData.Script
 		protected uint		bookSerial;
 		protected string	title;
 		protected string	author;
-		protected int		numPages;
+		protected short		numPages;
 
 		protected override void InternalReset()
 		{
@@ -315,7 +315,7 @@ namespace UOXData.Script
 
 			title		= Conversion.ToString( bTitle );
 			author		= Conversion.ToString( bAuthor );
-			numPages	= nPages[0] * 256 + nPages[1];
+			numPages	= (short)(nPages[0] * 256 + nPages[1]);
 
 			StreamReader ioStream	= new StreamReader( toRead );
 			for( int i = 0; i < numPages; ++i )
@@ -326,12 +326,21 @@ namespace UOXData.Script
 		}
 		public override void Save( StreamWriter ioStream )
 		{
-/*			foreach( ScriptSection s in Sections )
+			byte[] toWrite = Conversion.ToByteArray( title, 62 );
+			ioStream.BaseStream.Write( toWrite, 0, 62 );
+
+			toWrite			= Conversion.ToByteArray( author, 32 );
+			ioStream.BaseStream.Write( toWrite, 0, 32 );
+
+			toWrite			= Conversion.ToByteArray( numPages );
+			ioStream.BaseStream.Write( toWrite, 0, toWrite.Length );
+
+			for( int i = 0; i < numPages; ++i )
 			{
-				s.Save( ioStream );
-				ioStream.Flush();
+				this[i].Save( ioStream );
 			}
-			*/
+
+			ioStream.Flush();
 		}
 
 		public override void Retrieve( string targFile )
@@ -340,9 +349,9 @@ namespace UOXData.Script
 			Retrieve( ourIO );
 			ourIO.Close();
 		}
-		public new ClassicBookSection FindSection( string sectionName )
+		private new ClassicBookSection FindSection( string sectionName )
 		{
-			return (ClassicBookSection)base.FindSection( sectionName );
+			return null;
 		}
 
 		public string Title

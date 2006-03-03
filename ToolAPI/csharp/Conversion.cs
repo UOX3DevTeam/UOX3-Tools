@@ -30,6 +30,45 @@ namespace UOXData
 			}
 			return retVal;
 		}
+		public static byte[] ToByteArray( string input, int length )
+		{
+			byte[] retVal = new byte[length];
+			for( int i = 0; i < Math.Min( input.Length, length ); ++i )
+				retVal[i] = (byte)input[i];
+			return retVal;
+		}
+		public static byte[] ToByteArray( uint input )
+		{
+			byte[] retVal = new byte[4];
+			retVal[0] = (byte)((input>>24)%256);
+			retVal[1] = (byte)((input>>16)%256);
+			retVal[2] = (byte)((input>>8)%256);
+			retVal[3] = (byte)(input%256);
+			return retVal;
+		}
+		public static byte[] ToByteArray( int input )
+		{
+			byte[] retVal = new byte[4];
+			retVal[0] = (byte)((input>>24)%256);
+			retVal[1] = (byte)((input>>16)%256);
+			retVal[2] = (byte)((input>>8)%256);
+			retVal[3] = (byte)(input%256);
+			return retVal;
+		}
+		public static byte[] ToByteArray( short input )
+		{
+			byte[] retVal = new byte[2];
+			retVal[0] = (byte)((input>>8)%256);
+			retVal[1] = (byte)(input%256);
+			return retVal;
+		}
+		public static byte[] ToByteArray( ushort input )
+		{
+			byte[] retVal = new byte[2];
+			retVal[0] = (byte)((input>>8)%256);
+			retVal[1] = (byte)(input%256);
+			return retVal;
+		}
 		public static string TrimCommentAndWhitespace( string input )
 		{
 			int position = -1;

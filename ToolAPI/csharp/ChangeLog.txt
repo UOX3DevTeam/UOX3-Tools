@@ -1,4 +1,9 @@
 3rd March, 2006 - Maarc
+	Added Save() routines to ClassicBookScript and ClassicBookSection, and validated them against test books
+	Adjusted some protection levels on some functions
+	Added ToByteArray() functions that accept int/uint, short/ushort, or string, and chunk out a byte array of a particular length
+
+3rd March, 2006 - Maarc
 	Added a ToString() function to Conversion.  It takes either a byte[] or char[] and returns a valid string
 	Added InternalReset() functionality to the BaseScript and Section classes.  This allows pre-retrieval resetting of vars for constructed objects (child classes override as necessary)
 	Updated and tested the ClassicBookScript and ClassicBookSection classes.  They now read a valid book/pages, but currently does *not* write out!  Saving of books is currently unimplemented
