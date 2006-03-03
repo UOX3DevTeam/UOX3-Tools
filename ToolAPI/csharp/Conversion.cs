@@ -8,6 +8,28 @@ namespace UOXData
 	public class Conversion
 	{
 		protected static char[] whitespace = { ' ', '\t' };
+		public static string ToString( byte[] input )
+		{
+			string retVal = "";
+			for( int i = 0; i < input.Length; ++i )
+			{
+				if( input[i] == 0 )
+					break;
+				retVal += (char)input[i];
+			}
+			return retVal;
+		}
+		public static string ToString( char[] input )
+		{
+			string retVal = "";
+			for( int i = 0; i < input.Length; ++i )
+			{
+				if( input[i] == 0 )
+					break;
+				retVal += input[i];
+			}
+			return retVal;
+		}
 		public static string TrimCommentAndWhitespace( string input )
 		{
 			int position = -1;

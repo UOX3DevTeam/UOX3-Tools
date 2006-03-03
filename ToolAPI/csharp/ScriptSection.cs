@@ -84,19 +84,26 @@ namespace UOXData.Script
 		protected string	sectionName;
 		protected ArrayList	tagDataPairs;
 		
+		protected virtual void InternalReset()
+		{
+		}
+
 		public Section()
 		{ 
 			tagDataPairs = new ArrayList();
+			InternalReset();
 		}
 		public Section( string sectName )
 		{
 			tagDataPairs	= new ArrayList();
 			sectionName		= sectName;
+			InternalReset();
 		}
 		public Section( string sectName, StreamReader ioStream )
 		{
 			tagDataPairs	= new ArrayList();
 			sectionName		= sectName;	
+			InternalReset();
 			Retrieve( ioStream );
 		}
 		
@@ -328,7 +335,7 @@ namespace UOXData.Script
 
 	public class ClassicBookSection : Section
 	{
-		protected void InternalReset()
+		protected override void InternalReset()
 		{
 			for( int i = 0; i < 8; i++ )
 				tagDataPairs.Add( "" );
@@ -357,7 +364,7 @@ namespace UOXData.Script
 			for( int i = 0; i < 8; ++i )
 			{
 				ioStream.Read( lineBytes, 0, 34 );
-				tagDataPairs[i] = lineBytes.ToString();
+				tagDataPairs[i] = Conversion.ToString( lineBytes );
 			}
 		}
 		public override void Save( StreamWriter ioStream )
@@ -374,6 +381,15 @@ namespace UOXData.Script
 			ioStream.Flush();
 			*/
 		}
-		
+		public string this[int index]
+		{
+			get
+			{
+				if( index >= 0 && index < 8 )
+					return (string)tagDataPairs[index];
+				else
+					return null;
+			}
+		}
 	}
 }

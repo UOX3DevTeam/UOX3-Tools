@@ -53,19 +53,25 @@ namespace UOXData.Script
 	public abstract class BaseScript
 	{
 		protected ArrayList	sectionCollection;
+		protected virtual void InternalReset()
+		{
+		}
 		public BaseScript( string targFile )
 		{
 			sectionCollection = new ArrayList();
+			InternalReset();
 			Retrieve( targFile );
 		}
 		public BaseScript( System.IO.Stream toRead )
 		{
 			sectionCollection = new ArrayList();
+			InternalReset();
 			Retrieve( toRead );
 		}
 		public BaseScript()
 		{
 			sectionCollection = new ArrayList();
+			InternalReset();
 		}
 		public abstract void Retrieve( string targFile );
 		public abstract void Retrieve( System.IO.Stream toRead );
@@ -271,39 +277,31 @@ namespace UOXData.Script
 		protected string	title;
 		protected string	author;
 		protected int		numPages;
-		protected ArrayList	pageList;
 
-		protected void InternalReset()
+		protected override void InternalReset()
 		{
+			bookSerial	= 0xFFFFFFFF;
 			title		= "";
 			author		= "";
 			numPages	= 0;
-			pageList	= new ArrayList();
 		}
 		public ClassicBookScript( string targFile, uint bSerial ) : base( targFile )
 		{
 			bookSerial = bSerial;
-			InternalReset();
 		}
 		public ClassicBookScript( System.IO.Stream targFile, uint bSerial ) : base( targFile )
 		{
 			bookSerial = bSerial;
-			InternalReset();
 		}
 		public ClassicBookScript( string targFile ) : base( targFile )
 		{
 			bookSerial = 0xFFFFFFFF;
-			InternalReset();
 		}
 		public ClassicBookScript( System.IO.Stream targFile ) : base( targFile )
 		{
-			bookSerial = 0xFFFFFFFF;
-			InternalReset();
 		}
 		public ClassicBookScript() : base()
 		{
-			bookSerial = 0xFFFFFFFF;
-			InternalReset();
 		}
 		public override void Retrieve( System.IO.Stream toRead )
 		{
@@ -315,8 +313,8 @@ namespace UOXData.Script
 			toRead.Read( bAuthor, 0, 32 );
 			toRead.Read( nPages,  0, 2  );
 
-			title		= bTitle.ToString();
-			author		= bAuthor.ToString();
+			title		= Conversion.ToString( bTitle );
+			author		= Conversion.ToString( bAuthor );
 			numPages	= nPages[0] * 256 + nPages[1];
 
 			StreamReader ioStream	= new StreamReader( toRead );
@@ -363,7 +361,18 @@ namespace UOXData.Script
 		}
 		public ArrayList Pages
 		{
-			get {	return pageList;	}
+			get {	return sectionCollection;	}
+		}
+		// Another way of retrieving the pages
+		public ClassicBookSection this[int index]
+		{
+			get
+			{
+				if( index >= 0 && index < numPages )
+					return (ClassicBookSection)sectionCollection[index];
+				else
+					return null;
+			}
 		}
 	}
 

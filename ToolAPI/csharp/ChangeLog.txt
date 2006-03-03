@@ -1,3 +1,32 @@
+3rd March, 2006 - Maarc
+	Added a ToString() function to Conversion.  It takes either a byte[] or char[] and returns a valid string
+	Added InternalReset() functionality to the BaseScript and Section classes.  This allows pre-retrieval resetting of vars for constructed objects (child classes override as necessary)
+	Updated and tested the ClassicBookScript and ClassicBookSection classes.  They now read a valid book/pages, but currently does *not* write out!  Saving of books is currently unimplemented
+	Added indexing capabilities to ClassicBookScript and ClassicBookSection, as well as hiding some unnecessary functions
+	The indexing ensures that a valid page/line is selected (if it doesn't, it returns NULL)
+	Look at the basic test driver code below to see how
+
+	Some basic test driver code for books
+
+	foreach( string s in Directory.GetFiles( dirSect.FindTag( "BOOKSDIRECTORY" ), "*.bok" ) )
+	{
+		UOXData.Script.ClassicBookScript mBook	= new UOXData.Script.ClassicBookScript( s );
+		txtPackageDetails.Text			+= mBook.Title + " - " + mBook.Author + System.Environment.NewLine;
+		for( int i = 0; i < mBook.NumPages; ++i )
+		{
+			txtPackageDetails.Text += "Page " + (i+1) + System.Environment.NewLine;
+			txtPackageDetails.Text += "=======" + System.Environment.NewLine;
+			for( int j = 0; j < 8; ++j )
+			{
+				// Indexing accessing to a page.  mBook[i] is page i of the book mBook
+				UOXData.Script.ClassicBookSection mSection = mBook[i];
+				// Indexing accessing to a line.  mSection[j] is the line j of the page mSection
+				txtPackageDetails.Text += mSection[j] + System.Environment.NewLine;
+			}
+		}
+	}
+
+
 2nd March, 2006 - Maarc
 	Added a basic ClassicBookScript and ClassicBookSection class.  Note that this is *incomplete*, and requires testing against real data (which I don't have at the moment).
 	Added a very basic DictionaryScript and UOXIni class.  They are a subclass of Script, with no additional information.  Essentially, they just *are* normal Scripts, but this way, we can conceptualise it a bit better.
