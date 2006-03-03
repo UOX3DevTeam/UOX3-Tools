@@ -7,7 +7,7 @@ namespace UOXData
 {
 	public class Conversion
 	{
-		protected static char[] whitespace = { ' ', '\t' };
+		protected static char[] whitespace = { ' ', '\t', '\0' };
 		public static string ToString( byte[] input )
 		{
 			string retVal = "";
@@ -68,6 +68,10 @@ namespace UOXData
 			retVal[0] = (byte)((input>>8)%256);
 			retVal[1] = (byte)(input%256);
 			return retVal;
+		}
+		public static string TrimTrailingWhitespace( string input )
+		{
+			return input.TrimEnd( whitespace );
 		}
 		public static string TrimCommentAndWhitespace( string input )
 		{
@@ -139,6 +143,18 @@ namespace UOXData
 			}
 			return convertedValue;
 		}
+		public static int ToInt32( byte[] toConvert, int offset )
+		{
+			int convertedValue = 0;
+			if( offset + 4 <= toConvert.Length )
+			{
+				const int OFFSET_24	= 256 * 256 * 256;
+				const int OFFSET_16	= 256 * 256;
+				const int OFFSET_8	= 256;
+				convertedValue		= toConvert[offset] * OFFSET_24 + toConvert[offset+1] * OFFSET_16 + toConvert[offset+2] * OFFSET_8 + toConvert[offset+3];
+			}
+			return convertedValue;
+		}
 		public static uint ToUInt32( string toConvert )
 		{
 			uint convertedValue = 0;
@@ -154,6 +170,18 @@ namespace UOXData
 			catch( Exception )
 			{
 				convertedValue = 0;
+			}
+			return convertedValue;
+		}
+		public static uint ToUInt32( byte[] toConvert, int offset )
+		{
+			uint convertedValue = 0;
+			if( offset + 4 <= toConvert.Length )
+			{
+				const uint OFFSET_24	= 256 * 256 * 256;
+				const uint OFFSET_16	= 256 * 256;
+				const uint OFFSET_8		= 256;
+				convertedValue = toConvert[offset] * OFFSET_24 + toConvert[offset+1] * OFFSET_16 + toConvert[offset+2] * OFFSET_8 + toConvert[offset+3];
 			}
 			return convertedValue;
 		}

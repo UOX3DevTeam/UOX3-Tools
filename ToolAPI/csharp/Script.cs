@@ -50,6 +50,7 @@ namespace UOXData.Script
 		}
 	}
 
+	#region "BaseScript"
 	public abstract class BaseScript
 	{
 		protected ArrayList	sectionCollection;
@@ -94,6 +95,8 @@ namespace UOXData.Script
 			sectionCollection.Add( toAdd );
 		}
 	}
+	#endregion "BaseScript"
+	#region "Script"
 	public class Script : BaseScript
 	{
 		protected DFN_Categories	category;
@@ -167,7 +170,8 @@ namespace UOXData.Script
 			set	{	category = value;	}
 		}
 	}
-
+	#endregion "Script"
+	#region "WorldFile90"
 	public class WorldFile90 : BaseScript
 	{
 		public WorldFile90( string targFile ) : base( targFile )
@@ -214,7 +218,8 @@ namespace UOXData.Script
 			}
 		}
 	}
-
+	#endregion "WorldFile90"
+	#region "AccountScript"
 	public class AccountScript : BaseScript
 	{
 		public AccountScript( string targFile ) : base( targFile )
@@ -265,12 +270,14 @@ namespace UOXData.Script
 		}
 
 	}
+	#endregion "AccountScript"
 	public class DictionaryScript : Script
 	{
 	}
 	public class UOXIni : Script
 	{
 	}
+	#region "ClassicBookScript"
 	public class ClassicBookScript : BaseScript
 	{
 		protected uint		bookSerial;
@@ -285,6 +292,21 @@ namespace UOXData.Script
 			author		= "";
 			numPages	= 0;
 		}
+		protected void SerialFromFileName( string fileName )
+		{
+			string realFile		= fileName.Replace( "\\", "/" );
+			string [] fileParts	= realFile.Split( '/' );
+			string justFile		= fileParts[fileParts.Length - 1];
+			string [] nameParts	= justFile.Split( '.' );
+			string namePart		= "";
+			for( int i = 0; i < (nameParts.Length - 1); ++i )
+			{
+				if( i > 0 )
+					namePart += ".";
+				namePart += nameParts[i];
+			}
+			bookSerial = Conversion.ToUInt32( "0x" + namePart );
+		}
 		public ClassicBookScript( string targFile, uint bSerial ) : base( targFile )
 		{
 			bookSerial = bSerial;
@@ -295,7 +317,7 @@ namespace UOXData.Script
 		}
 		public ClassicBookScript( string targFile ) : base( targFile )
 		{
-			bookSerial = 0xFFFFFFFF;
+			SerialFromFileName( targFile );
 		}
 		public ClassicBookScript( System.IO.Stream targFile ) : base( targFile )
 		{
@@ -354,24 +376,13 @@ namespace UOXData.Script
 			return null;
 		}
 
-		public string Title
-		{
-			get	{	return title;	}
-			set	{	title = value;	}
-		}
-		public string Author
-		{
-			get	{	return author;	}
-			set	{	author = value;	}
-		}
-		public int NumPages
-		{
-			get {	return numPages;	}
-		}
-		public ArrayList Pages
-		{
-			get {	return sectionCollection;	}
-		}
+		public string Title		{	get	{	return title;	}		set	{	title		= value;	}	}
+		public string Author	{	get	{	return author;	}		set	{	author		= value;	}	}
+		public int NumPages		{	get {	return numPages;	}										}
+		public uint Serial		{	get {	return bookSerial;	}	set {	bookSerial	= value;	}	}
+		protected new ArrayList Sections	{	get { return null;				} }
+		public ArrayList Pages				{	get { return sectionCollection;	} }
+
 		// Another way of retrieving the pages
 		public ClassicBookSection this[int index]
 		{
@@ -383,6 +394,64 @@ namespace UOXData.Script
 					return null;
 			}
 		}
+	}
+	#endregion "ClassicBookScript"
+	public class MessageBoardScript : BaseScript
+	{
+		protected uint serial;
+		public uint Serial { get { return serial; } set { serial = value; } }
+
+		protected void SerialFromFileName( string fileName )
+		{
+			string realFile		= fileName.Replace( "\\", "/" );
+			string [] fileParts	= realFile.Split( '/' );
+			string justFile		= fileParts[fileParts.Length - 1];
+			string [] nameParts	= justFile.Split( '.' );
+			string namePart		= "";
+			for( int i = 0; i < (nameParts.Length - 1); ++i )
+			{
+				if( i > 0 )
+					namePart += ".";
+				namePart += nameParts[i];
+			}
+			serial = Conversion.ToUInt32( "0x" + namePart );
+		}
+		public MessageBoardScript( string targFile ) : base( targFile )
+		{
+			SerialFromFileName( targFile );
+		}
+		public MessageBoardScript( System.IO.Stream targFile ) : base( targFile )
+		{
+		}
+		public MessageBoardScript() : base()
+		{
+		}
+		public override void Retrieve( System.IO.Stream toRead )
+		{
+			StreamReader ioStream	= new StreamReader( toRead );
+			while( ioStream.BaseStream.Position < ioStream.BaseStream.Length )
+			{
+				MessageBoardSection toAdd	= new MessageBoardSection( ioStream );
+				sectionCollection.Add( toAdd );
+			}
+		}
+
+		public override void Retrieve( string targFile )
+		{
+			FileStream ourIO		= File.OpenRead( targFile );
+			Retrieve( ourIO );
+			ourIO.Close();
+		}
+		public override void Save( StreamWriter ioStream )
+		{
+			foreach( MessageBoardSection s in Posts )
+			{
+				s.Save( ioStream );
+				ioStream.Flush();
+			}
+		}
+		protected new ArrayList Sections	{	get { return null;				} }
+		public ArrayList Posts				{	get { return sectionCollection; } }
 	}
 
 }

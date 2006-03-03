@@ -1,4 +1,39 @@
 3rd March, 2006 - Maarc
+	Added ToInt32( byte[] toConvert, int offset ) and ToUInt32( byte[] toConvert, int offset ) to the Conversion class
+	Added automatic parsing of a book's serial from the filename, if it's constructed via a filename
+	Exposed the book's Serial, Title, Author, NumPages and Pages as properties
+	Added basic classes to parse message boards.  This is done through MessageBoardScript and MessageBoardSection.
+	Added basic constructor to Section() that accepts just a StreamReader
+	Added functionality to be able to set the line of a page of a book through indexing
+	Hid Sections from ClassicBookScript and MessageBoardScript
+	Updated TrimCommentAndWhitespace to remove NULLs
+	Added a TrimTrailingWhitespace command (in the event we don't want to actually trim a comment)
+
+	Some basic test driver code for message boards
+
+	foreach( string s in sList )
+	{
+		UOXData.Script.MessageBoardScript mBook	= new UOXData.Script.MessageBoardScript( s );
+		txtPackageDetails.Text					+= "Serial " + UOXData.Conversion.ToHexString( mBook.Serial ) + " - Posts " + mBook.Posts.Count + System.Environment.NewLine;
+		int threadCounter						= 0;
+		foreach( UOXData.Script.MessageBoardSection mbs in mBook.Posts )
+		{
+			txtPackageDetails.Text += "Thread " + threadCounter++ + System.Environment.NewLine;
+			txtPackageDetails.Text += "=======" + System.Environment.NewLine;
+			txtPackageDetails.Text += "Subject: " + mbs.Subject + System.Environment.NewLine;
+			txtPackageDetails.Text += "Poster : " + mbs.Poster + System.Environment.NewLine;
+			txtPackageDetails.Text += "Time   : " + mbs.Time + System.Environment.NewLine;
+			txtPackageDetails.Text += "Toggle : " + mbs.Toggle + System.Environment.NewLine;
+			txtPackageDetails.Text += "Region : ";
+			txtPackageDetails.Text += mbs.PostLocation.ToString() + System.Environment.NewLine;
+			txtPackageDetails.Text += "Lines  : " + mbs.NumLines + System.Environment.NewLine;
+			for( int i = 0; i < mbs.NumLines; ++i )
+				txtPackageDetails.Text += ((string)mbs.Lines[i]) + System.Environment.NewLine;
+		}
+	}
+
+
+3rd March, 2006 - Maarc
 	Added Save() routines to ClassicBookScript and ClassicBookSection, and validated them against test books
 	Adjusted some protection levels on some functions
 	Added ToByteArray() functions that accept int/uint, short/ushort, or string, and chunk out a byte array of a particular length
