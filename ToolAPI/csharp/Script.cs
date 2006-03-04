@@ -35,7 +35,6 @@ namespace UOXData.Script
 		maps		=	23,
 		NUM_DEFS	=	24
 	};
-
 	public interface ScriptSectionLoadable
 	{
 		void Load( ScriptSection toLoad );

@@ -1,3 +1,31 @@
+4th March, 2006 - Maarc
+	Added a validation scheme for trying to validate the format of a ScriptSection
+	Please note that this does not validate that the data you put in is useful!  It only validates that it subscribes to the right syntax
+	Essentially, it will allow you to find any bad/wrong tags, find any values that are the wrong type (eg string instead of number), and so on
+	This does not stop, for example, of you using say, a GET tag that points to a non-existent section (it only checks to see that it is a valid syntax)
+	Early schemas are in for:
+		RANDOMCOLOR entries in colors dfn
+		CARVE entries in carve dfns
+		COMMANDLEVELS, COMMAND_OVERRIDE and actual command entries in command dfns
+		CREATURE entries in creature dfns
+		RACE entries in race dfns
+		REGION, MIDILIST and INSTALOG entries in regions dfns
+		REGIONSPAWN entries in spawn dfns
+
+	Some basic test driver code to see how it works
+
+	UOXData.Script.DefinitionTree dfnTree					= new UOXData.Script.DefinitionTree( dfnPath );
+	UOXData.Script.ScriptSection mSect						= dfnTree.FindEntry( "CARVE 1", UOXData.Script.DFN_Categories.carve );
+	UOXData.Script.Validation.Schemas.BaseSchema mSchema	= UOXData.Script.DefinitionTree.ValidationSchema( UOXData.Script.DFN_Categories.carve, mSect.SectionName );
+	ArrayList errorLog										= new ArrayList();
+	if( mSchema != null )
+		mSchema.ValidateSection( mSect, errorLog );
+	foreach( UOXData.Script.Validation.ValidateError ve in errorLog )
+	{
+		txtPackageDetails.Text += ve.ErrorMessage + " - " + ve.ExpectedType + " - " + ve.Tag + " - " + ve.Value + System.Environment.NewLine;
+	}
+
+
 3rd March, 2006 - Maarc
 	Added ToInt32( byte[] toConvert, int offset ) and ToUInt32( byte[] toConvert, int offset ) to the Conversion class
 	Added automatic parsing of a book's serial from the filename, if it's constructed via a filename
