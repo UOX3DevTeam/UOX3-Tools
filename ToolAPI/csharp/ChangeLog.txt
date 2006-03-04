@@ -1,4 +1,27 @@
 4th March, 2006 - Maarc
+	Added schemas for
+		HOUSE and HOUSEITEM entries in house dfns
+		HTML entries in html dfns
+		LOCATION entries in location dfns
+		TILE and MAP entries in maps dfns
+		BOOK, PAGE, GUMPTEXT, GUMPMENU, MOTD, TIPS and TIP entries in misc dfns
+		ESCORTS and ESCORT entries in msgboard dfns
+		BESTSKILL and DEFAULT entries in newbie dfns
+		ORE_LIST, SKILL and ORE entries in skills dfns
+		REGIONSPAWN entries in spawn dfns
+		SPELL entries in spells dfns
+		SKILL, PROWESS, FAME and MURDERER entries in titles dfns
+		WEATHERAB entries in weather dfns
+
+	The only schemas missing are for
+		Advance
+		Create
+		Items
+		Harditems
+		NPCs
+		Menus
+
+4th March, 2006 - Maarc
 	Added a validation scheme for trying to validate the format of a ScriptSection
 	Please note that this does not validate that the data you put in is useful!  It only validates that it subscribes to the right syntax
 	Essentially, it will allow you to find any bad/wrong tags, find any values that are the wrong type (eg string instead of number), and so on

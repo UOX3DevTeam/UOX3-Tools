@@ -12,6 +12,7 @@ namespace UOXData.Script.Validation
 		String	= 0,
 		UppercaseString,
 		Numeric,
+		HexNumeric,
 		NumericFloat,
 		DoubleNumeric,
 		DoubleNumericFloat,
@@ -169,6 +170,49 @@ namespace UOXData.Script.Validation
 					convertedValue = long.Parse( toValidate.Substring(2), NumberStyles.HexNumber );
 				else
 					convertedValue = System.Convert.ToInt64( testing );
+			}
+			catch( Exception )
+			{
+				return false;
+			}
+			return Valid( convertedValue );
+		}
+	}
+	public class ValidValueHexNumeric : BaseValidValue
+	{
+		protected long	minValue;
+		protected long	maxValue;
+		public ValidValueHexNumeric() : base()
+		{
+			vType		= ValueTypes.HexNumeric;
+			minValue	= long.MinValue;
+			maxValue	= long.MaxValue;
+		}
+		public ValidValueHexNumeric( System.Type toEval ) : base()
+		{
+			FieldInfo mProp;
+			vType		= ValueTypes.HexNumeric;
+			mProp		= toEval.GetField( "MinValue" );
+			minValue	= System.Convert.ToInt64( mProp.GetValue( null ) );
+			mProp		= toEval.GetField( "MaxValue" );
+			maxValue	= System.Convert.ToInt64( mProp.GetValue( null ) );
+		}
+		public ValidValueHexNumeric( long mnVal, long mxVal ) : base()
+		{
+			vType		= ValueTypes.HexNumeric;
+			minValue	= mnVal;
+			maxValue	= mxVal;
+		}
+		public bool Valid( long toValidate )
+		{
+			return (toValidate >= minValue && toValidate <= maxValue);
+		}
+		public override bool Valid( string toValidate )
+		{
+			long convertedValue	= 0;
+			try
+			{
+				convertedValue = long.Parse( toValidate, NumberStyles.HexNumber );
 			}
 			catch( Exception )
 			{
@@ -405,9 +449,11 @@ namespace UOXData.Script.Validation
 		protected ArrayList tokens;
 		protected string	delimiter;
 		protected bool		mustMatch;
+		protected int		minMatch;
 
 		public string	Delimiter { get { return delimiter; } set { delimiter = value; } }
 		public bool		MustMatch { get { return mustMatch; } set { mustMatch = value; } }
+		public int		MinMatch  { get { return minMatch; }  set { minMatch  = value; } }
 
 		public void Add( BaseValidValue toAdd )
 		{
@@ -419,8 +465,9 @@ namespace UOXData.Script.Validation
 			tokens			= new ArrayList();
 			delimiter		= " ";
 			mustMatch		= true;
+			minMatch		= -1;
 		}
-		public ValidValueTokens() : base()
+		public	ValidValueTokens() : base()
 		{
 			InternalReset();
 		}
@@ -437,7 +484,30 @@ namespace UOXData.Script.Validation
 				tokens.Add( toAdd[i] );
 			delimiter = del;
 		}
-		public ValidValueTokens( bool mMatch ) : base()
+		public	ValidValueTokens( int mMatch ) : base()
+		{
+			InternalReset();
+			minMatch	= mMatch;
+			mustMatch	= false;
+		}
+		public  ValidValueTokens( BaseValidValue [] toAdd, int mMatch ) : base()
+		{
+			InternalReset();
+			for( int i = 0; i < toAdd.Length; ++i )
+				tokens.Add( toAdd[i] );
+			minMatch	= mMatch;
+			mustMatch	= false;
+		}
+		public  ValidValueTokens( BaseValidValue [] toAdd, string del, int mMatch ) : base()
+		{
+			InternalReset();
+			for( int i = 0; i < toAdd.Length; ++i )
+				tokens.Add( toAdd[i] );
+			delimiter = del;
+			minMatch	= mMatch;
+			mustMatch	= false;
+		}
+		public	ValidValueTokens( bool mMatch ) : base()
 		{
 			InternalReset();
 			mustMatch = mMatch;
@@ -463,6 +533,8 @@ namespace UOXData.Script.Validation
 				return true;
 			string [] splitString = toValidate.Split( delimiter.ToCharArray() );
 			if( splitString.Length != tokens.Count && mustMatch )
+				return false;
+			if( minMatch != -1 && splitString.Length < minMatch )
 				return false;
 			for( int i = 0; i < Math.Min( splitString.Length, tokens.Count ); ++i )
 			{
@@ -833,6 +905,412 @@ namespace UOXData.Script.Validation
 				tagValueCompare.Add( "SOUND_ATTACK",		new ValidValueNumeric( typeof( ushort ) )	);
 				tagValueCompare.Add( "SOUND_DEFEND",		new ValidValueNumeric( typeof( ushort ) )	);
 				tagValueCompare.Add( "SOUND_DIE",			new ValidValueNumeric( typeof( ushort ) )	);
+			}
+		}
+		public class HouseSchema : BaseSchema
+		{
+			public HouseSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "ID",			new ValidValueNumeric( typeof( ushort ) )	);
+				tagValueCompare.Add( "SPACEX",		new ValidValueNumeric( typeof( short ) )	);
+				tagValueCompare.Add( "SPACEY",		new ValidValueNumeric( typeof( short ) )	);
+				tagValueCompare.Add( "CHARX",		new ValidValueNumeric( typeof( short ) )	);
+				tagValueCompare.Add( "CHARY",		new ValidValueNumeric( typeof( short ) )	);
+				tagValueCompare.Add( "CHARZ",		new ValidValueNumeric( typeof( sbyte ) )	);
+				tagValueCompare.Add( "ITEMSDECAY",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "HOUSE_ITEM",	new ValidValueString()						);
+				tagValueCompare.Add( "HOUSE_DEED",	new ValidValueString()						);
+				tagValueCompare.Add( "BOAT",		new ValidValueNoData()						);
+			}
+		}
+		public class HouseItemSchema : BaseSchema
+		{
+			public HouseItemSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "ITEM",		new ValidValueString()						);
+				tagValueCompare.Add( "DECAY",		new ValidValueNoData()						);
+				tagValueCompare.Add( "NODECAY",		new ValidValueNoData()						);
+				tagValueCompare.Add( "PACK",		new ValidValueNoData()						);
+				tagValueCompare.Add( "MOVEABLE",	new ValidValueNoData()						);
+				tagValueCompare.Add( "LOCK",		new ValidValueNoData()						);
+				tagValueCompare.Add( "X",			new ValidValueNumeric( typeof( short ) )	);
+				tagValueCompare.Add( "Y",			new ValidValueNumeric( typeof( short ) )	);
+				tagValueCompare.Add( "Z",			new ValidValueNumeric( typeof( short ) )	);
+			}
+		}
+		public class HTMLSchema : BaseSchema
+		{
+			public HTMLSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "UPDATE",		new ValidValueString( new string[] { "STATUS", "OFFLINE", "PLAYER", "GUILD", "GMSTATUS" } )		);
+				tagValueCompare.Add( "TYPE",		new ValidValueNoData()						);
+				tagValueCompare.Add( "INPUT",		new ValidValueString()						);
+				tagValueCompare.Add( "OUTPUT",		new ValidValueString()						);
+				tagValueCompare.Add( "NAME",		new ValidValueString()						);
+			}
+		}
+		public class LocationSchema : BaseSchema
+		{
+			public LocationSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "X",			new ValidValueNumeric( typeof( short ) )	);
+				tagValueCompare.Add( "Y",			new ValidValueNumeric( typeof( short ) )	);
+				tagValueCompare.Add( "Z",			new ValidValueNumeric( typeof( sbyte ) )	);
+				tagValueCompare.Add( "WORLD",		new ValidValueNumeric( typeof( sbyte ) )	);
+				tagValueCompare.Add( "LOCATION",	new ValidValueLocation()					);
+			}
+		}
+		public class MapSchema : BaseSchema
+		{
+			public MapSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "MAP",					new ValidValueString()				);
+				tagValueCompare.Add( "MAPDIFF",				new ValidValueString()				);
+				tagValueCompare.Add( "MAPDIFFLIST",			new ValidValueString()				);
+				tagValueCompare.Add( "STATICS",				new ValidValueString()				);
+				tagValueCompare.Add( "STAIDX",				new ValidValueString()				);
+				tagValueCompare.Add( "STATICSDIFF",			new ValidValueString()				);
+				tagValueCompare.Add( "STATICSDIFFLIST",		new ValidValueString()				);
+				tagValueCompare.Add( "STATICSDIFFINDEX",	new ValidValueString()				);
+				tagValueCompare.Add( "X",					new ValidValueNumeric( typeof( ushort ) )	);
+				tagValueCompare.Add( "Y",					new ValidValueNumeric( typeof( ushort ) )	);
+			}
+		}
+		public class MapTileSchema : BaseSchema
+		{
+			public MapTileSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "HEIGHT",			new ValidValueNumeric( typeof( byte  ) )	);
+				tagValueCompare.Add( "WEIGHT",			new ValidValueNumeric( typeof( sbyte ) )	);
+				tagValueCompare.Add( "LAYER",			new ValidValueNumeric( typeof( byte  ) )	);
+				tagValueCompare.Add( "ANIMATION",		new ValidValueNumeric( typeof( int   ) )	);
+				tagValueCompare.Add( "NAME",			new ValidValueString()						);
+
+				tagValueCompare.Add( "ATFLOORLEVEL",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "HOLDABLE",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "SIGNGUILDBANNER",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "WEBDIRTBLOOD",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "WALLVERTTILE",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "DAMAGING",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "BLOCKING",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "LIQUIDWET",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "UNKNOWN1",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "STANDABLE",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "CLIMBABLE",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "STACKABLE",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "WINDOWARCHDOOR",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "CANNOTSHOOTTHRU",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "DISPLAYASA",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "DISPLAYASAN",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "DESCRIPTIONTILE",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "FADEWITHTRANS",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "UNKNOWN2",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "UNKNOWN3",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "MAP",				new ValidValueBoolean()						);
+				tagValueCompare.Add( "CONTAINER",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "EQUIPABLE",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "LIGHTSOURCE",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "ANIMATED",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "UNKNOWN4",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "WALK",			new ValidValueBoolean()						);
+				tagValueCompare.Add( "WHOLEBODYITEM",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "WALLROOFWEAP",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "DOOR",			new ValidValueBoolean()						);
+				tagValueCompare.Add( "CLIMBABLEBIT1",	new ValidValueBoolean()						);
+				tagValueCompare.Add( "CLIMBABLEBIT2",	new ValidValueBoolean()						);
+			}
+		}
+		public class BookSchema : BaseSchema
+		{
+			protected bool titleDone, authorDone, pagesDone;
+			public BookSchema() : base()
+			{
+				titleDone	= false;
+				pagesDone	= false;
+				authorDone	= false;
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "PAGES",				new ValidValueNumeric( typeof( short ) )	);
+				tagValueCompare.Add( "TITLE",				new ValidValueString()				);
+				tagValueCompare.Add( "AUTHOR",				new ValidValueString()				);
+				tagValueCompare.Add( "PAGE",				new ValidValueString()				);
+			}
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				bool validBase = base.ValidatePair( t, errorLog );
+				if( validBase )
+				{
+					if( !titleDone && t.Tag == "TITLE" )
+						titleDone	= true;
+					if( !authorDone && t.Tag == "AUTHOR" )
+						authorDone	= true;
+					if( !pagesDone && t.Tag == "PAGES" )
+						pagesDone	= true;
+					if( ( !pagesDone || !titleDone || !authorDone ) && t.Tag == "PAGE" )
+						return false;
+				}
+				return validBase;
+			}
+
+		}
+		public class PageSchema : BaseSchema
+		{
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				return ( t.Tag.Length != 0 );
+			}
+			public PageSchema() : base()
+			{
+			}
+		}
+		public class GumpTextSchema : BaseSchema
+		{
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				return ( t.Tag.Length != 0 );
+			}
+			public GumpTextSchema() : base()
+			{
+			}
+		}
+		public class GumpMenuSchema : BaseSchema
+		{
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				return ( t.Tag.Length != 0 );
+			}
+			public GumpMenuSchema() : base()
+			{
+			}
+		}
+		public class MOTDSchema : BaseSchema
+		{
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				return ( t.Tag.Length != 0 );
+			}
+			public MOTDSchema() : base()
+			{
+			}
+		}
+		public class TipSchema : BaseSchema
+		{
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				return ( t.Tag.Length != 0 );
+			}
+			public TipSchema() : base()
+			{
+			}
+		}
+		public class TipsListSchema : BaseSchema
+		{
+			public TipsListSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "TIP",				new ValidValueString()				);
+			}
+		}
+		public class EscortListSchema : BaseSchema
+		{
+			public EscortListSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "ESCORT",				new ValidValueString()				);
+			}
+		}
+		public class EscortSchema : BaseSchema
+		{
+			public EscortSchema() : base()
+			{
+			}
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				return ( t.Tag.Length != 0 );
+			}
+		}
+		public class NewbieSchema : BaseSchema
+		{
+			public NewbieSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "PACKITEM",				new ValidValueString()				);
+				tagValueCompare.Add( "EQUIPITEM",				new ValidValueString()				);
+			}
+		}
+		public class OreListSchema : BaseSchema
+		{
+			public OreListSchema() : base()
+			{
+			}
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				return ( t.Tag.Length != 0 );
+			}
+		}
+		public class SkillSchema : BaseSchema
+		{
+			public SkillSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "STR",				new ValidValueNumeric( typeof( ushort ) )	);
+				tagValueCompare.Add( "DEX",				new ValidValueNumeric( typeof( ushort ) )	);
+				tagValueCompare.Add( "INT",				new ValidValueNumeric( typeof( ushort ) )	);
+				tagValueCompare.Add( "SKILLPOINT",		new ValidValueTokens( new BaseValidValue[] { new ValidValueNumeric( typeof( ushort ) ), new ValidValueNumeric( typeof( byte ) ), new ValidValueNumeric( typeof( byte ) ), new ValidValueNumeric( typeof( byte ) ) }, ",", 3 ) );
+				tagValueCompare.Add( "MADEWORD",		new ValidValueString()						);
+				tagValueCompare.Add( "NAME",			new ValidValueString()						);
+			}
+		}
+		public class OreSchema : BaseSchema
+		{
+			public OreSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "COLOUR",			new ValidValueNumeric( typeof( ushort ) )	);
+				tagValueCompare.Add( "FOREIGN",			new ValidValueBoolean()						);
+				tagValueCompare.Add( "MAKEMENU",		new ValidValueNumeric( typeof( int    ) )	);
+				tagValueCompare.Add( "MINAMOUNT",		new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "MINSKILL",		new ValidValueNumeric( typeof( ushort ) )	);
+				tagValueCompare.Add( "NAME",			new ValidValueString()						);
+			}
+		}
+		public class SpellSchema : BaseSchema
+		{
+			public SpellSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "ACTION",			new ValidValueNumeric( typeof( ushort ) )	);
+				tagValueCompare.Add( "ASH",				new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "CIRCLE",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "DELAY",			new ValidValueNumeric( typeof( int    ) )	);
+				tagValueCompare.Add( "DRAKE",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "ENABLE",			new ValidValueBoolean()						);
+				tagValueCompare.Add( "FLAGS",			new ValidValueDoubleNumeric( typeof( byte ) )	);
+				tagValueCompare.Add( "GARLIC",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "GINSENG",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "HISKILL",			new ValidValueNumeric( typeof( short  ) )	);
+				tagValueCompare.Add( "HEALTH",			new ValidValueNumeric( typeof( short  ) )	);
+				tagValueCompare.Add( "LOSKILL",			new ValidValueNumeric( typeof( short  ) )	);
+				tagValueCompare.Add( "MANA",			new ValidValueNumeric( typeof( short  ) )	);
+				tagValueCompare.Add( "MANTRA",			new ValidValueString()						);
+				tagValueCompare.Add( "MOSS",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "MOVEFX",			new ValidValueTokens( new BaseValidValue [] { new ValidValueHexNumeric( typeof( byte ) ), new ValidValueHexNumeric( typeof( byte ) ), new ValidValueHexNumeric( typeof( byte ) ), new ValidValueHexNumeric( typeof( byte ) ), new ValidValueHexNumeric( typeof( byte ) ) } )	);
+				tagValueCompare.Add( "PEARL",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "SHADE",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "SILK",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "SOUNDFX",			new ValidValueTokens( new BaseValidValue [] { new ValidValueHexNumeric( typeof( byte ) ), new ValidValueHexNumeric( typeof( byte ) ) } )	);
+				tagValueCompare.Add( "STATFX",			new ValidValueTokens( new BaseValidValue [] { new ValidValueHexNumeric( typeof( byte ) ), new ValidValueHexNumeric( typeof( byte ) ), new ValidValueHexNumeric( typeof( byte ) ), new ValidValueHexNumeric( typeof( byte ) ) } )	);
+				tagValueCompare.Add( "SCLO",			new ValidValueNumeric( typeof( short  ) )	);
+				tagValueCompare.Add( "SCHI",			new ValidValueNumeric( typeof( short  ) )	);
+				tagValueCompare.Add( "STAMINA",			new ValidValueNumeric( typeof( short  ) )	);
+				tagValueCompare.Add( "TARG",			new ValidValueString()						);
+			}
+		}
+		public class FameSchema : BaseSchema
+		{
+			public FameSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "FAMETITLE",		new ValidValueString()	);
+			}
+		}
+		public class ProwessSchema : BaseSchema
+		{
+			protected ValidValueString	validStr;
+			protected ValidValueNumeric	validNum;
+			public ProwessSchema() : base()
+			{
+				validStr = new ValidValueString();
+				validNum = new ValidValueNumeric( typeof( short ) );
+			}
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				return validNum.Valid( t.Tag ) && validStr.Valid( t.Data.Value );
+			}
+		}
+		public class MurdererSchema : BaseSchema
+		{
+			protected ValidValueString	validStr;
+			protected ValidValueNumeric	validNum;
+			public MurdererSchema() : base()
+			{
+				validStr = new ValidValueString();
+				validNum = new ValidValueNumeric( typeof( short ) );
+			}
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				return validNum.Valid( t.Tag ) && validStr.Valid( t.Data.Value );
+			}
+		}
+		public class SkillTitleSchema : BaseSchema
+		{
+			public SkillTitleSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "SKILLTITLE",		new ValidValueString()	);
+			}
+		}
+		public class WeatherSchema : BaseSchema
+		{
+			public WeatherSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "COLDCHANCE",		new ValidValueNumeric(			typeof( sbyte ) )	);
+				tagValueCompare.Add( "COLDINTENSITY",	new ValidValueNumeric(			typeof( sbyte ) )	);
+				tagValueCompare.Add( "HEATCHANCE",		new ValidValueNumeric(			typeof( sbyte ) )	);
+				tagValueCompare.Add( "HEATINTENSITY",	new ValidValueNumeric(			typeof( sbyte ) )	);
+				tagValueCompare.Add( "LIGHTMIN",		new ValidValueNumericFloat()						);
+				tagValueCompare.Add( "LIGHTMAX",		new ValidValueNumericFloat()						);
+				tagValueCompare.Add( "MAXTEMP",			new ValidValueNumericFloat()						);
+				tagValueCompare.Add( "MINTEMP",			new ValidValueNumericFloat()						);
+				tagValueCompare.Add( "MAXWIND",			new ValidValueNumericFloat()						);
+				tagValueCompare.Add( "MINWIND",			new ValidValueNumericFloat()						);
+				tagValueCompare.Add( "RAINCHANCE",		new ValidValueNumeric(			typeof( sbyte ) )	);
+				tagValueCompare.Add( "RAININTENSITY",	new ValidValueDoubleNumeric(	typeof( sbyte ) )	);
+				tagValueCompare.Add( "RAINTEMPDROP",	new ValidValueNumeric(			typeof( sbyte ) )	);
+				tagValueCompare.Add( "SNOWCHANCE",		new ValidValueNumeric(			typeof( sbyte ) )	);
+				tagValueCompare.Add( "SNOWINTENSITY",	new ValidValueDoubleNumeric(	typeof( sbyte ) )	);
+				tagValueCompare.Add( "SNOWTHRESHOLD",	new ValidValueNumericFloat()						);
+				tagValueCompare.Add( "STORMCHANCE",		new ValidValueNumeric(			typeof( sbyte ) )	);
+				tagValueCompare.Add( "STORMINTENSITY",	new ValidValueDoubleNumeric(	typeof( sbyte ) )	);
+				tagValueCompare.Add( "STORMTEMPDROP",	new ValidValueNumeric(			typeof( sbyte ) )	);
 			}
 		}
 	}
