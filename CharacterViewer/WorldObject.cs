@@ -30,6 +30,8 @@ namespace CharacterExporter
 
         public ObjectHandler()
         {
+			nextItemSer = 0x40000000;
+			nextCharSer = 0;
             charList = new ArrayList();
             itemList = new ArrayList();
             importCharList = new ArrayList();

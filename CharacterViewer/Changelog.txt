@@ -1,3 +1,10 @@
+03/05/2006 - giwo (v0.4)
+	Fixed an issue causing character serials to change even when they are not conflicting.
+	Added some notifications to let the user know when a file has been loaded but no characters found.
+	Made the form a non-resizable tool window.
+	Fixed some spacing issues when using Windows XP Luna theme.
+	Enabled horizontal scrolling on the listboxes.
+
 03/01/2006 - giwo (v0.3)
 	Locked the "Maximize" button.
 	Set the "Maximum Size" property for resizing.

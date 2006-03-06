@@ -48,7 +48,7 @@ namespace CharacterExporter
 			this.radioPack = new System.Windows.Forms.RadioButton();
 			this.lblKeepItems = new System.Windows.Forms.Label();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
-			this.label1 = new System.Windows.Forms.Label();
+			this.lblProgress = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// btnBrowse
@@ -105,6 +105,7 @@ namespace CharacterExporter
 			// comboCharList
 			// 
 			this.comboCharList.FormattingEnabled = true;
+			this.comboCharList.HorizontalScrollbar = true;
 			this.comboCharList.Location = new System.Drawing.Point(99, 35);
 			this.comboCharList.Name = "comboCharList";
 			this.comboCharList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
@@ -115,6 +116,7 @@ namespace CharacterExporter
 			// comboItemList
 			// 
 			this.comboItemList.FormattingEnabled = true;
+			this.comboItemList.HorizontalScrollbar = true;
 			this.comboItemList.Location = new System.Drawing.Point(248, 35);
 			this.comboItemList.Name = "comboItemList";
 			this.comboItemList.SelectionMode = System.Windows.Forms.SelectionMode.None;
@@ -207,14 +209,14 @@ namespace CharacterExporter
 			this.progressBar.Size = new System.Drawing.Size(84, 23);
 			this.progressBar.TabIndex = 23;
 			// 
-			// label1
+			// lblProgress
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(6, 221);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(48, 13);
-			this.label1.TabIndex = 24;
-			this.label1.Text = "Progress";
+			this.lblProgress.AutoSize = true;
+			this.lblProgress.Location = new System.Drawing.Point(6, 221);
+			this.lblProgress.Name = "lblProgress";
+			this.lblProgress.Size = new System.Drawing.Size(48, 13);
+			this.lblProgress.TabIndex = 24;
+			this.lblProgress.Text = "Progress";
 			// 
 			// CharacterViewer
 			// 
@@ -222,7 +224,7 @@ namespace CharacterExporter
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(507, 296);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.lblProgress);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.lblKeepItems);
 			this.Controls.Add(this.radioPack);
@@ -238,11 +240,11 @@ namespace CharacterExporter
 			this.Controls.Add(this.btnExport);
 			this.Controls.Add(this.btnImport);
 			this.Controls.Add(this.btnBrowse);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(515, 326);
 			this.Name = "CharacterViewer";
-			this.Text = "UOX3 Character Viewer v0.3";
+			this.Text = "UOX3 Character Viewer v0.4";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -264,13 +266,13 @@ namespace CharacterExporter
 		private System.Windows.Forms.RadioButton radioWearables;
 		private System.Windows.Forms.RadioButton radioPack;
 		private System.Windows.Forms.Label lblKeepItems;
+		private System.Windows.Forms.Label lblProgress;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
 		private System.Windows.Forms.OpenFileDialog fileBrowserDialog;
 		private System.Windows.Forms.ProgressBar progressBar;
 		protected ArrayList worldFiles			= new ArrayList();
 		protected ObjectHandler worldObjects	= new ObjectHandler();
 		private KeepItemsState keepItemState;
-		private System.Windows.Forms.Label label1;
     }
 }
 

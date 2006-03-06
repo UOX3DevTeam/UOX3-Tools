@@ -1,9 +1,5 @@
 using System;
 using System.Collections;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
@@ -50,6 +46,10 @@ namespace CharacterExporter
 
         private void btnImport_Click(object sender, EventArgs e)
         {
+			bool selectFirst = false;
+			if( comboCharList.Items.Count == 0 )
+				selectFirst = true;
+
             fileBrowserDialog.Filter = "Character Export Files (*.cef)|*.cef|All Files (*.*)|*.*";
             if( fileBrowserDialog.ShowDialog() == DialogResult.OK )
             {
@@ -89,8 +89,19 @@ namespace CharacterExporter
                 }
 				worldObjects.ImportCharList.Clear();
 				worldObjects.ImportItemList.Clear();
-            }
-        }
+
+				if( selectFirst )
+				{
+					if( comboCharList.Items.Count > 0 )
+						comboCharList.SelectedIndex = 0;
+					else
+					{
+						comboItemList.Items.Clear();
+						comboItemList.Items.Add( "Character File Imported: No Characters to Display" );
+					}
+				}
+			}
+		}
 
         private void CheckItemsInCont( WorldObject mObj, bool cChange )
         {
@@ -180,7 +191,7 @@ namespace CharacterExporter
 				if (mScript.SectionName == "CHARACTER")
 				{
 					uint charSerial = UOXData.Conversion.ToUInt32(mScript.FindTag("Serial"));
-					if (charSerial >= worldObjects.NextCharSer)
+					if (charSerial > worldObjects.NextCharSer)
 						worldObjects.NextCharSer = charSerial + 1;
 					CharObject mChar = new CharObject(charSerial);
 					mChar.Name = mScript.FindTag("Name");
@@ -254,6 +265,8 @@ namespace CharacterExporter
 
 					if( comboCharList.Items.Count > 0 )
 						comboCharList.SelectedIndex = 0;
+					else
+						comboItemList.Items.Add( "World Loaded: No Characters to Display" );
 				}
 				else
 					MessageBox.Show("No worldfile found, please select a valid directory", "File Not Found" );
