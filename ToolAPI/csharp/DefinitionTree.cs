@@ -39,6 +39,10 @@ namespace UOXData.Script
 			return dfnCollection[(int)toGet];
 		}
 
+		public static Validation.Schemas.BaseSchema ValidationSchema( ScriptSection toValidate )
+		{
+			return ValidationSchema( toValidate.Category, toValidate.SectionName );
+		}
 		public static Validation.Schemas.BaseSchema ValidationSchema( DFN_Categories toComp, string sectHeader )
 		{
 			Validation.Schemas.BaseSchema toReturn = null;

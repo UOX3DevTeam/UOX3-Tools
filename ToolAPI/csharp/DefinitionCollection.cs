@@ -49,5 +49,9 @@ namespace UOXData.Script
 			}
 			return null;
 		}
+		public System.Collections.IDictionaryEnumerator GetFileEnumerator()
+		{
+			return files.GetEnumerator();
+		}
 	}
 }

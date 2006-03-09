@@ -1,3 +1,13 @@
+9th March, 2006 - Maarc
+	Fixed some subtle order of construction errors with Scripts and ScriptSections
+	Added a GetFileEnumerator() method to DefinitionCollection so that you can now progressively access all the DFNs in the tree
+	Added category tracking to ScriptSection, so that getting a schema is really easy
+	Added an easier way to get at a validation schema
+	Updated ScriptSection so that it also strips off comments and whitespace on the tag, not just data
+	Updated UOXIni and Dictionary classes so that they have a default constructor
+	Updated UOXIni so that it can deal with relative paths (using the Directory() method)
+	Fixed a bug in the HTML Validation Schema (TYPE and UPDATE were wrong)
+
 4th March, 2006 - Maarc
 	Added schemas for
 		HOUSE and HOUSEITEM entries in house dfns

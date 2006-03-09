@@ -60,13 +60,11 @@ namespace UOXData.Script
 		{
 			sectionCollection = new ArrayList();
 			InternalReset();
-			Retrieve( targFile );
 		}
 		public BaseScript( System.IO.Stream toRead )
 		{
 			sectionCollection = new ArrayList();
 			InternalReset();
-			Retrieve( toRead );
 		}
 		public BaseScript()
 		{
@@ -102,18 +100,22 @@ namespace UOXData.Script
 		public Script( string targFile, DFN_Categories mCat ) : base( targFile )
 		{
 			category = mCat;
+			Retrieve( targFile );
 		}
 		public Script( System.IO.Stream targFile, DFN_Categories mCat ) : base( targFile )
 		{
 			category = mCat;
+			Retrieve( targFile );
 		}
 		public Script( string targFile ) : base( targFile )
 		{
 			category = DFN_Categories.NUM_DEFS;
+			Retrieve( targFile );
 		}
 		public Script( System.IO.Stream targFile ) : base( targFile )
 		{
 			category = DFN_Categories.NUM_DEFS;
+			Retrieve( targFile );
 		}
 		public Script() : base()
 		{
@@ -134,7 +136,7 @@ namespace UOXData.Script
 						if( brackPos != -1 )
 						{
 							string sectionName	= curLine.Remove( brackPos, curLine.Length - brackPos ).Substring( 1 );
-							ScriptSection toAdd	= new ScriptSection( sectionName, ioStream );
+							ScriptSection toAdd	= new ScriptSection( sectionName, ioStream, category );
 							sectionCollection.Add( toAdd );
 						}
 						else
@@ -175,9 +177,11 @@ namespace UOXData.Script
 	{
 		public WorldFile90( string targFile ) : base( targFile )
 		{
+			Retrieve( targFile );
 		}
 		public WorldFile90( System.IO.Stream targFile ) : base( targFile )
 		{
+			Retrieve( targFile );
 		}
 		public WorldFile90() : base()
 		{
@@ -223,9 +227,11 @@ namespace UOXData.Script
 	{
 		public AccountScript( string targFile ) : base( targFile )
 		{
+			Retrieve( targFile );
 		}
 		public AccountScript( System.IO.Stream targFile ) : base( targFile )
 		{
+			Retrieve( targFile );
 		}
 		public AccountScript() : base()
 		{
@@ -272,9 +278,76 @@ namespace UOXData.Script
 	#endregion "AccountScript"
 	public class DictionaryScript : Script
 	{
+		public DictionaryScript( string sVal ) : base( sVal )
+		{
+			Retrieve( sVal );
+		}
+		public DictionaryScript() : base()
+		{
+		}
 	}
 	public class UOXIni : Script
 	{
+		public UOXIni( string sVal ) : base( sVal )
+		{
+			Retrieve( sVal );
+		}
+		public UOXIni() : base()
+		{
+		}
+		public enum DirectoryPaths
+		{
+			Root = 0,
+			Data,
+			Definitions,
+			Access,
+			Accounts,
+			Scripts,
+			Backup,
+			Msgboard,
+			Shared,
+			HTML,
+			Logs,
+			Dictionaries,
+			Books,
+			COUNT
+		};
+
+		public string Directory( DirectoryPaths toCheck )
+		{
+			if( toCheck == DirectoryPaths.COUNT )
+				return "";
+			ScriptSection dirSection	= FindSection( "directories" );
+			if( dirSection != null )
+			{
+				string sRoot			= dirSection.FindTag( "DIRECTORY" );
+				string partialPath		= "";
+				if( toCheck == DirectoryPaths.Root )
+					return sRoot;
+				switch( toCheck )
+				{
+					case DirectoryPaths.Dictionaries:	partialPath = dirSection.FindTag( "DICTIONARYDIRECTORY" );						break;
+					case DirectoryPaths.Definitions:	partialPath = dirSection.FindTag( "DEFSDIRECTORY" );							break;
+					case DirectoryPaths.Accounts:		partialPath = dirSection.FindTag( "ACTSDIRECTORY" );							break;
+					default:							partialPath	= dirSection.FindTag( toCheck.ToString().ToUpper() + "DIRECTORY" );	break;
+				}
+				if( partialPath == "" )
+					return "";
+				if( partialPath.StartsWith( "./" ) )
+				{
+					string builtPath	= sRoot;
+					builtPath			= builtPath.Replace( "\\", "/" );
+					if( !builtPath.EndsWith( "/" ) )
+						builtPath		+= "/";
+					builtPath += partialPath.Substring( 2 );
+					return builtPath;
+				}
+				else
+					return partialPath;
+			}
+			else
+				return "";
+		}
 	}
 	#region "ClassicBookScript"
 	public class ClassicBookScript : BaseScript
@@ -309,17 +382,21 @@ namespace UOXData.Script
 		public ClassicBookScript( string targFile, uint bSerial ) : base( targFile )
 		{
 			bookSerial = bSerial;
+			Retrieve( targFile );
 		}
 		public ClassicBookScript( System.IO.Stream targFile, uint bSerial ) : base( targFile )
 		{
 			bookSerial = bSerial;
+			Retrieve( targFile );
 		}
 		public ClassicBookScript( string targFile ) : base( targFile )
 		{
 			SerialFromFileName( targFile );
+			Retrieve( targFile );
 		}
 		public ClassicBookScript( System.IO.Stream targFile ) : base( targFile )
 		{
+			Retrieve( targFile );
 		}
 		public ClassicBookScript() : base()
 		{
@@ -418,9 +495,11 @@ namespace UOXData.Script
 		public MessageBoardScript( string targFile ) : base( targFile )
 		{
 			SerialFromFileName( targFile );
+			Retrieve( targFile );
 		}
 		public MessageBoardScript( System.IO.Stream targFile ) : base( targFile )
 		{
+			Retrieve( targFile );
 		}
 		public MessageBoardScript() : base()
 		{

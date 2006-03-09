@@ -157,15 +157,33 @@ namespace UOXData.Script
 	}
 	public class ScriptSection : Section
 	{
+		protected DFN_Categories	sectCategory;
 		public ScriptSection() : base()
-		{ 
+		{
+			sectCategory	= DFN_Categories.NUM_DEFS;
 		}
 		public ScriptSection( string sectName ) : base( sectName )
 		{
+			sectCategory	= DFN_Categories.NUM_DEFS;
 		}
 		public ScriptSection( string sectName, StreamReader ioStream ) : base( sectName, ioStream )
 		{
+			sectCategory	= DFN_Categories.NUM_DEFS;
 		}
+		public ScriptSection( DFN_Categories mValue ) : base()
+		{
+			sectCategory	= mValue;
+		}
+		public ScriptSection( string sectName, DFN_Categories mValue ) : base( sectName )
+		{
+			sectCategory	= mValue;
+		}
+		public ScriptSection( string sectName, StreamReader ioStream, DFN_Categories mValue ) : base( sectName, ioStream )
+		{
+			sectCategory	= mValue;
+		}
+
+		public DFN_Categories	Category { get { return sectCategory; } set { sectCategory = value; } }
 		
 		public new TagDataPair GetDataPair( string tagName )
 		{
@@ -202,7 +220,8 @@ namespace UOXData.Script
 								data += "=";
 							data += split[i];
 						}
-						data = Conversion.TrimCommentAndWhitespace( data );
+						tag		= Conversion.TrimCommentAndWhitespace( tag );
+						data	= Conversion.TrimCommentAndWhitespace( data );
 						Add( tag, data );
 					}
 				}

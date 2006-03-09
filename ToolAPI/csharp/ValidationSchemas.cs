@@ -630,7 +630,7 @@ namespace UOXData.Script.Validation
 			}
 			public virtual ScriptSection SanitiseSection( Section toValidate, ArrayList errorLog )
 			{
-				ScriptSection toReturn = new ScriptSection();
+				ScriptSection toReturn = new ScriptSection( toValidate.SectionName );
 				if( toValidate != null )
 				{
 					foreach( TagDataPair t in toValidate.TagDataPairs )
@@ -951,8 +951,8 @@ namespace UOXData.Script.Validation
 			}
 			protected override void BuildSchema()
 			{
-				tagValueCompare.Add( "UPDATE",		new ValidValueString( new string[] { "STATUS", "OFFLINE", "PLAYER", "GUILD", "GMSTATUS" } )		);
-				tagValueCompare.Add( "TYPE",		new ValidValueNoData()						);
+				tagValueCompare.Add( "TYPE",		new ValidValueString( new string[] { "STATUS", "OFFLINE", "PLAYER", "GUILD", "GMSTATUS" } )		);
+				tagValueCompare.Add( "UPDATE",		new ValidValueNumeric()						);
 				tagValueCompare.Add( "INPUT",		new ValidValueString()						);
 				tagValueCompare.Add( "OUTPUT",		new ValidValueString()						);
 				tagValueCompare.Add( "NAME",		new ValidValueString()						);
