@@ -998,10 +998,12 @@ namespace UOXData.Script.Validation
 			}
 			protected override void BuildSchema()
 			{
-				tagValueCompare.Add( "HEIGHT",			new ValidValueNumeric( typeof( byte  ) )	);
-				tagValueCompare.Add( "WEIGHT",			new ValidValueNumeric( typeof( sbyte ) )	);
-				tagValueCompare.Add( "LAYER",			new ValidValueNumeric( typeof( byte  ) )	);
-				tagValueCompare.Add( "ANIMATION",		new ValidValueNumeric( typeof( int   ) )	);
+				tagValueCompare.Add( "HEIGHT",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "WEIGHT",			new ValidValueNumeric( typeof( sbyte  ) )	);
+				tagValueCompare.Add( "LAYER",			new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "ANIMATION",		new ValidValueNumeric( typeof( ushort ) )	);
+				tagValueCompare.Add( "HUE",				new ValidValueNumeric( typeof( byte   ) )	);
+				tagValueCompare.Add( "QUANTITY",		new ValidValueNumeric( typeof( byte   ) )	);
 				tagValueCompare.Add( "NAME",			new ValidValueString()						);
 
 				tagValueCompare.Add( "ATFLOORLEVEL",	new ValidValueBoolean()						);
@@ -1012,7 +1014,7 @@ namespace UOXData.Script.Validation
 				tagValueCompare.Add( "DAMAGING",		new ValidValueBoolean()						);
 				tagValueCompare.Add( "BLOCKING",		new ValidValueBoolean()						);
 				tagValueCompare.Add( "LIQUIDWET",		new ValidValueBoolean()						);
-				tagValueCompare.Add( "UNKNOWN1",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "UNKNOWNFLAG1",	new ValidValueBoolean()						);
 				tagValueCompare.Add( "STANDABLE",		new ValidValueBoolean()						);
 				tagValueCompare.Add( "CLIMBABLE",		new ValidValueBoolean()						);
 				tagValueCompare.Add( "STACKABLE",		new ValidValueBoolean()						);
@@ -1022,15 +1024,15 @@ namespace UOXData.Script.Validation
 				tagValueCompare.Add( "DISPLAYASAN",		new ValidValueBoolean()						);
 				tagValueCompare.Add( "DESCRIPTIONTILE",	new ValidValueBoolean()						);
 				tagValueCompare.Add( "FADEWITHTRANS",	new ValidValueBoolean()						);
-				tagValueCompare.Add( "UNKNOWN2",		new ValidValueBoolean()						);
-				tagValueCompare.Add( "UNKNOWN3",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "PARTIALHUE",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "UNKNOWNFLAG2",	new ValidValueBoolean()						);
 				tagValueCompare.Add( "MAP",				new ValidValueBoolean()						);
 				tagValueCompare.Add( "CONTAINER",		new ValidValueBoolean()						);
 				tagValueCompare.Add( "EQUIPABLE",		new ValidValueBoolean()						);
 				tagValueCompare.Add( "LIGHTSOURCE",		new ValidValueBoolean()						);
 				tagValueCompare.Add( "ANIMATED",		new ValidValueBoolean()						);
-				tagValueCompare.Add( "UNKNOWN4",		new ValidValueBoolean()						);
-				tagValueCompare.Add( "WALK",			new ValidValueBoolean()						);
+				tagValueCompare.Add( "NODIAGONAL",		new ValidValueBoolean()						);
+				tagValueCompare.Add( "UNKNOWNFLAG3",	new ValidValueBoolean()						);
 				tagValueCompare.Add( "WHOLEBODYITEM",	new ValidValueBoolean()						);
 				tagValueCompare.Add( "WALLROOFWEAP",	new ValidValueBoolean()						);
 				tagValueCompare.Add( "DOOR",			new ValidValueBoolean()						);

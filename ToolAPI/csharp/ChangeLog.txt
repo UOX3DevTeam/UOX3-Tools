@@ -1,4 +1,7 @@
 9th March, 2006 - Maarc
+	Updated Validation Schema for MapTiles to reflect the new beta cycle
+
+9th March, 2006 - Maarc
 	Fixed some subtle order of construction errors with Scripts and ScriptSections
 	Added a GetFileEnumerator() method to DefinitionCollection so that you can now progressively access all the DFNs in the tree
 	Added category tracking to ScriptSection, so that getting a schema is really easy
