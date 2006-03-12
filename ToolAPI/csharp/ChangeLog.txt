@@ -1,3 +1,6 @@
+12th March, 2006 - Maarc
+	Added Validation Schemas for the NPC definitions
+
 9th March, 2006 - Maarc
 	Updated Validation Schema for MapTiles to reflect the new beta cycle
 

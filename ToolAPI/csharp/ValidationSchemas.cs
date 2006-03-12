@@ -840,7 +840,13 @@ namespace UOXData.Script.Validation
 			}
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return validStr.Valid( t.Tag ) && validNum.Valid( t.Data.Value );
+				bool validTag	= validStr.Valid( t.Tag );
+				bool validData	= validNum.Valid( t.Data.Value );
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				if( !validData )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.Numeric, t.Data.Value, "Failed validation test" ) );
+				return validTag && validData;
 			}
 		}
 		public class CommandOverrideSchema : BaseSchema
@@ -854,7 +860,13 @@ namespace UOXData.Script.Validation
 			}
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return validStr.Valid( t.Tag ) && validNum.Valid( t.Data.Value );
+				bool validTag	= validStr.Valid( t.Tag );
+				bool validData	= validNum.Valid( t.Data.Value );
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				if( !validData )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.Numeric, t.Data.Value, "Failed validation test" ) );
+				return validTag && validData;
 			}
 		}
 		public class CommandLevelIndivSchema : BaseSchema
@@ -883,7 +895,10 @@ namespace UOXData.Script.Validation
 			}
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return validNum.Valid( t.Tag );
+				bool validTag	= validNum.Valid( t.Tag );
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.Numeric, t.Data.Value, "Failed validation test" ) );
+				return validTag;
 			}
 		}
 		public class CreatureSchema : BaseSchema
@@ -1068,7 +1083,10 @@ namespace UOXData.Script.Validation
 					if( !pagesDone && t.Tag == "PAGES" )
 						pagesDone	= true;
 					if( ( !pagesDone || !titleDone || !authorDone ) && t.Tag == "PAGE" )
+					{
+						errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "TITLE, AUTHOR and PAGES must come before PAGE" ) );
 						return false;
+					}
 				}
 				return validBase;
 			}
@@ -1078,7 +1096,10 @@ namespace UOXData.Script.Validation
 		{
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return ( t.Tag.Length != 0 );
+				bool validTag	= (t.Tag.Length != 0);
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag;
 			}
 			public PageSchema() : base()
 			{
@@ -1088,7 +1109,10 @@ namespace UOXData.Script.Validation
 		{
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return ( t.Tag.Length != 0 );
+				bool validTag	= (t.Tag.Length != 0);
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag;
 			}
 			public GumpTextSchema() : base()
 			{
@@ -1098,7 +1122,10 @@ namespace UOXData.Script.Validation
 		{
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return ( t.Tag.Length != 0 );
+				bool validTag	= (t.Tag.Length != 0);
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag;
 			}
 			public GumpMenuSchema() : base()
 			{
@@ -1108,7 +1135,10 @@ namespace UOXData.Script.Validation
 		{
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return ( t.Tag.Length != 0 );
+				bool validTag	= (t.Tag.Length != 0);
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag;
 			}
 			public MOTDSchema() : base()
 			{
@@ -1118,7 +1148,10 @@ namespace UOXData.Script.Validation
 		{
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return ( t.Tag.Length != 0 );
+				bool validTag	= (t.Tag.Length != 0);
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag;
 			}
 			public TipSchema() : base()
 			{
@@ -1151,7 +1184,10 @@ namespace UOXData.Script.Validation
 			}
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return ( t.Tag.Length != 0 );
+				bool validTag	= (t.Tag.Length != 0);
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag;
 			}
 		}
 		public class NewbieSchema : BaseSchema
@@ -1172,7 +1208,10 @@ namespace UOXData.Script.Validation
 			}
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return ( t.Tag.Length != 0 );
+				bool validTag	= (t.Tag.Length != 0);
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag;
 			}
 		}
 		public class SkillSchema : BaseSchema
@@ -1260,7 +1299,13 @@ namespace UOXData.Script.Validation
 			}
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return validNum.Valid( t.Tag ) && validStr.Valid( t.Data.Value );
+				bool validTag	= validNum.Valid( t.Tag );
+				bool validData	= validStr.Valid( t.Data.Value );
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.Numeric, t.Data.Value, "Failed validation test" ) );
+				if( !validData )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag && validData;
 			}
 		}
 		public class MurdererSchema : BaseSchema
@@ -1274,7 +1319,13 @@ namespace UOXData.Script.Validation
 			}
 			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
 			{
-				return validNum.Valid( t.Tag ) && validStr.Valid( t.Data.Value );
+				bool validTag	= validNum.Valid( t.Tag );
+				bool validData	= validStr.Valid( t.Data.Value );
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.Numeric, t.Data.Value, "Failed validation test" ) );
+				if( !validData )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag && validData;
 			}
 		}
 		public class SkillTitleSchema : BaseSchema
@@ -1313,6 +1364,147 @@ namespace UOXData.Script.Validation
 				tagValueCompare.Add( "STORMCHANCE",		new ValidValueNumeric(			typeof( sbyte ) )	);
 				tagValueCompare.Add( "STORMINTENSITY",	new ValidValueDoubleNumeric(	typeof( sbyte ) )	);
 				tagValueCompare.Add( "STORMTEMPDROP",	new ValidValueNumeric(			typeof( sbyte ) )	);
+			}
+		}
+		public class NPCListSchema : BaseSchema
+		{
+			protected ValidValueString	validStr;
+			public NPCListSchema() : base()
+			{
+				validStr = new ValidValueString();
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "NPCLIST",			new ValidValueString()						);
+			}
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				bool retVal = false;
+				if( tagValueCompare.ContainsKey( t.Tag ) )
+				{
+					BaseValidValue mValue = (BaseValidValue)tagValueCompare[t.Tag];
+					if( !mValue.Valid( t.Data.Value ) )
+						errorLog.Add( new ValidateError( t.Tag, mValue.ValueType, t.Data.Value, "Failed validation test" ) );
+					else
+						retVal = true;
+				}
+				else
+				{
+					retVal = validStr.Valid( t.Tag );
+					if( !retVal )
+						errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				}
+				return retVal;
+			}
+		}
+		public class RandomNameSchema : BaseSchema
+		{
+			public RandomNameSchema() : base()
+			{
+			}
+			protected override bool ValidatePair( TagDataPair t, ArrayList errorLog )
+			{
+				bool validTag	= (t.Tag.Length != 0);
+				if( !validTag )
+					errorLog.Add( new ValidateError( t.Tag, ValueTypes.String, t.Data.Value, "Failed validation test" ) );
+				return validTag;
+			}
+		}
+		public class NPCSchema : BaseSchema
+		{
+			public NPCSchema() : base()
+			{
+			}
+			protected override void BuildSchema()
+			{
+				tagValueCompare.Add( "ATT",				new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "DAMAGE",			new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "BACKPACK",		new ValidValueNoData()								);
+				tagValueCompare.Add( "CARVE",			new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "COLOUR",			new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "COLOR",			new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "COLOURLIST",		new ValidValueString()								);
+				tagValueCompare.Add( "COLORLIST",		new ValidValueString()								);
+				tagValueCompare.Add( "COLORMATCHHAIR",	new ValidValueNoData()								);
+				tagValueCompare.Add( "COLOURMATCHHAIR",	new ValidValueNoData()								);
+				tagValueCompare.Add( "DEXTERITY",		new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "DX",				new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "DEX",				new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "DEF",				new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "DIR",				new ValidValueString( new string[] { "NE", "E", "SE", "S", "SW", "W", "NW", "N"  }  )	);
+				tagValueCompare.Add( "DIRECTION",		new ValidValueString( new string[] { "NE", "E", "SE", "S", "SW", "W", "NW", "N"  }  )	);
+				tagValueCompare.Add( "EMOTECOLOR",		new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "EMOTECOLOUR",		new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "EQUIPITEM",		new ValidValueUppercaseString()						);
+				tagValueCompare.Add( "FAME",			new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "FLEEAT",			new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "FLAG",			new ValidValueUppercaseString( new string[] { "NEUTRAL", "INNOCENT", "EVIL"  }  )						);
+				tagValueCompare.Add( "FX1",				new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "FX2",				new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "FY1",				new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "FY2",				new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "FZ1",				new ValidValueNumeric(			typeof( sbyte  ) )	);
+				tagValueCompare.Add( "FOOD",			new ValidValueUppercaseString()						);
+				tagValueCompare.Add( "GET",				new ValidValueUppercaseString()						);
+				tagValueCompare.Add( "GOLD",			new ValidValueDoubleNumeric(	typeof( ushort ) )	);
+				tagValueCompare.Add( "HAIRCOLOR",		new ValidValueString()								);
+				tagValueCompare.Add( "HAIRCOLOUR",		new ValidValueString()								);
+				tagValueCompare.Add( "HIDAMAGE",		new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "HP",				new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "HPMAX",			new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "ID",				new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "INTELLIGENCE",	new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "IN",				new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "INT",				new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "KARMA",			new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "LOOT",			new ValidValueUppercaseString()						);
+				tagValueCompare.Add( "LODAMAGE",		new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "MANA",			new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "MANAMAX",			new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "NAME",			new ValidValueString()								);
+				tagValueCompare.Add( "NAMELIST",		new ValidValueString()								);
+				tagValueCompare.Add( "NPCWANDER",		new ValidValueNumeric(			typeof( sbyte  ) )	);
+				tagValueCompare.Add( "NPCAI",			new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "NOTRAIN",			new ValidValueNoData()								);
+				tagValueCompare.Add( "PACKITEM",		new ValidValueTokens( new BaseValidValue[] { new ValidValueString(), new ValidValueNumeric( typeof( ushort ) ) }, ",", 1 ) );
+				tagValueCompare.Add( "POISONSTRENGTH",	new ValidValueNumeric(			typeof( byte   ) )	);
+				tagValueCompare.Add( "PRIV1",			new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "RSHOPITEM",		new ValidValueString()								);
+				tagValueCompare.Add( "REATTACKAT",		new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "RACE",			new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "RUNS",			new ValidValueNoData()								);
+				tagValueCompare.Add( "SKIN",			new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "SHOPKEEPER",		new ValidValueNoData()								);
+				tagValueCompare.Add( "SHOPLIST",		new ValidValueString()								);
+				tagValueCompare.Add( "SELLITEM",		new ValidValueString()								);
+				tagValueCompare.Add( "SHOPITEM",		new ValidValueString()								);
+				tagValueCompare.Add( "SAYCOLOUR",		new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "SAYCOLOR",		new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "SPATTACK",		new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "SPADELAY",		new ValidValueNumeric(			typeof( sbyte  ) )	);
+				tagValueCompare.Add( "SPLIT",			new ValidValueNumeric(			typeof( byte   ) )	);
+				tagValueCompare.Add( "SPLITCHANCE",		new ValidValueNumeric(			typeof( byte   ) )	);
+				tagValueCompare.Add( "STRENGTH",		new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "ST",				new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "STR",				new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "STAMINA",			new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "STAMINAMAX",		new ValidValueDoubleNumeric(	typeof( short  ) )	);
+				tagValueCompare.Add( "SKINLIST",		new ValidValueString()								);
+				tagValueCompare.Add( "SKILL",			new ValidValueDoubleNumeric( typeof( ushort  ), typeof( byte ) )	);
+				tagValueCompare.Add( "SCRIPT",			new ValidValueNumeric(			typeof( ushort ) )	);
+				tagValueCompare.Add( "TOTAME",			new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "TOPROV",			new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "TOPEACE",			new ValidValueNumeric(			typeof( short  ) )	);
+				tagValueCompare.Add( "TAMEDHUNGER",		new ValidValueDoubleNumeric( typeof( ushort  ), typeof( byte ) )	);
+				tagValueCompare.Add( "WILLHUNGER",		new ValidValueBoolean()								);
+				tagValueCompare.Add( "CUSTOMSTRINGTAG",	new ValidValueTokens( new BaseValidValue[] { new ValidValueString(), new ValidValueString() }, " ", 2 ) );
+				tagValueCompare.Add( "CUSTOMINTTAG",	new ValidValueTokens( new BaseValidValue[] { new ValidValueString(), new ValidValueNumeric( typeof( long ) ) }, " ", 2 ) );
+
+				for( Skills v = Skills.ALCHEMY; v < Skills.ALLSKILLS; ++v )
+				{
+					tagValueCompare.Add( v.ToString(), new ValidValueDoubleNumeric( typeof( ushort ) ) );
+					tagValueCompare.Add( v.ToString(), new ValidValueDoubleNumeric( typeof( ushort ) ) );
+				}
 			}
 		}
 	}

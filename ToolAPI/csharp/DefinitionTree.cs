@@ -125,6 +125,12 @@ namespace UOXData.Script
 						toReturn = new UOXData.Script.Validation.Schemas.NewbieSchema();
 					break;
 				case DFN_Categories.npc:
+					if( sectHeader.StartsWith( "NPCLIST" ) )
+						toReturn = new UOXData.Script.Validation.Schemas.NPCListSchema();
+					else if( sectHeader.StartsWith( "RANDOMNAME" ) )
+						toReturn = new UOXData.Script.Validation.Schemas.RandomNameSchema();
+					else
+						toReturn = new UOXData.Script.Validation.Schemas.NPCSchema();
 					break;
 				case DFN_Categories.race:
 					if( sectHeader.StartsWith( "RACE" ) )
