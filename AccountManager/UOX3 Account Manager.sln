@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C# Express 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UOXData", "..\ToolAPI\csharp\UOXData.csproj", "{B74881F6-CEC7-4591-A812-12A8A3E67A9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Account Manager", "Account Manager.csproj", "{EC1C6CD4-6D1C-4C10-90CF-D54D73F674A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B74881F6-CEC7-4591-A812-12A8A3E67A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B74881F6-CEC7-4591-A812-12A8A3E67A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B74881F6-CEC7-4591-A812-12A8A3E67A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B74881F6-CEC7-4591-A812-12A8A3E67A9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC1C6CD4-6D1C-4C10-90CF-D54D73F674A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC1C6CD4-6D1C-4C10-90CF-D54D73F674A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC1C6CD4-6D1C-4C10-90CF-D54D73F674A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC1C6CD4-6D1C-4C10-90CF-D54D73F674A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
