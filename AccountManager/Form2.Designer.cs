@@ -51,7 +51,7 @@ namespace AccountManager
 			this.grpCharSettings.Location = new System.Drawing.Point(130, 13);
 			this.grpCharSettings.Name = "grpCharSettings";
 			this.grpCharSettings.Size = new System.Drawing.Size(236, 101);
-			this.grpCharSettings.TabIndex = 45;
+			this.grpCharSettings.TabIndex = 2;
 			this.grpCharSettings.TabStop = false;
 			this.grpCharSettings.Text = "Character Settings";
 			// 

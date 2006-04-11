@@ -5,7 +5,7 @@ namespace AccountManager
 {
 	public class AccountObject
 	{
-		public AccountObject( ushort acctNum )
+		public AccountObject( int acctNum )
 		{
 			num			= acctNum;
 			name		= "";
@@ -20,7 +20,7 @@ namespace AccountManager
 		}
 
 		#region "Protected Data"
-		protected ushort			num;
+		protected int				num;
 		protected string			name;
 		protected string			pass;
 		protected string			contact;
@@ -31,7 +31,7 @@ namespace AccountManager
 		#endregion
 
 		#region "Public Properties"
-		public ushort			Number			{ get { return num;			}	set { num = value;		}	}
+		public int				Number			{ get { return num;			}	set { num = value;		}	}
 		public string			Name			{ get { return name;		}	set { name = value;		}	}
 		public string			Pass			{ get { return pass;		}	set { pass = value;		}	}
 		public string			Contact			{ get { return contact;		}	set { contact = value;	}	}
@@ -41,10 +41,10 @@ namespace AccountManager
 		public List<SlotObject> CharSlots		{ get { return charSlots;	}								}
 		#endregion
 
-		public void Save( StreamWriter ioStream )
+		public bool Save( StreamWriter ioStream )
 		{
 			if( name.Length == 0 || pass.Length == 0 || num == 0xFFFF )
-				return;
+				return false;
 
 			ioStream.WriteLine( "SECTION ACCOUNT " + num.ToString() );
 			ioStream.WriteLine( "{" );
@@ -63,6 +63,7 @@ namespace AccountManager
 			ioStream.WriteLine("}");
 			ioStream.WriteLine();
 			ioStream.Flush();
+			return true;
 		}
 
 		public void SetFlag( ushort toSet, bool newVal )

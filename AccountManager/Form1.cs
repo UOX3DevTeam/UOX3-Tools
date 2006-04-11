@@ -16,8 +16,18 @@ namespace AccountManager
 			myForm		= new CharacterEditor();
 			selAcct		= null;
 			nextAcct	= 0;
+			numAccts	= 0;
+			numPlayers	= 0;
+			numBans		= 0;
+			UpdateStats();
 		}
 
+		private void UpdateStats()
+		{
+			txtAccountStats.Text	= "Accounts: " + numAccts.ToString();
+			txtBanStats.Text		= "Bans: " + numBans.ToString();
+			txtPlayerStats.Text		= "Players: " + numPlayers.ToString();
+		}
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
 			Close();
@@ -58,7 +68,7 @@ namespace AccountManager
 					{
 						ushort acctNum = UOXData.Conversion.ToUInt16( mSect.SectionName );
 						if( acctNum >= nextAcct )
-							nextAcct = (ushort)(acctNum + 1);
+							nextAcct = acctNum + 1;
 						AccountObject toAdd = new AccountObject( acctNum );
 						foreach( UOXData.Script.TagDataPair mPair in mSect.TagDataPairs )
 						{
@@ -99,15 +109,23 @@ namespace AccountManager
 									mSlot.Serial		= UOXData.Conversion.ToUInt32( dataSplit[0] );
 									if( dataSplit[1].Length > 0 )
 										mSlot.Name		= dataSplit[1].Substring( 1, dataSplit[1].Length - 2 );
+
+									if( mSlot.Serial != 0xFFFFFFFF )
+										++numPlayers;
 									break;
 								default:
 									break;
 							}
 						}
+						if( toAdd.GetFlag( 0x0001 ) )
+							++numBans;
 						accountList.Add( toAdd );
+						++numAccts;
 						listAccounts.Items.Add( toAdd.Name + " (" + mSect.SectionName + ")" );
 						progressBar.PerformStep();
 					}
+
+					UpdateStats();
 
 					if( listAccounts.Items.Count > 0 )
 						listAccounts.SelectedIndex = 0;
@@ -126,7 +144,7 @@ namespace AccountManager
 
 		private void listAccounts_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			selAcct = null;
+			selAcct				= null;
 			cbPublic.Checked	= false;
 			rdBanned.Checked	= false;
 			rdSuspended.Checked = false;
@@ -142,31 +160,38 @@ namespace AccountManager
 				return;
 			}
 
-			selAcct			= accountList[listAccounts.SelectedIndex];
-			txtName.Text	= selAcct.Name;
-			txtPass.Text	= selAcct.Pass;
-			txtPath.Text	= selAcct.Path;
-			txtContact.Text = selAcct.Contact;
-			txtTimeban.Text = selAcct.TimeBan.ToString();
-			if( selAcct.GetFlag( 0x0004 ) )
+			AccountObject tmpAcct	= accountList[listAccounts.SelectedIndex];
+			txtName.Text			= tmpAcct.Name;
+			txtPass.Text			= tmpAcct.Pass;
+			txtPath.Text			= tmpAcct.Path;
+			txtContact.Text			= tmpAcct.Contact;
+			txtTimeban.Text			= tmpAcct.TimeBan.ToString();
+			if( tmpAcct.GetFlag( 0x0004 ) )
 				cbPublic.Checked = true;
 
-			if( selAcct.GetFlag( 0x8000 ) )
+			if( tmpAcct.GetFlag( 0x8000 ) )
 				rdGM.Checked = true;
-			else if( selAcct.GetFlag( 0x4000 ) )
+			else if( tmpAcct.GetFlag( 0x4000 ) )
 				rdCns.Checked = true;
-			else if( selAcct.GetFlag( 0x2000 ) )
+			else if( tmpAcct.GetFlag( 0x2000 ) )
 				rdSeer.Checked = true;
 
-			if( selAcct.GetFlag( 0x0001 ) )
+			if( tmpAcct.GetFlag( 0x0001 ) )
 				rdBanned.Checked = true;
-			else if( selAcct.GetFlag( 0x0002 ) )
+			else if( tmpAcct.GetFlag( 0x0002 ) )
 				rdSuspended.Checked = true;
 
 			if( myForm.Visible )
-				myForm.UpdateList( selAcct );
+				myForm.UpdateList( tmpAcct );
+
+			selAcct = tmpAcct;
 		}
 
+		private void txtName_LostFocus( object sender, EventArgs e )
+		{
+			if( selAcct != null && txtName.Text.Length > 0 )
+				listAccounts.Items[listAccounts.SelectedIndex] = txtName.Text + " (" + selAcct.Number + ")";
+		}
 		private void txtName_TextChanged(object sender, EventArgs e)
 		{
 			if( selAcct != null && txtName.Text.Length > 0 )
@@ -199,34 +224,71 @@ namespace AccountManager
 
 		private void btnAdd_Click(object sender, EventArgs e)
 		{
-			accountList.Add( new AccountObject( nextAcct ) );
-			listAccounts.Items.Add("NewAccount (" + nextAcct.ToString() + ")");
+			if( nextAcct >= 0xFFFF )
+			{
+				MessageBox.Show("Error: UOX3 Only Supports Accounts with numbers 0-65535!", "Failure");
+				return;
+			}
+
+			AccountObject newAcct = new AccountObject( nextAcct );
+			string name = "guest" + nextAcct.ToString();
+			if( nextAcct == 0 )
+			{
+				name = "admin";
+				newAcct.SetFlag( 0x8000, true );
+			}
+
+			newAcct.Name = name;
+			newAcct.Pass = name;
+			accountList.Add( newAcct );
+			listAccounts.Items.Add( name + " (" + nextAcct.ToString() + ")" );
 			listAccounts.SelectedIndex = listAccounts.Items.Count-1;
 			++nextAcct;
+			++numAccts;
+
+			UpdateStats();
 		}
 
 		private void btnRemove_Click(object sender, EventArgs e)
 		{
 			if( selAcct != null )
 			{
-				if( selAcct.Number == (ushort)(nextAcct-1) )
+				if( selAcct.GetFlag( 0x0001 ) )
+					--numBans;
+				foreach( SlotObject mSlot in selAcct.CharSlots )
+				{
+					if( mSlot.Serial != 0xFFFFFFFF )
+						--numPlayers;
+				}
+				--numAccts;
+
+				if( selAcct.Number == (nextAcct - 1) )
 					--nextAcct;
 				int index = listAccounts.SelectedIndex;
-				listAccounts.Items.RemoveAt( index );
 				accountList.Remove( selAcct );
+				listAccounts.Items.RemoveAt( index );
 
 				if( index > 0 )
 					listAccounts.SelectedIndex = index-1 ;
 				else if( listAccounts.Items.Count > 0 )
 					listAccounts.SelectedIndex = 0;
+
+
+				UpdateStats();
 			}
 		}
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
+			if( accountList.Count == 0 )
+			{
+				MessageBox.Show( "Error: Unable to save Accounts.adm, there are no accounts to save!", "Failure" );
+				return;
+			}
 			folderBrowserDialog.Description = "Please Select the a Directory to Save the Accounts.adm file to.";
 			if( folderBrowserDialog.ShowDialog() == DialogResult.OK )
 			{
+				int invalidCount	= 0;
 				string filePath		= folderBrowserDialog.SelectedPath + "\\accounts.adm";
 				progressBar.Minimum = 0;
 				progressBar.Value	= 1;
@@ -234,10 +296,14 @@ namespace AccountManager
 				StreamWriter ioStream = new StreamWriter(filePath);
 				foreach( AccountObject mAcct in accountList )
 				{
-					mAcct.Save( ioStream );
+					if( !mAcct.Save( ioStream ) )
+						++invalidCount;
 					progressBar.PerformStep();
 				}
 				ioStream.Close();
+
+				if( invalidCount > 0 )
+					MessageBox.Show( "Warning: Found " + invalidCount.ToString() + " Accounts with bad/missing name or password entries, these accounts were NOT saved!", "Warning" );
 			}
 		}
 
@@ -262,7 +328,15 @@ namespace AccountManager
 		private void rdBanned_CheckedChanged(object sender, EventArgs e)
 		{
 			if( selAcct != null )
+			{
 				selAcct.SetFlag( 0x0001, rdBanned.Checked );
+				if( rdBanned.Checked )
+					++numBans;
+				else
+					--numBans;
+			}
+
+			UpdateStats();
 		}
 
 		private void rdSuspended_CheckedChanged(object sender, EventArgs e)
@@ -275,6 +349,47 @@ namespace AccountManager
 		{
 			if( selAcct != null )
 				selAcct.SetFlag( 0x0004, cbPublic.Checked );
+		}
+
+		private void btnRenumber_Click(object sender, EventArgs e)
+		{
+			if( accountList.Count == 0 )
+			{
+				MessageBox.Show("Error: There are no accounts to re-number!", "Failure");
+				return;
+			}
+			if( MessageBox.Show( "Do you really want to re-number all of your accounts sequentially?", "Confirmation", MessageBoxButtons.YesNo ) == DialogResult.Yes )
+			{
+				listAccounts.Items.Clear();
+				progressBar.Value	= 1;
+				progressBar.Maximum = accountList.Count;
+				int i				= 1;
+				foreach( AccountObject mAcct in accountList )
+				{
+					if( mAcct.Number != 0 )
+					{
+						mAcct.Number = i;
+						++i;
+					}
+					string name;
+					if( mAcct.Name.Length > 0 )
+						name = mAcct.Name;
+					else
+					{
+						if( mAcct.Number == 0 )
+							name = "AdminAccount";
+						else
+							name = "NewAccount";
+					}
+					listAccounts.Items.Add( name + " (" + mAcct.Number.ToString() + ")" );
+					progressBar.PerformStep();
+				}
+
+				if( listAccounts.Items.Count > 0 )
+					listAccounts.SelectedIndex = 0;
+
+				nextAcct = i;
+			}
 		}
 	}
 }

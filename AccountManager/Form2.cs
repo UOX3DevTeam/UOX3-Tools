@@ -25,7 +25,6 @@ namespace AccountManager
 		{
 			if( assocAcct != null && listCharacters.Items.Count > 0 )
 			{
-				 
 				ushort flag = (ushort)Math.Pow( 2, (4 + listCharacters.SelectedIndex) );
 				assocAcct.SetFlag( flag, cbBlockSlot.Checked );
 			}
@@ -58,12 +57,14 @@ namespace AccountManager
 			}
 
 			int index			= listCharacters.SelectedIndex;
-			selSlot				= (SlotObject)assocAcct.CharSlots[index];
-			txtCharName.Text	= selSlot.Name;
-			txtCharSer.Text		= UOXData.Conversion.ToHexString( selSlot.Serial );
+			SlotObject tmpSlot  = assocAcct.CharSlots[index];
+			txtCharName.Text	= tmpSlot.Name;
+			txtCharSer.Text		= UOXData.Conversion.ToHexString( tmpSlot.Serial );
 			ushort flag			= (ushort)Math.Pow( 2, (4 + index) );
 			if( (assocAcct.Flags&flag) == flag )
 				cbBlockSlot.Checked = true;
+
+			selSlot				= tmpSlot;
 		}
 
 		private void txtCharSer_TextChanged(object sender, EventArgs e)

@@ -1,0 +1,20 @@
+04/11/2006 - giwo (v0.2)
+	Added some stats to count number of accounts, banned accounts, and players.
+	Added an error message dialog when attempting to save an empty Accounts.adm.
+	Modified the Account name-change handling to automatically update the listentry for the account.
+	Modified Account Number handling to eventually allow numbers larger than 65535.
+	Placed a manual limit of 65535 so as not to cause invalid account numbers to be passed to UOX3.
+	Added an option to re-number the accounts list sequentially
+		(note that it will NOT modify account 0).
+	Fixed a minor issue with tab-selection ordering.
+	Changed behaviour of adding new accounts to default name/pass to guest#/guest#
+		(note that Account 0 will default to admin/admin).
+	Added a Warning dialog to inform user when invalid accounts were not saved.
+	Fixed a bug when attempting to remove Account 0.
+
+04/10/2006 - giwo (v0.1 Initial Release)
+
+Current Featureset:
+	Loads a current Accounts.adm file, listing account entries and characters attached to each account.
+	Allows easy addition, removal, and modifications of all data contained in Accounts.adm, including account flags.
+	Saves Accounts.adm in a format readable by UOX3.
