@@ -43,7 +43,7 @@ namespace AccountManager
 
 		public bool Save( StreamWriter ioStream )
 		{
-			if( name.Length == 0 || pass.Length == 0 || num == 0xFFFF )
+			if( name.Length == 0 || pass.Length == 0 || num >= 0xFFFF )
 				return false;
 
 			ioStream.WriteLine( "SECTION ACCOUNT " + num.ToString() );

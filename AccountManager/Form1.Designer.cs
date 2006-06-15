@@ -453,7 +453,7 @@ namespace AccountManager
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "AccountManager";
-			this.Text = "UOX3 Account Manager v0.2";
+			this.Text = "UOX3 Account Manager v0.3";
 			this.grpLevel.ResumeLayout(false);
 			this.grpLevel.PerformLayout();
 			this.grpStatus.ResumeLayout(false);

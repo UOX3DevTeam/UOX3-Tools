@@ -23,11 +23,23 @@ namespace AccountManager
 
 		private void cbBlockSlot_CheckedChanged(object sender, EventArgs e)
 		{
-			if( assocAcct != null && listCharacters.Items.Count > 0 )
+			if( selSlot != null && assocAcct != null && listCharacters.Items.Count > 0 )
 			{
 				ushort flag = (ushort)Math.Pow( 2, (4 + listCharacters.SelectedIndex) );
 				assocAcct.SetFlag( flag, cbBlockSlot.Checked );
 			}
+		}
+
+		public void Clear()
+		{
+			assocAcct = null;
+			selSlot = null;
+
+			listCharacters.Items.Clear();
+			listCharacters.Update();
+			txtCharName.Clear();
+			txtCharSer.Clear();
+			cbBlockSlot.Checked = false;
 		}
 
 		public void UpdateList( AccountObject toDisp )

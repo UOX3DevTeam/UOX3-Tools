@@ -54,6 +54,8 @@ namespace AccountManager
 				string dirPath = folderBrowserDialog.SelectedPath + "\\accounts.adm";
 				accountList.Clear();
 				listAccounts.Items.Clear();
+				if( myForm.Visible )
+					myForm.Clear();
 				txtAccountsDir.Text = folderBrowserDialog.SelectedPath;
 				listAccounts.Update();
 				txtAccountsDir.Update();
@@ -157,6 +159,8 @@ namespace AccountManager
 				txtPath.Clear();
 				txtContact.Clear();
 				txtTimeban.Clear();
+				if( myForm.Visible )
+					myForm.Clear();
 				return;
 			}
 
@@ -226,7 +230,7 @@ namespace AccountManager
 		{
 			if( nextAcct >= 0xFFFF )
 			{
-				MessageBox.Show("Error: UOX3 Only Supports Accounts with numbers 0-65535!", "Failure");
+				MessageBox.Show("Error: UOX3 Only Supports Accounts with numbers 0-65534!", "Failure");
 				return;
 			}
 
@@ -303,7 +307,7 @@ namespace AccountManager
 				ioStream.Close();
 
 				if( invalidCount > 0 )
-					MessageBox.Show( "Warning: Found " + invalidCount.ToString() + " Accounts with bad/missing name or password entries, these accounts were NOT saved!", "Warning" );
+					MessageBox.Show( "Unable to save " + invalidCount.ToString() + " invalid accounts, check that all accounts have a name and password entry and are numbered below 65535.", "Warning" );
 			}
 		}
 

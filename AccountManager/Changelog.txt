@@ -1,3 +1,8 @@
+05/30/2006 - giwo (v.03)
+	Fixed an issue causing a blocked slot to automatically be unblocked.
+	Fixed an issue causing the character slot editor not to refresh when loading an empty accounts directory.
+	Improved error handling for accounts over 65535 (UOX3's current logical limit for account numbering).
+
 04/11/2006 - giwo (v0.2)
 	Added some stats to count number of accounts, banned accounts, and players.
 	Added an error message dialog when attempting to save an empty Accounts.adm.
