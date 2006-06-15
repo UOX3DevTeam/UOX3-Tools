@@ -18,12 +18,16 @@ namespace CharacterExporter
         public CharacterViewer()
         {
             InitializeComponent();
+			worldFiles			= new ArrayList();
+			worldObjects		= new ObjectHandler();
+			keepItemState		= KeepItemsState.KEEP_ALL;
+			radioAll.Checked	= true;
         }
 
         private void txtDirPath_TextChanged(object sender, EventArgs e)
         {
-			folderBrowserDialog.SelectedPath = txtDirPath.Text;
-			fileBrowserDialog.InitialDirectory = txtDirPath.Text;
+			folderBrowserDialog.SelectedPath	= txtDirPath.Text;
+			fileBrowserDialog.InitialDirectory	= txtDirPath.Text;
         }
 
         private void comboCharList_SelectedIndexChanged(object sender, EventArgs e)

@@ -66,7 +66,7 @@ namespace CharacterExporter
 			this.btnImport.Location = new System.Drawing.Point(9, 35);
 			this.btnImport.Name = "btnImport";
 			this.btnImport.Size = new System.Drawing.Size(84, 22);
-			this.btnImport.TabIndex = 7;
+			this.btnImport.TabIndex = 3;
 			this.btnImport.Text = "Import";
 			this.btnImport.UseVisualStyleBackColor = true;
 			this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
@@ -76,7 +76,7 @@ namespace CharacterExporter
 			this.btnExport.Location = new System.Drawing.Point(9, 63);
 			this.btnExport.Name = "btnExport";
 			this.btnExport.Size = new System.Drawing.Size(84, 22);
-			this.btnExport.TabIndex = 8;
+			this.btnExport.TabIndex = 4;
 			this.btnExport.Text = "Export";
 			this.btnExport.UseVisualStyleBackColor = true;
 			this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
@@ -110,7 +110,7 @@ namespace CharacterExporter
 			this.comboCharList.Name = "comboCharList";
 			this.comboCharList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.comboCharList.Size = new System.Drawing.Size(143, 225);
-			this.comboCharList.TabIndex = 14;
+			this.comboCharList.TabIndex = 10;
 			this.comboCharList.SelectedIndexChanged += new System.EventHandler(this.comboCharList_SelectedIndexChanged);
 			// 
 			// comboItemList
@@ -121,7 +121,7 @@ namespace CharacterExporter
 			this.comboItemList.Name = "comboItemList";
 			this.comboItemList.SelectionMode = System.Windows.Forms.SelectionMode.None;
 			this.comboItemList.Size = new System.Drawing.Size(253, 225);
-			this.comboItemList.TabIndex = 15;
+			this.comboItemList.TabIndex = 11;
 			// 
 			// ChooseWorldLabel
 			// 
@@ -137,7 +137,7 @@ namespace CharacterExporter
 			this.txtDirPath.Location = new System.Drawing.Point(99, 9);
 			this.txtDirPath.Name = "txtDirPath";
 			this.txtDirPath.Size = new System.Drawing.Size(335, 20);
-			this.txtDirPath.TabIndex = 17;
+			this.txtDirPath.TabIndex = 1;
 			this.txtDirPath.TextChanged += new System.EventHandler(this.txtDirPath_TextChanged);
 			// 
 			// fileBrowserDialog
@@ -150,7 +150,7 @@ namespace CharacterExporter
 			this.radioAll.Location = new System.Drawing.Point(12, 117);
 			this.radioAll.Name = "radioAll";
 			this.radioAll.Size = new System.Drawing.Size(36, 17);
-			this.radioAll.TabIndex = 18;
+			this.radioAll.TabIndex = 5;
 			this.radioAll.TabStop = true;
 			this.radioAll.Text = "All";
 			this.radioAll.UseVisualStyleBackColor = true;
@@ -162,7 +162,7 @@ namespace CharacterExporter
 			this.radioNone.Location = new System.Drawing.Point(12, 140);
 			this.radioNone.Name = "radioNone";
 			this.radioNone.Size = new System.Drawing.Size(51, 17);
-			this.radioNone.TabIndex = 19;
+			this.radioNone.TabIndex = 6;
 			this.radioNone.TabStop = true;
 			this.radioNone.Text = "None";
 			this.radioNone.UseVisualStyleBackColor = true;
@@ -174,7 +174,7 @@ namespace CharacterExporter
 			this.radioWearables.Location = new System.Drawing.Point(12, 163);
 			this.radioWearables.Name = "radioWearables";
 			this.radioWearables.Size = new System.Drawing.Size(76, 17);
-			this.radioWearables.TabIndex = 20;
+			this.radioWearables.TabIndex = 7;
 			this.radioWearables.TabStop = true;
 			this.radioWearables.Text = "Wearables";
 			this.radioWearables.UseVisualStyleBackColor = true;
@@ -186,7 +186,7 @@ namespace CharacterExporter
 			this.radioPack.Location = new System.Drawing.Point(12, 186);
 			this.radioPack.Name = "radioPack";
 			this.radioPack.Size = new System.Drawing.Size(78, 17);
-			this.radioPack.TabIndex = 21;
+			this.radioPack.TabIndex = 8;
 			this.radioPack.TabStop = true;
 			this.radioPack.Text = "Pack Items";
 			this.radioPack.UseVisualStyleBackColor = true;
@@ -207,7 +207,7 @@ namespace CharacterExporter
 			this.progressBar.Location = new System.Drawing.Point(9, 237);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(84, 23);
-			this.progressBar.TabIndex = 23;
+			this.progressBar.TabIndex = 9;
 			// 
 			// lblProgress
 			// 
@@ -244,7 +244,7 @@ namespace CharacterExporter
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "CharacterViewer";
-			this.Text = "UOX3 Character Viewer v0.4";
+			this.Text = "UOX3 Character Viewer v0.5";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -270,8 +270,8 @@ namespace CharacterExporter
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
 		private System.Windows.Forms.OpenFileDialog fileBrowserDialog;
 		private System.Windows.Forms.ProgressBar progressBar;
-		protected ArrayList worldFiles			= new ArrayList();
-		protected ObjectHandler worldObjects	= new ObjectHandler();
+		protected ArrayList worldFiles;
+		protected ObjectHandler worldObjects;
 		private KeepItemsState keepItemState;
     }
 }
