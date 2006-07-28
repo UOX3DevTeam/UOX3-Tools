@@ -19,6 +19,7 @@ namespace CharacterExporter
         protected ArrayList importCharList;
         protected ArrayList importItemList;
         #endregion "ProtectedData"
+
         #region "Public Properties"	
         public ArrayList CharList       { get { return charList;        }									}
         public ArrayList ItemList       { get { return itemList;        }									}
@@ -30,12 +31,12 @@ namespace CharacterExporter
 
         public ObjectHandler()
         {
-			nextItemSer = 0x40000000;
-			nextCharSer = 0;
-            charList = new ArrayList();
-            itemList = new ArrayList();
-            importCharList = new ArrayList();
-            importItemList = new ArrayList();
+			nextItemSer		= 0x40000000;
+			nextCharSer		= 0;
+            charList		= new ArrayList();
+            itemList		= new ArrayList();
+            importCharList	= new ArrayList();
+            importItemList	= new ArrayList();
         }
 
 		public void Clear()
@@ -85,6 +86,7 @@ namespace CharacterExporter
 		protected ArrayList containsList;
 		protected UOXData.Script.WorldSection section;
 		#endregion "Protected Data"
+
 		#region "Public Properties"
 		public UOXData.Script.WorldSection Section	{ get { return section;			} set { section = value;	}	}
 		public ArrayList ContainsList				{ get { return containsList;	}								}
@@ -93,39 +95,60 @@ namespace CharacterExporter
 		public uint Serial							{ get { return serial;			} set { serial = value;		}	}
 		public ObjectType ObjType					{ get { return objType;			} set { objType = value;	}	}
 		#endregion "Public Properties"
+
 		public WorldObject()
         {
-            containsList = new ArrayList();
+			ResetDefaults();
         }
         public WorldObject(uint newSer)
         {
+			ResetDefaults();
             serial = newSer;
-            containsList = new ArrayList();
         }
+		private void ResetDefaults()
+		{
+            containsList	= new ArrayList();
+			objType			= ObjectType.OT_CBO;
+			name			= "";
+			serial			= 0xFFFFFFFF;
+			id				= 0xFFFF;
+			section			= null;
+		}
     }
 
     public class CharObject : WorldObject
     {
         public CharObject() : base()
         {
-			ObjType = ObjectType.OT_CHAR;
+			ResetDefaults();
         }
         public CharObject(uint newSer) : base(newSer)
         {
-			ObjType = ObjectType.OT_CHAR;
+			ResetDefaults();
         }
+
+		private void ResetDefaults()
+		{
+			ObjType = ObjectType.OT_CHAR;
+		}
     }
 
     public class ItemObject : WorldObject
     {
         public ItemObject() : base()
         {
-			ObjType = ObjectType.OT_ITEM;
+			ResetDefaults();
         }
         public ItemObject(uint newSer) : base(newSer)
         {
-			ObjType = ObjectType.OT_ITEM;
+			ResetDefaults();
         }
+
+		private void ResetDefaults()
+		{
+			ObjType		= ObjectType.OT_ITEM;
+			container	= 0xFFFFFFFF;
+		}
 
         protected uint container;
         public uint Container

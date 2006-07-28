@@ -32,19 +32,36 @@ namespace CharacterExporter
 
         private void comboCharList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            comboItemList.Items.Clear();
+			UpdateItemList();
+		}
 
-            CharObject mChar = ( CharObject )worldObjects.CharList[comboCharList.SelectedIndex];
-            if( mChar != null )
-                ListItemsInCont(mChar);
-        }
+		private void UpdateItemList()
+		{
+			dataGridItems.Rows.Clear();
+
+			if( keepItemState != KeepItemsState.KEEP_NONE )
+			{
+				foreach( int selSlot in comboCharList.SelectedIndices )
+				{
+					CharObject mChar = ( CharObject )worldObjects.CharList[selSlot];
+					if( mChar != null )
+						ListItemsInCont( mChar );
+				}
+			}
+
+			if( dataGridItems.Rows.Count == 0 )
+				dataGridItems.Rows.Add( "No items will be exported with this character." );
+		}
 
         private void ListItemsInCont( WorldObject mCont )
         {
+			bool listAll = (mCont.ObjType == ObjectType.OT_ITEM);
             foreach( ItemObject mItem in mCont.ContainsList )
             {
-                comboItemList.Items.Add(mItem.Name + " (" + UOXData.Conversion.ToHexString( mItem.ID ) + ", " + UOXData.Conversion.ToHexString( mItem.Serial ) + ")" );
-                ListItemsInCont(mItem);
+				if( listAll || keepItemState != KeepItemsState.KEEP_PACKITEMS || mItem.ContainsList.Count > 0 )
+					dataGridItems.Rows.Add( mItem.Name, UOXData.Conversion.ToHexString(mItem.ID), UOXData.Conversion.ToHexString(mItem.Serial) );
+				if( listAll || keepItemState != KeepItemsState.KEEP_WEARABLES )
+					ListItemsInCont( mItem );
             }
         }
 
@@ -100,8 +117,8 @@ namespace CharacterExporter
 						comboCharList.SelectedIndex = 0;
 					else
 					{
-						comboItemList.Items.Clear();
-						comboItemList.Items.Add( "Character File Imported: No Characters to Display" );
+						dataGridItems.Rows.Clear();
+						dataGridItems.Rows.Add("Character File Imported: No Characters to Display");
 					}
 				}
 			}
@@ -163,12 +180,13 @@ namespace CharacterExporter
 
         private void SaveItemsInCont(WorldObject mCont, StreamWriter fileOut)
         {
+			bool saveAll = (mCont.ObjType == ObjectType.OT_ITEM);
             foreach (ItemObject mItem in mCont.ContainsList)
             {
-				if( mCont.ObjType != ObjectType.OT_CHAR || keepItemState != KeepItemsState.KEEP_PACKITEMS )
-					mItem.Section.Save(fileOut);
-				if( keepItemState != KeepItemsState.KEEP_WEARABLES )
-	                SaveItemsInCont(mItem, fileOut);
+				if( saveAll || keepItemState != KeepItemsState.KEEP_PACKITEMS || mItem.ContainsList.Count > 0 )
+					mItem.Section.Save( fileOut );
+				if( saveAll || keepItemState != KeepItemsState.KEEP_WEARABLES )
+					SaveItemsInCont( mItem, fileOut );
             }
         }
 
@@ -190,17 +208,17 @@ namespace CharacterExporter
 
 		private void LoadWorldFile( UOXData.Script.WorldFile90 toAdd, bool doImport )
 		{
-			foreach (UOXData.Script.WorldSection mScript in toAdd.Sections)
+			foreach( UOXData.Script.WorldSection mScript in toAdd.Sections )
 			{
-				if (mScript.SectionName == "CHARACTER")
+				if( mScript.SectionName == "CHARACTER" )
 				{
 					uint charSerial = UOXData.Conversion.ToUInt32(mScript.FindTag("Serial"));
 					if (charSerial > worldObjects.NextCharSer)
 						worldObjects.NextCharSer = charSerial + 1;
-					CharObject mChar = new CharObject(charSerial);
-					mChar.Name = mScript.FindTag("Name");
-					mChar.ID = UOXData.Conversion.ToUInt16(mScript.FindTag("ID"));
-					mChar.Section = mScript;
+					CharObject mChar	= new CharObject(charSerial);
+					mChar.Name			= mScript.FindTag("Name");
+					mChar.ID			= UOXData.Conversion.ToUInt16(mScript.FindTag("ID"));
+					mChar.Section		= mScript;
 					if( doImport )
 						worldObjects.ImportCharList.Add( mChar );
 					else
@@ -210,20 +228,20 @@ namespace CharacterExporter
 				{
 					uint contSerial = UOXData.Conversion.ToUInt32(mScript.FindTag("Cont"));
 					uint itemSerial = UOXData.Conversion.ToUInt32(mScript.FindTag("Serial"));
-					if (itemSerial >= worldObjects.NextItemSer)
+					if( itemSerial >= worldObjects.NextItemSer )
 						worldObjects.NextItemSer = itemSerial + 1;
-					ItemObject mItem = new ItemObject(itemSerial);
-					if (contSerial != 0xFFFFFFFF)
+					if( contSerial != 0xFFFFFFFF )
 					{
-						mItem.Container = contSerial;
-						mItem.Name = mScript.FindTag("Name");
-						mItem.Section = mScript;
-						mItem.ID = UOXData.Conversion.ToUInt16(mScript.FindTag("ID"));
+						ItemObject mItem	= new ItemObject(itemSerial);
+						mItem.Container		= contSerial;
+						mItem.Name			= mScript.FindTag("Name");
+						mItem.Section		= mScript;
+						mItem.ID			= UOXData.Conversion.ToUInt16(mScript.FindTag("ID"));
+						if( doImport )
+							worldObjects.ImportItemList.Add(mItem);
+						else
+							worldObjects.ItemList.Add(mItem);
 					}
-					if( doImport )
-						worldObjects.ImportItemList.Add(mItem);
-					else
-						worldObjects.ItemList.Add( mItem );
 				}
 			}
 		}
@@ -236,10 +254,10 @@ namespace CharacterExporter
                 worldFiles.Clear();
 				worldObjects.Clear();
 				comboCharList.Items.Clear();
-				comboItemList.Items.Clear();
+				dataGridItems.Rows.Clear();
                 txtDirPath.Text = dirPath;
 				comboCharList.Update();
-				comboItemList.Update();
+				dataGridItems.Update();
 				txtDirPath.Update();
 
 				string[] fileList = Directory.GetFiles( dirPath, "*.*.wsc" );
@@ -270,7 +288,7 @@ namespace CharacterExporter
 					if( comboCharList.Items.Count > 0 )
 						comboCharList.SelectedIndex = 0;
 					else
-						comboItemList.Items.Add( "World Loaded: No Characters to Display" );
+						dataGridItems.Rows.Add("World Loaded: No Characters to Display");
 				}
 				else
 					MessageBox.Show("No worldfile found, please select a valid directory", "File Not Found" );
@@ -285,22 +303,38 @@ namespace CharacterExporter
 
 		private void radioAll_CheckedChanged(object sender, EventArgs e)
 		{
-			keepItemState = KeepItemsState.KEEP_ALL;
+			if( keepItemState != KeepItemsState.KEEP_ALL )
+			{
+				keepItemState = KeepItemsState.KEEP_ALL;
+				UpdateItemList();
+			}
 		}
 
 		private void radioNone_CheckedChanged(object sender, EventArgs e)
 		{
-			keepItemState = KeepItemsState.KEEP_NONE;
+			if (keepItemState != KeepItemsState.KEEP_NONE)
+			{
+				keepItemState = KeepItemsState.KEEP_NONE;
+				UpdateItemList();
+			}
 		}
 
 		private void radioWearables_CheckedChanged(object sender, EventArgs e)
 		{
-			keepItemState = KeepItemsState.KEEP_WEARABLES;
+			if (keepItemState != KeepItemsState.KEEP_WEARABLES)
+			{
+				keepItemState = KeepItemsState.KEEP_WEARABLES;
+				UpdateItemList();
+			}
 		}
 
 		private void radioPack_CheckedChanged(object sender, EventArgs e)
 		{
-			keepItemState = KeepItemsState.KEEP_PACKITEMS;
+			if (keepItemState != KeepItemsState.KEEP_PACKITEMS)
+			{
+				keepItemState = KeepItemsState.KEEP_PACKITEMS;
+				UpdateItemList();
+			}
 		}
     }
 }

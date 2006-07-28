@@ -37,7 +37,6 @@ namespace CharacterExporter
 			this.btnSave = new System.Windows.Forms.Button();
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.comboCharList = new System.Windows.Forms.ListBox();
-			this.comboItemList = new System.Windows.Forms.ListBox();
 			this.ChooseWorldLabel = new System.Windows.Forms.Label();
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
 			this.txtDirPath = new System.Windows.Forms.TextBox();
@@ -49,6 +48,15 @@ namespace CharacterExporter
 			this.lblKeepItems = new System.Windows.Forms.Label();
 			this.progressBar = new System.Windows.Forms.ProgressBar();
 			this.lblProgress = new System.Windows.Forms.Label();
+			this.splitPanel = new System.Windows.Forms.SplitContainer();
+			this.dataGridItems = new System.Windows.Forms.DataGridView();
+			this.dgName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgSerial = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.splitPanel.Panel1.SuspendLayout();
+			this.splitPanel.Panel2.SuspendLayout();
+			this.splitPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridItems)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btnBrowse
@@ -86,7 +94,7 @@ namespace CharacterExporter
 			this.btnSave.Location = new System.Drawing.Point(345, 266);
 			this.btnSave.Name = "btnSave";
 			this.btnSave.Size = new System.Drawing.Size(75, 23);
-			this.btnSave.TabIndex = 12;
+			this.btnSave.TabIndex = 14;
 			this.btnSave.Text = "Save";
 			this.btnSave.UseVisualStyleBackColor = true;
 			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -97,31 +105,22 @@ namespace CharacterExporter
 			this.btnCancel.Location = new System.Drawing.Point(426, 266);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 13;
+			this.btnCancel.TabIndex = 15;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 			// 
 			// comboCharList
 			// 
+			this.comboCharList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboCharList.FormattingEnabled = true;
 			this.comboCharList.HorizontalScrollbar = true;
-			this.comboCharList.Location = new System.Drawing.Point(99, 35);
+			this.comboCharList.Location = new System.Drawing.Point(0, 0);
 			this.comboCharList.Name = "comboCharList";
 			this.comboCharList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.comboCharList.Size = new System.Drawing.Size(143, 225);
+			this.comboCharList.Size = new System.Drawing.Size(159, 225);
 			this.comboCharList.TabIndex = 10;
 			this.comboCharList.SelectedIndexChanged += new System.EventHandler(this.comboCharList_SelectedIndexChanged);
-			// 
-			// comboItemList
-			// 
-			this.comboItemList.FormattingEnabled = true;
-			this.comboItemList.HorizontalScrollbar = true;
-			this.comboItemList.Location = new System.Drawing.Point(248, 35);
-			this.comboItemList.Name = "comboItemList";
-			this.comboItemList.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.comboItemList.Size = new System.Drawing.Size(253, 225);
-			this.comboItemList.TabIndex = 11;
 			// 
 			// ChooseWorldLabel
 			// 
@@ -147,6 +146,7 @@ namespace CharacterExporter
 			// radioAll
 			// 
 			this.radioAll.AutoSize = true;
+			this.radioAll.Checked = true;
 			this.radioAll.Location = new System.Drawing.Point(12, 117);
 			this.radioAll.Name = "radioAll";
 			this.radioAll.Size = new System.Drawing.Size(36, 17);
@@ -163,7 +163,6 @@ namespace CharacterExporter
 			this.radioNone.Name = "radioNone";
 			this.radioNone.Size = new System.Drawing.Size(51, 17);
 			this.radioNone.TabIndex = 6;
-			this.radioNone.TabStop = true;
 			this.radioNone.Text = "None";
 			this.radioNone.UseVisualStyleBackColor = true;
 			this.radioNone.CheckedChanged += new System.EventHandler(this.radioNone_CheckedChanged);
@@ -175,7 +174,6 @@ namespace CharacterExporter
 			this.radioWearables.Name = "radioWearables";
 			this.radioWearables.Size = new System.Drawing.Size(76, 17);
 			this.radioWearables.TabIndex = 7;
-			this.radioWearables.TabStop = true;
 			this.radioWearables.Text = "Wearables";
 			this.radioWearables.UseVisualStyleBackColor = true;
 			this.radioWearables.CheckedChanged += new System.EventHandler(this.radioWearables_CheckedChanged);
@@ -187,7 +185,6 @@ namespace CharacterExporter
 			this.radioPack.Name = "radioPack";
 			this.radioPack.Size = new System.Drawing.Size(78, 17);
 			this.radioPack.TabIndex = 8;
-			this.radioPack.TabStop = true;
 			this.radioPack.Text = "Pack Items";
 			this.radioPack.UseVisualStyleBackColor = true;
 			this.radioPack.CheckedChanged += new System.EventHandler(this.radioPack_CheckedChanged);
@@ -218,12 +215,77 @@ namespace CharacterExporter
 			this.lblProgress.TabIndex = 24;
 			this.lblProgress.Text = "Progress";
 			// 
+			// splitPanel
+			// 
+			this.splitPanel.Location = new System.Drawing.Point(99, 35);
+			this.splitPanel.Name = "splitPanel";
+			// 
+			// splitPanel.Panel1
+			// 
+			this.splitPanel.Panel1.Controls.Add(this.comboCharList);
+			this.splitPanel.Panel1MinSize = 50;
+			// 
+			// splitPanel.Panel2
+			// 
+			this.splitPanel.Panel2.Controls.Add(this.dataGridItems);
+			this.splitPanel.Panel2MinSize = 50;
+			this.splitPanel.Size = new System.Drawing.Size(402, 225);
+			this.splitPanel.SplitterDistance = 159;
+			this.splitPanel.TabIndex = 11;
+			// 
+			// dataGridItems
+			// 
+			this.dataGridItems.AllowUserToAddRows = false;
+			this.dataGridItems.AllowUserToDeleteRows = false;
+			this.dataGridItems.AllowUserToResizeRows = false;
+			this.dataGridItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+			this.dataGridItems.BackgroundColor = System.Drawing.SystemColors.Window;
+			this.dataGridItems.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.dataGridItems.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+			this.dataGridItems.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+			this.dataGridItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgName,
+            this.dgID,
+            this.dgSerial});
+			this.dataGridItems.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dataGridItems.Location = new System.Drawing.Point(0, 0);
+			this.dataGridItems.Name = "dataGridItems";
+			this.dataGridItems.ReadOnly = true;
+			this.dataGridItems.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+			this.dataGridItems.RowHeadersVisible = false;
+			this.dataGridItems.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+			this.dataGridItems.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.dataGridItems.Size = new System.Drawing.Size(239, 225);
+			this.dataGridItems.TabIndex = 13;
+			// 
+			// dgName
+			// 
+			this.dgName.HeaderText = "Name";
+			this.dgName.Name = "dgName";
+			this.dgName.ReadOnly = true;
+			this.dgName.Width = 58;
+			// 
+			// dgID
+			// 
+			this.dgID.HeaderText = "ID";
+			this.dgID.Name = "dgID";
+			this.dgID.ReadOnly = true;
+			this.dgID.Width = 41;
+			// 
+			// dgSerial
+			// 
+			this.dgSerial.HeaderText = "Serial";
+			this.dgSerial.Name = "dgSerial";
+			this.dgSerial.ReadOnly = true;
+			this.dgSerial.Width = 56;
+			// 
 			// CharacterViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(507, 296);
+			this.Controls.Add(this.splitPanel);
 			this.Controls.Add(this.lblProgress);
 			this.Controls.Add(this.progressBar);
 			this.Controls.Add(this.lblKeepItems);
@@ -233,8 +295,6 @@ namespace CharacterExporter
 			this.Controls.Add(this.radioAll);
 			this.Controls.Add(this.txtDirPath);
 			this.Controls.Add(this.ChooseWorldLabel);
-			this.Controls.Add(this.comboItemList);
-			this.Controls.Add(this.comboCharList);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnSave);
 			this.Controls.Add(this.btnExport);
@@ -244,7 +304,11 @@ namespace CharacterExporter
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "CharacterViewer";
-			this.Text = "UOX3 Character Viewer v0.5";
+			this.Text = "UOX3 Character Viewer v0.6";
+			this.splitPanel.Panel1.ResumeLayout(false);
+			this.splitPanel.Panel2.ResumeLayout(false);
+			this.splitPanel.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridItems)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -257,8 +321,7 @@ namespace CharacterExporter
 		private System.Windows.Forms.Button btnExport;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.ListBox comboCharList;
-        private System.Windows.Forms.ListBox comboItemList;
+		private System.Windows.Forms.ListBox comboCharList;
         private System.Windows.Forms.Label ChooseWorldLabel;
         private System.Windows.Forms.TextBox txtDirPath;
 		private System.Windows.Forms.RadioButton radioAll;
@@ -273,6 +336,11 @@ namespace CharacterExporter
 		protected ArrayList worldFiles;
 		protected ObjectHandler worldObjects;
 		private KeepItemsState keepItemState;
+		private System.Windows.Forms.SplitContainer splitPanel;
+		private System.Windows.Forms.DataGridView dataGridItems;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgName;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgID;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgSerial;
     }
 }
 

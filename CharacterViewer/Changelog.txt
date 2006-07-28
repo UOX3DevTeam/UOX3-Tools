@@ -1,3 +1,12 @@
+7/27/2006 - giwo (0.6)
+	Made the Character and Item lists resizable (by dragging the separator).
+	Fixed a relatively large bug involving characters with a serial of 0.
+	Added default values to WorldObject and its derivative classes.
+	Fixed an issue causing the pack not to be exported if "Pack Items" was selected as an export option.
+	Modified the ItemList to display all exportable items on all selected characters.
+	Modified the Itemlist so that only those items which will be exported display on a character.
+	Modified the ItemList to make it much easier to read (and sortable too!).
+
 04/07/2006 - giwo (v0.5)
 	Updated the TabIndex of the controls to reflect a more logical order.
 	
