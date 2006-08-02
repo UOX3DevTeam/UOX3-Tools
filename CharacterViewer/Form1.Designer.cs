@@ -53,15 +53,31 @@ namespace CharacterExporter
 			this.dgName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgID = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgSerial = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.menuStrip = new System.Windows.Forms.MenuStrip();
+			this.fileToolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.openWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveWorldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportSelecToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.itemsToolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportNoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportWearablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exportPackItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.txtTotalChars = new System.Windows.Forms.TextBox();
+			this.txtTotalItems = new System.Windows.Forms.TextBox();
 			this.splitPanel.Panel1.SuspendLayout();
 			this.splitPanel.Panel2.SuspendLayout();
 			this.splitPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridItems)).BeginInit();
+			this.menuStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// btnBrowse
 			// 
-			this.btnBrowse.Location = new System.Drawing.Point(440, 8);
+			this.btnBrowse.Location = new System.Drawing.Point(440, 32);
 			this.btnBrowse.Name = "btnBrowse";
 			this.btnBrowse.Size = new System.Drawing.Size(61, 20);
 			this.btnBrowse.TabIndex = 2;
@@ -71,7 +87,7 @@ namespace CharacterExporter
 			// 
 			// btnImport
 			// 
-			this.btnImport.Location = new System.Drawing.Point(9, 35);
+			this.btnImport.Location = new System.Drawing.Point(9, 57);
 			this.btnImport.Name = "btnImport";
 			this.btnImport.Size = new System.Drawing.Size(84, 22);
 			this.btnImport.TabIndex = 3;
@@ -81,7 +97,7 @@ namespace CharacterExporter
 			// 
 			// btnExport
 			// 
-			this.btnExport.Location = new System.Drawing.Point(9, 63);
+			this.btnExport.Location = new System.Drawing.Point(9, 85);
 			this.btnExport.Name = "btnExport";
 			this.btnExport.Size = new System.Drawing.Size(84, 22);
 			this.btnExport.TabIndex = 4;
@@ -91,7 +107,7 @@ namespace CharacterExporter
 			// 
 			// btnSave
 			// 
-			this.btnSave.Location = new System.Drawing.Point(345, 266);
+			this.btnSave.Location = new System.Drawing.Point(345, 288);
 			this.btnSave.Name = "btnSave";
 			this.btnSave.Size = new System.Drawing.Size(75, 23);
 			this.btnSave.TabIndex = 14;
@@ -102,7 +118,7 @@ namespace CharacterExporter
 			// btnCancel
 			// 
 			this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnCancel.Location = new System.Drawing.Point(426, 266);
+			this.btnCancel.Location = new System.Drawing.Point(426, 288);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 15;
@@ -125,7 +141,7 @@ namespace CharacterExporter
 			// ChooseWorldLabel
 			// 
 			this.ChooseWorldLabel.AutoSize = true;
-			this.ChooseWorldLabel.Location = new System.Drawing.Point(6, 12);
+			this.ChooseWorldLabel.Location = new System.Drawing.Point(6, 36);
 			this.ChooseWorldLabel.Name = "ChooseWorldLabel";
 			this.ChooseWorldLabel.Size = new System.Drawing.Size(90, 13);
 			this.ChooseWorldLabel.TabIndex = 16;
@@ -133,7 +149,7 @@ namespace CharacterExporter
 			// 
 			// txtDirPath
 			// 
-			this.txtDirPath.Location = new System.Drawing.Point(99, 9);
+			this.txtDirPath.Location = new System.Drawing.Point(99, 32);
 			this.txtDirPath.Name = "txtDirPath";
 			this.txtDirPath.Size = new System.Drawing.Size(335, 20);
 			this.txtDirPath.TabIndex = 1;
@@ -147,7 +163,7 @@ namespace CharacterExporter
 			// 
 			this.radioAll.AutoSize = true;
 			this.radioAll.Checked = true;
-			this.radioAll.Location = new System.Drawing.Point(12, 117);
+			this.radioAll.Location = new System.Drawing.Point(12, 148);
 			this.radioAll.Name = "radioAll";
 			this.radioAll.Size = new System.Drawing.Size(36, 17);
 			this.radioAll.TabIndex = 5;
@@ -159,7 +175,7 @@ namespace CharacterExporter
 			// radioNone
 			// 
 			this.radioNone.AutoSize = true;
-			this.radioNone.Location = new System.Drawing.Point(12, 140);
+			this.radioNone.Location = new System.Drawing.Point(12, 167);
 			this.radioNone.Name = "radioNone";
 			this.radioNone.Size = new System.Drawing.Size(51, 17);
 			this.radioNone.TabIndex = 6;
@@ -170,7 +186,7 @@ namespace CharacterExporter
 			// radioWearables
 			// 
 			this.radioWearables.AutoSize = true;
-			this.radioWearables.Location = new System.Drawing.Point(12, 163);
+			this.radioWearables.Location = new System.Drawing.Point(12, 186);
 			this.radioWearables.Name = "radioWearables";
 			this.radioWearables.Size = new System.Drawing.Size(76, 17);
 			this.radioWearables.TabIndex = 7;
@@ -181,7 +197,7 @@ namespace CharacterExporter
 			// radioPack
 			// 
 			this.radioPack.AutoSize = true;
-			this.radioPack.Location = new System.Drawing.Point(12, 186);
+			this.radioPack.Location = new System.Drawing.Point(12, 205);
 			this.radioPack.Name = "radioPack";
 			this.radioPack.Size = new System.Drawing.Size(78, 17);
 			this.radioPack.TabIndex = 8;
@@ -192,7 +208,7 @@ namespace CharacterExporter
 			// lblKeepItems
 			// 
 			this.lblKeepItems.AutoSize = true;
-			this.lblKeepItems.Location = new System.Drawing.Point(6, 101);
+			this.lblKeepItems.Location = new System.Drawing.Point(6, 132);
 			this.lblKeepItems.Name = "lblKeepItems";
 			this.lblKeepItems.Size = new System.Drawing.Size(65, 13);
 			this.lblKeepItems.TabIndex = 22;
@@ -201,7 +217,7 @@ namespace CharacterExporter
 			// progressBar
 			// 
 			this.progressBar.BackColor = System.Drawing.SystemColors.Control;
-			this.progressBar.Location = new System.Drawing.Point(9, 237);
+			this.progressBar.Location = new System.Drawing.Point(9, 259);
 			this.progressBar.Name = "progressBar";
 			this.progressBar.Size = new System.Drawing.Size(84, 23);
 			this.progressBar.TabIndex = 9;
@@ -209,7 +225,7 @@ namespace CharacterExporter
 			// lblProgress
 			// 
 			this.lblProgress.AutoSize = true;
-			this.lblProgress.Location = new System.Drawing.Point(6, 221);
+			this.lblProgress.Location = new System.Drawing.Point(6, 243);
 			this.lblProgress.Name = "lblProgress";
 			this.lblProgress.Size = new System.Drawing.Size(48, 13);
 			this.lblProgress.TabIndex = 24;
@@ -217,7 +233,7 @@ namespace CharacterExporter
 			// 
 			// splitPanel
 			// 
-			this.splitPanel.Location = new System.Drawing.Point(99, 35);
+			this.splitPanel.Location = new System.Drawing.Point(99, 57);
 			this.splitPanel.Name = "splitPanel";
 			// 
 			// splitPanel.Panel1
@@ -280,11 +296,143 @@ namespace CharacterExporter
 			this.dgSerial.ReadOnly = true;
 			this.dgSerial.Width = 56;
 			// 
+			// menuStrip
+			// 
+			this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenu,
+            this.itemsToolStripMenu});
+			this.menuStrip.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip.Name = "menuStrip";
+			this.menuStrip.Size = new System.Drawing.Size(507, 24);
+			this.menuStrip.TabIndex = 25;
+			// 
+			// fileToolStripMenu
+			// 
+			this.fileToolStripMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openWorldToolStripMenuItem,
+            this.closeToolStripMenuItem,
+            this.saveWorldToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.importToolStripMenuItem,
+            this.exportSelecToolStripMenuItem});
+			this.fileToolStripMenu.Name = "fileToolStripMenu";
+			this.fileToolStripMenu.Size = new System.Drawing.Size(40, 20);
+			this.fileToolStripMenu.Text = "File";
+			// 
+			// openWorldToolStripMenuItem
+			// 
+			this.openWorldToolStripMenuItem.Name = "openWorldToolStripMenuItem";
+			this.openWorldToolStripMenuItem.ShortcutKeyDisplayString = "";
+			this.openWorldToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.O)));
+			this.openWorldToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+			this.openWorldToolStripMenuItem.Text = "Open";
+			this.openWorldToolStripMenuItem.Click += new System.EventHandler(this.openWorldToolStripMenuItem_Click);
+			// 
+			// closeToolStripMenuItem
+			// 
+			this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+			this.closeToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
+			this.closeToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+			this.closeToolStripMenuItem.Text = "Close";
+			this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+			// 
+			// saveWorldToolStripMenuItem
+			// 
+			this.saveWorldToolStripMenuItem.Name = "saveWorldToolStripMenuItem";
+			this.saveWorldToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
+			this.saveWorldToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+			this.saveWorldToolStripMenuItem.Text = "Save";
+			this.saveWorldToolStripMenuItem.Click += new System.EventHandler(this.saveWorldToolStripMenuItem_Click);
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(160, 6);
+			// 
+			// importToolStripMenuItem
+			// 
+			this.importToolStripMenuItem.Name = "importToolStripMenuItem";
+			this.importToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.I)));
+			this.importToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+			this.importToolStripMenuItem.Text = "Import";
+			this.importToolStripMenuItem.Click += new System.EventHandler(this.importToolStripMenuItem_Click);
+			// 
+			// exportSelecToolStripMenuItem
+			// 
+			this.exportSelecToolStripMenuItem.Name = "exportSelecToolStripMenuItem";
+			this.exportSelecToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.E)));
+			this.exportSelecToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+			this.exportSelecToolStripMenuItem.Text = "Export";
+			this.exportSelecToolStripMenuItem.Click += new System.EventHandler(this.exportSelecToolStripMenuItem_Click);
+			// 
+			// itemsToolStripMenu
+			// 
+			this.itemsToolStripMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportAllToolStripMenuItem,
+            this.exportNoneToolStripMenuItem,
+            this.exportWearablesToolStripMenuItem,
+            this.exportPackItemsToolStripMenuItem});
+			this.itemsToolStripMenu.Name = "itemsToolStripMenu";
+			this.itemsToolStripMenu.Size = new System.Drawing.Size(52, 20);
+			this.itemsToolStripMenu.Text = "Items";
+			// 
+			// exportAllToolStripMenuItem
+			// 
+			this.exportAllToolStripMenuItem.Name = "exportAllToolStripMenuItem";
+			this.exportAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+			this.exportAllToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+			this.exportAllToolStripMenuItem.Text = "Export All";
+			this.exportAllToolStripMenuItem.Click += new System.EventHandler(this.exportAllToolStripMenuItem_Click);
+			// 
+			// exportNoneToolStripMenuItem
+			// 
+			this.exportNoneToolStripMenuItem.Name = "exportNoneToolStripMenuItem";
+			this.exportNoneToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.N)));
+			this.exportNoneToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+			this.exportNoneToolStripMenuItem.Text = "Export None";
+			this.exportNoneToolStripMenuItem.Click += new System.EventHandler(this.exportNoneToolStripMenuItem_Click);
+			// 
+			// exportWearablesToolStripMenuItem
+			// 
+			this.exportWearablesToolStripMenuItem.Name = "exportWearablesToolStripMenuItem";
+			this.exportWearablesToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.W)));
+			this.exportWearablesToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+			this.exportWearablesToolStripMenuItem.Text = "Export Wearables";
+			this.exportWearablesToolStripMenuItem.Click += new System.EventHandler(this.exportWearablesToolStripMenuItem_Click);
+			// 
+			// exportPackItemsToolStripMenuItem
+			// 
+			this.exportPackItemsToolStripMenuItem.Name = "exportPackItemsToolStripMenuItem";
+			this.exportPackItemsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
+			this.exportPackItemsToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+			this.exportPackItemsToolStripMenuItem.Text = "Export Pack Items";
+			this.exportPackItemsToolStripMenuItem.Click += new System.EventHandler(this.exportPackItemsToolStripMenuItem_Click);
+			// 
+			// txtTotalChars
+			// 
+			this.txtTotalChars.Location = new System.Drawing.Point(99, 291);
+			this.txtTotalChars.Name = "txtTotalChars";
+			this.txtTotalChars.ReadOnly = true;
+			this.txtTotalChars.Size = new System.Drawing.Size(103, 20);
+			this.txtTotalChars.TabIndex = 26;
+			this.txtTotalChars.Text = "Characters: 0";
+			// 
+			// txtTotalItems
+			// 
+			this.txtTotalItems.Location = new System.Drawing.Point(208, 291);
+			this.txtTotalItems.Name = "txtTotalItems";
+			this.txtTotalItems.ReadOnly = true;
+			this.txtTotalItems.Size = new System.Drawing.Size(103, 20);
+			this.txtTotalItems.TabIndex = 27;
+			this.txtTotalItems.Text = "Items: 0";
+			// 
 			// CharacterViewer
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(507, 296);
+			this.ClientSize = new System.Drawing.Size(507, 319);
+			this.Controls.Add(this.txtTotalItems);
+			this.Controls.Add(this.txtTotalChars);
 			this.Controls.Add(this.splitPanel);
 			this.Controls.Add(this.lblProgress);
 			this.Controls.Add(this.progressBar);
@@ -300,15 +448,18 @@ namespace CharacterExporter
 			this.Controls.Add(this.btnExport);
 			this.Controls.Add(this.btnImport);
 			this.Controls.Add(this.btnBrowse);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.Controls.Add(this.menuStrip);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "CharacterViewer";
-			this.Text = "UOX3 Character Viewer v0.6";
+			this.Text = "UOX3 Character Viewer v0.7";
 			this.splitPanel.Panel1.ResumeLayout(false);
 			this.splitPanel.Panel2.ResumeLayout(false);
 			this.splitPanel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridItems)).EndInit();
+			this.menuStrip.ResumeLayout(false);
+			this.menuStrip.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -333,14 +484,33 @@ namespace CharacterExporter
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
 		private System.Windows.Forms.OpenFileDialog fileBrowserDialog;
 		private System.Windows.Forms.ProgressBar progressBar;
-		protected ArrayList worldFiles;
-		protected ObjectHandler worldObjects;
-		private KeepItemsState keepItemState;
 		private System.Windows.Forms.SplitContainer splitPanel;
 		private System.Windows.Forms.DataGridView dataGridItems;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgName;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgID;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgSerial;
+		private System.Windows.Forms.MenuStrip menuStrip;
+		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenu;
+		private System.Windows.Forms.ToolStripMenuItem itemsToolStripMenu;
+		private System.Windows.Forms.ToolStripMenuItem openWorldToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem saveWorldToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripMenuItem exportSelecToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem exportAllToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem exportNoneToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem exportWearablesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem exportPackItemsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
+		private System.Windows.Forms.TextBox txtTotalChars;
+		private System.Windows.Forms.TextBox txtTotalItems;
+
+		protected ArrayList worldFiles;
+		protected ObjectHandler worldObjects;
+		private KeepItemsState keepItemState;
+		private bool worldHasChanged;
+		private uint totalItems;
+		private uint totalChars;
     }
 }
 

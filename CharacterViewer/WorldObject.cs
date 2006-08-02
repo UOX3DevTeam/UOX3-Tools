@@ -82,6 +82,7 @@ namespace CharacterExporter
 		protected ObjectType objType;
 		protected string name;
 		protected uint serial;
+		protected string serString;
 		protected ushort id;
 		protected ArrayList containsList;
 		protected UOXData.Script.WorldSection section;
@@ -93,6 +94,7 @@ namespace CharacterExporter
 		public string Name							{ get { return name;			} set { name = value;		}	}
 		public ushort ID							{ get { return id;				} set { id = value;			}	}
 		public uint Serial							{ get { return serial;			} set { serial = value;		}	}
+		public string SerString						{ get { return serString;		} set { serString = value;	}	}
 		public ObjectType ObjType					{ get { return objType;			} set { objType = value;	}	}
 		#endregion "Public Properties"
 
@@ -110,6 +112,7 @@ namespace CharacterExporter
             containsList	= new ArrayList();
 			objType			= ObjectType.OT_CBO;
 			name			= "";
+			serString		= "0xFFFFFFFF";
 			serial			= 0xFFFFFFFF;
 			id				= 0xFFFF;
 			section			= null;
