@@ -184,7 +184,7 @@ namespace UOXData.Script
 		}
 
 		public DFN_Categories	Category { get { return sectCategory; } set { sectCategory = value; } }
-		
+
 		public new TagDataPair GetDataPair( string tagName )
 		{
 			foreach( TagDataPair t in tagDataPairs )

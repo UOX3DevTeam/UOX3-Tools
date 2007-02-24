@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C# Express 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UOX3 INI Editor", "UOX3 INI Editor.csproj", "{6C0E2270-FB1A-4F32-8D49-938E225681FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UOXData", "..\ToolAPI\csharp\UOXData.csproj", "{B74881F6-CEC7-4591-A812-12A8A3E67A9E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6C0E2270-FB1A-4F32-8D49-938E225681FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C0E2270-FB1A-4F32-8D49-938E225681FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C0E2270-FB1A-4F32-8D49-938E225681FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C0E2270-FB1A-4F32-8D49-938E225681FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B74881F6-CEC7-4591-A812-12A8A3E67A9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B74881F6-CEC7-4591-A812-12A8A3E67A9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B74881F6-CEC7-4591-A812-12A8A3E67A9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B74881F6-CEC7-4591-A812-12A8A3E67A9E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

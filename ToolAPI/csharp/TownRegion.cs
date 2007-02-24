@@ -242,8 +242,8 @@ namespace UOXData.Region
 			for( int i = 1; i < 8; ++i )
 				bitMasks[i]			= BitVector32.CreateMask( bitMasks[i-1] );
 
-			guards					= new ArrayList();;		// array of strings
-			orePreferences			= new ArrayList();;		// array of orePref
+			guards					= new ArrayList();		// array of strings
+			orePreferences			= new ArrayList();		// array of orePref
 			townMember				= new ArrayList();		// array of townPers
 			alliedTowns				= new ArrayList();		// array of byte
 			locations				= new ArrayList();		// array of locations

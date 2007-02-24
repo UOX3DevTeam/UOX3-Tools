@@ -1,0 +1,6 @@
+02/27/2007 - giwo (v0.1 Initial Release)
+
+Current Featureset:
+	Loads all currently used uox.ini tags.
+	Allows easy modification of the various ini file settings.
+	Saves modified ini files in a format readable by UOX3.

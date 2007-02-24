@@ -280,7 +280,6 @@ namespace UOXData.Script
 	{
 		public DictionaryScript( string sVal ) : base( sVal )
 		{
-			Retrieve( sVal );
 		}
 		public DictionaryScript() : base()
 		{
@@ -290,7 +289,6 @@ namespace UOXData.Script
 	{
 		public UOXIni( string sVal ) : base( sVal )
 		{
-			Retrieve( sVal );
 		}
 		public UOXIni() : base()
 		{
