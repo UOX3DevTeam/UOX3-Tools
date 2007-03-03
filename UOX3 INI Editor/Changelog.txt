@@ -1,3 +1,7 @@
+03/03/2007 - giwo (v0.2)
+	Added support for the CLIENTFEATURES and SERVERFEATURES tags.
+
+
 02/27/2007 - giwo (v0.1 Initial Release)
 
 Current Featureset:

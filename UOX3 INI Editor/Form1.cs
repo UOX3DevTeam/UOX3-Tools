@@ -276,22 +276,40 @@ namespace UOX3_INI_Editor
                                     case "BUTTONRIGHT":
                                         gumpButtons[2] = mPair.Data.ToUInt16();
                                         break;
+									case "CLIENTFEATURES":
+										BitVector32 sCFeat = new BitVector32(mPair.Data.ToUInt16());
+										int cmask = BitVector32.CreateMask();
+										for (ClientFeatures cEnum = ClientFeatures.Chat_Button; cEnum < ClientFeatures.COUNT; ++cEnum)
+										{ 
+											dataGridClientFeatures.Rows.Add(cEnum.ToString().Replace("_", " "), sCFeat[cmask]);
+											cmask = BitVector32.CreateMask(cmask);
+										}
+										break;
                                     case "LEFTTEXTCOLOUR":
                                         gumpText[1] = mPair.Data.ToUInt16();
                                         break;
                                     case "RIGHTTEXTCOLOUR":
                                         gumpText[2] = mPair.Data.ToUInt16();
                                         break;
+									case "SERVERFEATURES":
+										BitVector32 sSFeat = new BitVector32(mPair.Data.ToInt32());
+										int smask = BitVector32.CreateMask();
+										for (ServerFeatures sEnum = ServerFeatures.UNKNOWN1; sEnum < ServerFeatures.COUNT; ++sEnum)
+										{
+											dataGridServerFeatures.Rows.Add(sEnum.ToString().Replace("_", " "), sSFeat[smask]);
+											smask = BitVector32.CreateMask(smask);
+										}
+										break;
                                     case "STARTGOLD":
                                         mtxtStartGold.Text = mPair.Data.ToString();
                                         break;
                                     case "STARTPRIVS":
                                         BitVector32 sPriv = new BitVector32(mPair.Data.ToUInt16());
-                                        int mask = BitVector32.CreateMask();
-                                        for (StartPrivs bEnum = StartPrivs.GM; bEnum < StartPrivs.COUNT; ++bEnum)
+                                        int pmask = BitVector32.CreateMask();
+                                        for (StartPrivs pEnum = StartPrivs.GM; pEnum < StartPrivs.COUNT; ++pEnum)
                                         {
-                                            dataGridPrivs.Rows.Add(bEnum.ToString().Replace("_", " "), sPriv[mask]);
-                                            mask = BitVector32.CreateMask(mask);
+                                            dataGridPrivs.Rows.Add(pEnum.ToString().Replace("_", " "), sPriv[pmask]);
+                                            pmask = BitVector32.CreateMask(pmask);
                                         }
                                         break;
                                     case "TITLECOLOUR":
@@ -358,18 +376,36 @@ namespace UOX3_INI_Editor
 
             SaveSection(iniOut, "start locations", dataGridLocations, "LOCATION");
 
+			BitVector32 sCFeat = new BitVector32(0);
+			int cmask = BitVector32.CreateMask();
+			foreach (DataGridViewRow dgcRow in dataGridClientFeatures.Rows)
+			{
+				sCFeat[cmask] = (bool)dgcRow.Cells[1].Value;
+				cmask = BitVector32.CreateMask(cmask);
+			}
+
+			BitVector32 sSFeat = new BitVector32(0);
+			int smask = BitVector32.CreateMask();
+			foreach (DataGridViewRow dgsRow in dataGridServerFeatures.Rows)
+			{
+				sSFeat[smask] = (bool)dgsRow.Cells[1].Value;
+				smask = BitVector32.CreateMask(smask);
+			}
+
             BitVector32 sPriv = new BitVector32(0);
-            int mask = BitVector32.CreateMask();
-            foreach (DataGridViewRow dgRow in dataGridPrivs.Rows)
+            int pmask = BitVector32.CreateMask();
+            foreach (DataGridViewRow dgpRow in dataGridPrivs.Rows)
             {
-                sPriv[mask] = (bool)dgRow.Cells[1].Value;
-                mask = BitVector32.CreateMask(mask);
+                sPriv[pmask] = (bool)dgpRow.Cells[1].Value;
+                pmask = BitVector32.CreateMask(pmask);
             }
 
             iniOut.WriteLine("[startup]");
             iniOut.WriteLine("{");
             iniOut.WriteLine("STARTGOLD=" + mtxtStartGold.Text);
             iniOut.WriteLine("STARTPRIVS=" + UOXData.Conversion.ToHexString((ushort)sPriv.Data));
+			iniOut.WriteLine("CLIENTFEATURES=" + UOXData.Conversion.ToHexString((ushort)sCFeat.Data));
+			iniOut.WriteLine("SERVERFEATURES=" + UOXData.Conversion.ToHexString((uint)sSFeat.Data));
             iniOut.WriteLine("}");
             iniOut.WriteLine();
 
@@ -386,6 +422,7 @@ namespace UOX3_INI_Editor
             iniOut.WriteLine();
 
             iniOut.WriteLine();
+			iniOut.Flush();
             iniOut.Close();
         }
 
@@ -504,14 +541,18 @@ namespace UOX3_INI_Editor
         }
 
         private class ControlData
-        {
-            protected string ctrlName;
+		{
+			#region "Protected Data"
+			protected string ctrlName;
             protected string ctrlDesc;
+			#endregion
 
-            public string CtrlName { get { return ctrlName; } set { ctrlName = value; } }
+			#region "Public Properties"
+			public string CtrlName { get { return ctrlName; } set { ctrlName = value; } }
             public string CtrlDesc { get { return ctrlDesc; } set { ctrlDesc = value; } }
+			#endregion
 
-            public ControlData(string cName)
+			public ControlData(string cName)
                 : this()
             {
                 ctrlName = cName;
@@ -530,7 +571,7 @@ namespace UOX3_INI_Editor
             }
         }
 
-        public enum StartPrivs
+		public enum StartPrivs
         {
             GM = 1,
             Broadcast,
@@ -550,7 +591,42 @@ namespace UOX3_INI_Editor
             COUNT
         }
 
-        public enum SectionNames
+		public enum ClientFeatures
+		{
+			Chat_Button = 1,
+			Lord_Blackthorns_Revenge,
+			UNKNOWN1,
+			UNKNOWN2,
+			Age_Of_Shadows,
+			Six_Characters,
+			Samurai_Empire,
+			Mondains_Legacy,
+			UNKNOWN3,
+			UNKNOWN4,
+			UNKNOWN5,
+			UNKNOWN6,
+			UNKNOWN7,
+			UNKNOWN8,
+			UNKNOWN9,
+			Enable_Expansions = 16,
+			COUNT
+		}
+
+		public enum ServerFeatures
+		{
+			UNKNOWN1 = 1,
+			IGR_Client,
+			Limit_Characters,
+			Context_Menus,
+			One_Character,
+			Age_Of_Shadows,
+			Six_Characters,
+			Samurai_Empire,
+			Mondains_Legacy,
+			COUNT
+		}
+
+		public enum SectionNames
         {
             system = 0,
             skills,
@@ -573,7 +649,7 @@ namespace UOX3_INI_Editor
             ClearControlValues(this);
         }
 
-        public void ClearControlValues(System.Windows.Forms.Control Container)
+		private void ClearControlValues(System.Windows.Forms.Control Container)
         {
             try
             {
