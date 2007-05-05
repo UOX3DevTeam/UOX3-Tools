@@ -41,10 +41,11 @@ namespace UOX3_INI_Editor
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(INIEditor));
 			this.btnCancel = new System.Windows.Forms.Button();
 			this.btnSave = new System.Windows.Forms.Button();
@@ -96,7 +97,7 @@ namespace UOX3_INI_Editor
 			this.lblReAttackAt = new System.Windows.Forms.Label();
 			this.lblFleeAt = new System.Windows.Forms.Label();
 			this.lblNPCDmgRate = new System.Windows.Forms.Label();
-			this.tabSettings2 = new System.Windows.Forms.TabPage();
+			this.tabMisc = new System.Windows.Forms.TabPage();
 			this.grpGumps = new System.Windows.Forms.GroupBox();
 			this.mtxtGumpBackground = new System.Windows.Forms.MaskedTextBox();
 			this.lblGumpBackground = new System.Windows.Forms.Label();
@@ -170,7 +171,7 @@ namespace UOX3_INI_Editor
 			this.dataGridTimers = new System.Windows.Forms.DataGridView();
 			this.dgvTimerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgvTimerSeconds = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.tabSettings = new System.Windows.Forms.TabPage();
+			this.tabGeneral = new System.Windows.Forms.TabPage();
 			this.grpAnnounce = new System.Windows.Forms.GroupBox();
 			this.grpLight = new System.Windows.Forms.GroupBox();
 			this.mtxtDarkLight = new System.Windows.Forms.MaskedTextBox();
@@ -196,7 +197,7 @@ namespace UOX3_INI_Editor
 			this.chkLogConsole = new System.Windows.Forms.CheckBox();
 			this.txtPrefix = new System.Windows.Forms.TextBox();
 			this.lblPrefix = new System.Windows.Forms.Label();
-			this.tabGeneral = new System.Windows.Forms.TabPage();
+			this.tabSetup = new System.Windows.Forms.TabPage();
 			this.grpDirectories = new System.Windows.Forms.GroupBox();
 			this.dataGridDirectories = new System.Windows.Forms.DataGridView();
 			this.dgvDirectoryName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -209,18 +210,24 @@ namespace UOX3_INI_Editor
 			this.dgvServerIP = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dgvServerPort = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tabControl = new System.Windows.Forms.TabControl();
-			this.btnClear = new System.Windows.Forms.Button();
+			this.tabFeatures = new System.Windows.Forms.TabPage();
+			this.grpServerFeatures = new System.Windows.Forms.GroupBox();
+			this.dataGridServerFeatures = new System.Windows.Forms.DataGridView();
+			this.dgvSFeature = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgvSFeatureEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.grpClientFeatures = new System.Windows.Forms.GroupBox();
+			this.dataGridClientFeatures = new System.Windows.Forms.DataGridView();
+			this.dgvClientFeature = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dgvClientFeatureEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.tabOther = new System.Windows.Forms.TabPage();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.dataGridUncategorized = new System.Windows.Forms.DataGridView();
+			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.btnDefaults = new System.Windows.Forms.Button();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.btnSaveAs = new System.Windows.Forms.Button();
-			this.tabFeatures = new System.Windows.Forms.TabPage();
-			this.grpClientFeatures = new System.Windows.Forms.GroupBox();
-			this.grpServerFeatures = new System.Windows.Forms.GroupBox();
-			this.dataGridClientFeatures = new System.Windows.Forms.DataGridView();
-			this.dataGridServerFeatures = new System.Windows.Forms.DataGridView();
-			this.dgvClientFeature = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewCheckBoxColumn1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.dgvSFeature = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewCheckBoxColumn2 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.chkLootIsCrime = new System.Windows.Forms.CheckBox();
 			this.tabCreate.SuspendLayout();
 			this.grpStartPrivs.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridPrivs)).BeginInit();
@@ -231,7 +238,7 @@ namespace UOX3_INI_Editor
 			this.grpCombatRange.SuspendLayout();
 			this.grpCombatAnimals.SuspendLayout();
 			this.grpCombatNPC.SuspendLayout();
-			this.tabSettings2.SuspendLayout();
+			this.tabMisc.SuspendLayout();
 			this.grpGumps.SuspendLayout();
 			this.grpHunger.SuspendLayout();
 			this.grpSound.SuspendLayout();
@@ -246,21 +253,24 @@ namespace UOX3_INI_Editor
 			((System.ComponentModel.ISupportInitialize)(this.dataGridSpeed)).BeginInit();
 			this.grpGameTimers.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridTimers)).BeginInit();
-			this.tabSettings.SuspendLayout();
+			this.tabGeneral.SuspendLayout();
 			this.grpAnnounce.SuspendLayout();
 			this.grpLight.SuspendLayout();
 			this.grpSettingsGeneral.SuspendLayout();
-			this.tabGeneral.SuspendLayout();
+			this.tabSetup.SuspendLayout();
 			this.grpDirectories.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridDirectories)).BeginInit();
 			this.grpServers.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridServers)).BeginInit();
 			this.tabControl.SuspendLayout();
 			this.tabFeatures.SuspendLayout();
-			this.grpClientFeatures.SuspendLayout();
 			this.grpServerFeatures.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridClientFeatures)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridServerFeatures)).BeginInit();
+			this.grpClientFeatures.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridClientFeatures)).BeginInit();
+			this.tabOther.SuspendLayout();
+			this.groupBox1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridUncategorized)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// btnCancel
@@ -269,7 +279,7 @@ namespace UOX3_INI_Editor
 			this.btnCancel.Location = new System.Drawing.Point(461, 258);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(77, 23);
-			this.btnCancel.TabIndex = 0;
+			this.btnCancel.TabIndex = 6;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -279,7 +289,7 @@ namespace UOX3_INI_Editor
 			this.btnSave.Location = new System.Drawing.Point(378, 258);
 			this.btnSave.Name = "btnSave";
 			this.btnSave.Size = new System.Drawing.Size(77, 23);
-			this.btnSave.TabIndex = 1;
+			this.btnSave.TabIndex = 5;
 			this.btnSave.Text = "Save";
 			this.btnSave.UseVisualStyleBackColor = true;
 			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -295,17 +305,20 @@ namespace UOX3_INI_Editor
 			// 
 			// txtINIFile
 			// 
+			this.txtINIFile.AcceptsReturn = true;
 			this.txtINIFile.Location = new System.Drawing.Point(58, 7);
 			this.txtINIFile.Name = "txtINIFile";
 			this.txtINIFile.Size = new System.Drawing.Size(397, 20);
-			this.txtINIFile.TabIndex = 3;
+			this.txtINIFile.TabIndex = 1;
+			this.txtINIFile.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtINIFile_KeyPress);
+			this.txtINIFile.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtINIFile_KeyDown);
 			// 
 			// btnBrowse
 			// 
 			this.btnBrowse.Location = new System.Drawing.Point(461, 7);
 			this.btnBrowse.Name = "btnBrowse";
 			this.btnBrowse.Size = new System.Drawing.Size(77, 20);
-			this.btnBrowse.TabIndex = 4;
+			this.btnBrowse.TabIndex = 2;
 			this.btnBrowse.Text = "Browse";
 			this.btnBrowse.UseVisualStyleBackColor = true;
 			this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
@@ -790,18 +803,18 @@ namespace UOX3_INI_Editor
 			this.lblNPCDmgRate.TabIndex = 77;
 			this.lblNPCDmgRate.Text = "Damage Multiplier:";
 			// 
-			// tabSettings2
+			// tabMisc
 			// 
-			this.tabSettings2.Controls.Add(this.grpGumps);
-			this.tabSettings2.Controls.Add(this.grpHunger);
-			this.tabSettings2.Controls.Add(this.grpResources);
-			this.tabSettings2.Location = new System.Drawing.Point(4, 22);
-			this.tabSettings2.Name = "tabSettings2";
-			this.tabSettings2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabSettings2.Size = new System.Drawing.Size(518, 193);
-			this.tabSettings2.TabIndex = 4;
-			this.tabSettings2.Text = "Other Settings";
-			this.tabSettings2.UseVisualStyleBackColor = true;
+			this.tabMisc.Controls.Add(this.grpGumps);
+			this.tabMisc.Controls.Add(this.grpHunger);
+			this.tabMisc.Controls.Add(this.grpResources);
+			this.tabMisc.Location = new System.Drawing.Point(4, 22);
+			this.tabMisc.Name = "tabMisc";
+			this.tabMisc.Padding = new System.Windows.Forms.Padding(3);
+			this.tabMisc.Size = new System.Drawing.Size(518, 193);
+			this.tabMisc.TabIndex = 4;
+			this.tabMisc.Text = "Misc";
+			this.tabMisc.UseVisualStyleBackColor = true;
 			// 
 			// grpGumps
 			// 
@@ -1629,17 +1642,17 @@ namespace UOX3_INI_Editor
 			this.dgvTimerSeconds.Name = "dgvTimerSeconds";
 			this.dgvTimerSeconds.Width = 73;
 			// 
-			// tabSettings
+			// tabGeneral
 			// 
-			this.tabSettings.Controls.Add(this.grpAnnounce);
-			this.tabSettings.Controls.Add(this.grpSettingsGeneral);
-			this.tabSettings.Location = new System.Drawing.Point(4, 22);
-			this.tabSettings.Name = "tabSettings";
-			this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
-			this.tabSettings.Size = new System.Drawing.Size(518, 193);
-			this.tabSettings.TabIndex = 1;
-			this.tabSettings.Text = "Settings";
-			this.tabSettings.UseVisualStyleBackColor = true;
+			this.tabGeneral.Controls.Add(this.grpAnnounce);
+			this.tabGeneral.Controls.Add(this.grpSettingsGeneral);
+			this.tabGeneral.Location = new System.Drawing.Point(4, 22);
+			this.tabGeneral.Name = "tabGeneral";
+			this.tabGeneral.Padding = new System.Windows.Forms.Padding(3);
+			this.tabGeneral.Size = new System.Drawing.Size(518, 193);
+			this.tabGeneral.TabIndex = 1;
+			this.tabGeneral.Text = "General";
+			this.tabGeneral.UseVisualStyleBackColor = true;
 			// 
 			// grpAnnounce
 			// 
@@ -1747,6 +1760,7 @@ namespace UOX3_INI_Editor
 			// 
 			// grpSettingsGeneral
 			// 
+			this.grpSettingsGeneral.Controls.Add(this.chkLootIsCrime);
 			this.grpSettingsGeneral.Controls.Add(this.mtxtBackupRatio);
 			this.grpSettingsGeneral.Controls.Add(this.chkEscorts);
 			this.grpSettingsGeneral.Controls.Add(this.chkAdvPathfind);
@@ -1792,7 +1806,7 @@ namespace UOX3_INI_Editor
 			// chkAdvPathfind
 			// 
 			this.chkAdvPathfind.AutoSize = true;
-			this.chkAdvPathfind.Location = new System.Drawing.Point(153, 91);
+			this.chkAdvPathfind.Location = new System.Drawing.Point(153, 114);
 			this.chkAdvPathfind.Name = "chkAdvPathfind";
 			this.chkAdvPathfind.Size = new System.Drawing.Size(131, 17);
 			this.chkAdvPathfind.TabIndex = 96;
@@ -1802,7 +1816,7 @@ namespace UOX3_INI_Editor
 			// chkOverloadPackets
 			// 
 			this.chkOverloadPackets.AutoSize = true;
-			this.chkOverloadPackets.Location = new System.Drawing.Point(153, 114);
+			this.chkOverloadPackets.Location = new System.Drawing.Point(153, 137);
 			this.chkOverloadPackets.Name = "chkOverloadPackets";
 			this.chkOverloadPackets.Size = new System.Drawing.Size(148, 17);
 			this.chkOverloadPackets.TabIndex = 95;
@@ -1906,17 +1920,17 @@ namespace UOX3_INI_Editor
 			this.lblPrefix.TabIndex = 84;
 			this.lblPrefix.Text = "Command Prefix:";
 			// 
-			// tabGeneral
+			// tabSetup
 			// 
-			this.tabGeneral.Controls.Add(this.grpDirectories);
-			this.tabGeneral.Controls.Add(this.grpServers);
-			this.tabGeneral.Location = new System.Drawing.Point(4, 22);
-			this.tabGeneral.Name = "tabGeneral";
-			this.tabGeneral.Padding = new System.Windows.Forms.Padding(3);
-			this.tabGeneral.Size = new System.Drawing.Size(518, 193);
-			this.tabGeneral.TabIndex = 0;
-			this.tabGeneral.Text = "General";
-			this.tabGeneral.UseVisualStyleBackColor = true;
+			this.tabSetup.Controls.Add(this.grpDirectories);
+			this.tabSetup.Controls.Add(this.grpServers);
+			this.tabSetup.Location = new System.Drawing.Point(4, 22);
+			this.tabSetup.Name = "tabSetup";
+			this.tabSetup.Padding = new System.Windows.Forms.Padding(3);
+			this.tabSetup.Size = new System.Drawing.Size(518, 193);
+			this.tabSetup.TabIndex = 0;
+			this.tabSetup.Text = "Setup";
+			this.tabSetup.UseVisualStyleBackColor = true;
 			// 
 			// grpDirectories
 			// 
@@ -2042,39 +2056,20 @@ namespace UOX3_INI_Editor
 			// 
 			// tabControl
 			// 
+			this.tabControl.Controls.Add(this.tabSetup);
 			this.tabControl.Controls.Add(this.tabGeneral);
-			this.tabControl.Controls.Add(this.tabSettings);
-			this.tabControl.Controls.Add(this.tabSettings2);
+			this.tabControl.Controls.Add(this.tabMisc);
 			this.tabControl.Controls.Add(this.tabTimers);
 			this.tabControl.Controls.Add(this.tabSkills);
 			this.tabControl.Controls.Add(this.tabCombat);
 			this.tabControl.Controls.Add(this.tabCreate);
 			this.tabControl.Controls.Add(this.tabFeatures);
+			this.tabControl.Controls.Add(this.tabOther);
 			this.tabControl.Location = new System.Drawing.Point(12, 33);
 			this.tabControl.Name = "tabControl";
 			this.tabControl.SelectedIndex = 0;
 			this.tabControl.Size = new System.Drawing.Size(526, 219);
-			this.tabControl.TabIndex = 5;
-			// 
-			// btnClear
-			// 
-			this.btnClear.Location = new System.Drawing.Point(12, 258);
-			this.btnClear.Name = "btnClear";
-			this.btnClear.Size = new System.Drawing.Size(77, 23);
-			this.btnClear.TabIndex = 6;
-			this.btnClear.Text = "Clear";
-			this.btnClear.UseVisualStyleBackColor = true;
-			this.btnClear.Click += new System.EventHandler(this.btnDefaults_Click);
-			// 
-			// btnSaveAs
-			// 
-			this.btnSaveAs.Location = new System.Drawing.Point(295, 258);
-			this.btnSaveAs.Name = "btnSaveAs";
-			this.btnSaveAs.Size = new System.Drawing.Size(77, 23);
-			this.btnSaveAs.TabIndex = 7;
-			this.btnSaveAs.Text = "Save As";
-			this.btnSaveAs.UseVisualStyleBackColor = true;
-			this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
+			this.tabControl.TabIndex = 7;
 			// 
 			// tabFeatures
 			// 
@@ -2088,16 +2083,6 @@ namespace UOX3_INI_Editor
 			this.tabFeatures.Text = "Features";
 			this.tabFeatures.UseVisualStyleBackColor = true;
 			// 
-			// grpClientFeatures
-			// 
-			this.grpClientFeatures.Controls.Add(this.dataGridClientFeatures);
-			this.grpClientFeatures.Location = new System.Drawing.Point(6, 6);
-			this.grpClientFeatures.Name = "grpClientFeatures";
-			this.grpClientFeatures.Size = new System.Drawing.Size(254, 181);
-			this.grpClientFeatures.TabIndex = 0;
-			this.grpClientFeatures.TabStop = false;
-			this.grpClientFeatures.Text = "Client Features";
-			// 
 			// grpServerFeatures
 			// 
 			this.grpServerFeatures.Controls.Add(this.dataGridServerFeatures);
@@ -2107,37 +2092,6 @@ namespace UOX3_INI_Editor
 			this.grpServerFeatures.TabIndex = 1;
 			this.grpServerFeatures.TabStop = false;
 			this.grpServerFeatures.Text = "Server Features";
-			// 
-			// dataGridClientFeatures
-			// 
-			this.dataGridClientFeatures.AllowUserToAddRows = false;
-			this.dataGridClientFeatures.AllowUserToDeleteRows = false;
-			this.dataGridClientFeatures.AllowUserToResizeRows = false;
-			this.dataGridClientFeatures.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-			this.dataGridClientFeatures.BackgroundColor = System.Drawing.SystemColors.Window;
-			this.dataGridClientFeatures.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-			this.dataGridClientFeatures.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
-			this.dataGridClientFeatures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridClientFeatures.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dgvClientFeature,
-            this.dataGridViewCheckBoxColumn1});
-			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-			dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.dataGridClientFeatures.DefaultCellStyle = dataGridViewCellStyle17;
-			this.dataGridClientFeatures.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-			this.dataGridClientFeatures.Location = new System.Drawing.Point(6, 19);
-			this.dataGridClientFeatures.MultiSelect = false;
-			this.dataGridClientFeatures.Name = "dataGridClientFeatures";
-			this.dataGridClientFeatures.RowHeadersVisible = false;
-			this.dataGridClientFeatures.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-			this.dataGridClientFeatures.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dataGridClientFeatures.Size = new System.Drawing.Size(240, 156);
-			this.dataGridClientFeatures.TabIndex = 30;
 			// 
 			// dataGridServerFeatures
 			// 
@@ -2151,7 +2105,7 @@ namespace UOX3_INI_Editor
 			this.dataGridServerFeatures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridServerFeatures.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dgvSFeature,
-            this.dataGridViewCheckBoxColumn2});
+            this.dgvSFeatureEnabled});
 			dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
 			dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Window;
 			dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -2170,24 +2124,6 @@ namespace UOX3_INI_Editor
 			this.dataGridServerFeatures.Size = new System.Drawing.Size(240, 156);
 			this.dataGridServerFeatures.TabIndex = 31;
 			// 
-			// dgvClientFeature
-			// 
-			dataGridViewCellStyle16.NullValue = null;
-			this.dgvClientFeature.DefaultCellStyle = dataGridViewCellStyle16;
-			this.dgvClientFeature.HeaderText = "Feature";
-			this.dgvClientFeature.Name = "dgvClientFeature";
-			this.dgvClientFeature.ReadOnly = true;
-			this.dgvClientFeature.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			this.dgvClientFeature.Width = 49;
-			// 
-			// dataGridViewCheckBoxColumn1
-			// 
-			this.dataGridViewCheckBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-			this.dataGridViewCheckBoxColumn1.HeaderText = "";
-			this.dataGridViewCheckBoxColumn1.Name = "dataGridViewCheckBoxColumn1";
-			this.dataGridViewCheckBoxColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewCheckBoxColumn1.Width = 25;
-			// 
 			// dgvSFeature
 			// 
 			dataGridViewCellStyle14.NullValue = null;
@@ -2198,13 +2134,165 @@ namespace UOX3_INI_Editor
 			this.dgvSFeature.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
 			this.dgvSFeature.Width = 49;
 			// 
-			// dataGridViewCheckBoxColumn2
+			// dgvSFeatureEnabled
 			// 
-			this.dataGridViewCheckBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-			this.dataGridViewCheckBoxColumn2.HeaderText = "";
-			this.dataGridViewCheckBoxColumn2.Name = "dataGridViewCheckBoxColumn2";
-			this.dataGridViewCheckBoxColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewCheckBoxColumn2.Width = 25;
+			this.dgvSFeatureEnabled.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+			this.dgvSFeatureEnabled.HeaderText = "";
+			this.dgvSFeatureEnabled.Name = "dgvSFeatureEnabled";
+			this.dgvSFeatureEnabled.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dgvSFeatureEnabled.Width = 25;
+			// 
+			// grpClientFeatures
+			// 
+			this.grpClientFeatures.Controls.Add(this.dataGridClientFeatures);
+			this.grpClientFeatures.Location = new System.Drawing.Point(6, 6);
+			this.grpClientFeatures.Name = "grpClientFeatures";
+			this.grpClientFeatures.Size = new System.Drawing.Size(254, 181);
+			this.grpClientFeatures.TabIndex = 0;
+			this.grpClientFeatures.TabStop = false;
+			this.grpClientFeatures.Text = "Client Features";
+			// 
+			// dataGridClientFeatures
+			// 
+			this.dataGridClientFeatures.AllowUserToAddRows = false;
+			this.dataGridClientFeatures.AllowUserToDeleteRows = false;
+			this.dataGridClientFeatures.AllowUserToResizeRows = false;
+			this.dataGridClientFeatures.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+			this.dataGridClientFeatures.BackgroundColor = System.Drawing.SystemColors.Window;
+			this.dataGridClientFeatures.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.dataGridClientFeatures.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+			this.dataGridClientFeatures.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridClientFeatures.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvClientFeature,
+            this.dgvClientFeatureEnabled});
+			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+			dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dataGridClientFeatures.DefaultCellStyle = dataGridViewCellStyle17;
+			this.dataGridClientFeatures.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+			this.dataGridClientFeatures.Location = new System.Drawing.Point(6, 19);
+			this.dataGridClientFeatures.MultiSelect = false;
+			this.dataGridClientFeatures.Name = "dataGridClientFeatures";
+			this.dataGridClientFeatures.RowHeadersVisible = false;
+			this.dataGridClientFeatures.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+			this.dataGridClientFeatures.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.dataGridClientFeatures.Size = new System.Drawing.Size(240, 156);
+			this.dataGridClientFeatures.TabIndex = 30;
+			// 
+			// dgvClientFeature
+			// 
+			dataGridViewCellStyle16.NullValue = null;
+			this.dgvClientFeature.DefaultCellStyle = dataGridViewCellStyle16;
+			this.dgvClientFeature.HeaderText = "Feature";
+			this.dgvClientFeature.Name = "dgvClientFeature";
+			this.dgvClientFeature.ReadOnly = true;
+			this.dgvClientFeature.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			this.dgvClientFeature.Width = 49;
+			// 
+			// dgvClientFeatureEnabled
+			// 
+			this.dgvClientFeatureEnabled.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+			this.dgvClientFeatureEnabled.HeaderText = "";
+			this.dgvClientFeatureEnabled.Name = "dgvClientFeatureEnabled";
+			this.dgvClientFeatureEnabled.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+			this.dgvClientFeatureEnabled.Width = 25;
+			// 
+			// tabOther
+			// 
+			this.tabOther.Controls.Add(this.groupBox1);
+			this.tabOther.Location = new System.Drawing.Point(4, 22);
+			this.tabOther.Name = "tabOther";
+			this.tabOther.Padding = new System.Windows.Forms.Padding(3);
+			this.tabOther.Size = new System.Drawing.Size(518, 193);
+			this.tabOther.TabIndex = 8;
+			this.tabOther.Text = "Other";
+			this.tabOther.UseVisualStyleBackColor = true;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.dataGridUncategorized);
+			this.groupBox1.Location = new System.Drawing.Point(6, 6);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(506, 181);
+			this.groupBox1.TabIndex = 31;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Uncategorized Settings";
+			// 
+			// dataGridUncategorized
+			// 
+			this.dataGridUncategorized.AllowUserToAddRows = false;
+			this.dataGridUncategorized.AllowUserToResizeRows = false;
+			this.dataGridUncategorized.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+			this.dataGridUncategorized.BackgroundColor = System.Drawing.SystemColors.Window;
+			this.dataGridUncategorized.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+			this.dataGridUncategorized.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.dataGridUncategorized.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle18;
+			this.dataGridUncategorized.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridUncategorized.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2});
+			this.dataGridUncategorized.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+			this.dataGridUncategorized.Location = new System.Drawing.Point(6, 19);
+			this.dataGridUncategorized.MultiSelect = false;
+			this.dataGridUncategorized.Name = "dataGridUncategorized";
+			this.dataGridUncategorized.RowHeadersVisible = false;
+			this.dataGridUncategorized.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+			this.dataGridUncategorized.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.dataGridUncategorized.Size = new System.Drawing.Size(494, 156);
+			this.dataGridUncategorized.TabIndex = 0;
+			// 
+			// dataGridViewTextBoxColumn1
+			// 
+			this.dataGridViewTextBoxColumn1.HeaderText = "Tag";
+			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+			this.dataGridViewTextBoxColumn1.Width = 51;
+			// 
+			// dataGridViewTextBoxColumn2
+			// 
+			this.dataGridViewTextBoxColumn2.HeaderText = "Value";
+			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+			this.dataGridViewTextBoxColumn2.Width = 59;
+			// 
+			// btnDefaults
+			// 
+			this.btnDefaults.Location = new System.Drawing.Point(12, 258);
+			this.btnDefaults.Name = "btnDefaults";
+			this.btnDefaults.Size = new System.Drawing.Size(77, 23);
+			this.btnDefaults.TabIndex = 3;
+			this.btnDefaults.Text = "Clear";
+			this.btnDefaults.UseVisualStyleBackColor = true;
+			this.btnDefaults.Click += new System.EventHandler(this.btnDefaults_Click);
+			// 
+			// btnSaveAs
+			// 
+			this.btnSaveAs.Location = new System.Drawing.Point(295, 258);
+			this.btnSaveAs.Name = "btnSaveAs";
+			this.btnSaveAs.Size = new System.Drawing.Size(77, 23);
+			this.btnSaveAs.TabIndex = 4;
+			this.btnSaveAs.Text = "Save As";
+			this.btnSaveAs.UseVisualStyleBackColor = true;
+			this.btnSaveAs.Click += new System.EventHandler(this.btnSaveAs_Click);
+			// 
+			// chkLootIsCrime
+			// 
+			this.chkLootIsCrime.AutoSize = true;
+			this.chkLootIsCrime.Location = new System.Drawing.Point(153, 91);
+			this.chkLootIsCrime.Name = "chkLootIsCrime";
+			this.chkLootIsCrime.Size = new System.Drawing.Size(109, 17);
+			this.chkLootIsCrime.TabIndex = 98;
+			this.chkLootIsCrime.Text = "Looting is a Crime";
+			this.chkLootIsCrime.UseVisualStyleBackColor = true;
 			// 
 			// INIEditor
 			// 
@@ -2212,7 +2300,7 @@ namespace UOX3_INI_Editor
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(550, 293);
 			this.Controls.Add(this.btnSaveAs);
-			this.Controls.Add(this.btnClear);
+			this.Controls.Add(this.btnDefaults);
 			this.Controls.Add(this.tabControl);
 			this.Controls.Add(this.btnBrowse);
 			this.Controls.Add(this.txtINIFile);
@@ -2222,7 +2310,6 @@ namespace UOX3_INI_Editor
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "INIEditor";
-			this.Text = "UOX3 INI Editor v0.1";
 			this.tabCreate.ResumeLayout(false);
 			this.grpStartPrivs.ResumeLayout(false);
 			this.grpStartPrivs.PerformLayout();
@@ -2238,7 +2325,7 @@ namespace UOX3_INI_Editor
 			this.grpCombatAnimals.PerformLayout();
 			this.grpCombatNPC.ResumeLayout(false);
 			this.grpCombatNPC.PerformLayout();
-			this.tabSettings2.ResumeLayout(false);
+			this.tabMisc.ResumeLayout(false);
 			this.grpGumps.ResumeLayout(false);
 			this.grpGumps.PerformLayout();
 			this.grpHunger.ResumeLayout(false);
@@ -2262,14 +2349,14 @@ namespace UOX3_INI_Editor
 			this.grpGameTimers.ResumeLayout(false);
 			this.grpGameTimers.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridTimers)).EndInit();
-			this.tabSettings.ResumeLayout(false);
+			this.tabGeneral.ResumeLayout(false);
 			this.grpAnnounce.ResumeLayout(false);
 			this.grpAnnounce.PerformLayout();
 			this.grpLight.ResumeLayout(false);
 			this.grpLight.PerformLayout();
 			this.grpSettingsGeneral.ResumeLayout(false);
 			this.grpSettingsGeneral.PerformLayout();
-			this.tabGeneral.ResumeLayout(false);
+			this.tabSetup.ResumeLayout(false);
 			this.grpDirectories.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridDirectories)).EndInit();
 			this.grpServers.ResumeLayout(false);
@@ -2277,10 +2364,13 @@ namespace UOX3_INI_Editor
 			((System.ComponentModel.ISupportInitialize)(this.dataGridServers)).EndInit();
 			this.tabControl.ResumeLayout(false);
 			this.tabFeatures.ResumeLayout(false);
-			this.grpClientFeatures.ResumeLayout(false);
 			this.grpServerFeatures.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.dataGridClientFeatures)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridServerFeatures)).EndInit();
+			this.grpClientFeatures.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridClientFeatures)).EndInit();
+			this.tabOther.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.dataGridUncategorized)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -2299,7 +2389,7 @@ namespace UOX3_INI_Editor
         private System.Windows.Forms.DataGridView dataGridPrivs;
 		private System.Windows.Forms.DataGridView dataGridLocations;
 		private System.Windows.Forms.TabPage tabCombat;
-		private System.Windows.Forms.TabPage tabSettings2;
+		private System.Windows.Forms.TabPage tabMisc;
 		private System.Windows.Forms.ComboBox comboMineCheck;
 		private System.Windows.Forms.Label lblMineCheck;
 		private System.Windows.Forms.TabPage tabSkills;
@@ -2320,8 +2410,8 @@ namespace UOX3_INI_Editor
 		private System.Windows.Forms.TabPage tabTimers;
 		private System.Windows.Forms.DataGridView dataGridSpeed;
 		private System.Windows.Forms.DataGridView dataGridTimers;
-		private System.Windows.Forms.TabPage tabSettings;
 		private System.Windows.Forms.TabPage tabGeneral;
+		private System.Windows.Forms.TabPage tabSetup;
         private System.Windows.Forms.DataGridView dataGridDirectories;
 		private System.Windows.Forms.DataGridView dataGridServers;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgvServerName;
@@ -2413,7 +2503,7 @@ namespace UOX3_INI_Editor
 		private System.Windows.Forms.Label lblSecondsPerUOMin;
 		private System.Windows.Forms.MaskedTextBox mtxtMaxStaminaMove;
 		private System.Windows.Forms.Label lblMaxStamMove;
-		private System.Windows.Forms.Button btnClear;
+		private System.Windows.Forms.Button btnDefaults;
 		private System.Windows.Forms.GroupBox grpGumps;
 		private System.Windows.Forms.MaskedTextBox mtxtGumpText;
         private System.Windows.Forms.GroupBox grpSettingsGeneral;
@@ -2437,9 +2527,6 @@ namespace UOX3_INI_Editor
 		private System.Windows.Forms.Label lblGumpText;
 		private System.Windows.Forms.MaskedTextBox mtxtGumpBackground;
 		private System.Windows.Forms.Label lblGumpBackground;
-
-		ushort[] gumpText = new ushort[3];
-		ushort[] gumpButtons = new ushort[3];
         private System.Windows.Forms.GroupBox grpAnnounce;
         private System.Windows.Forms.GroupBox grpLight;
         private System.Windows.Forms.MaskedTextBox mtxtDarkLight;
@@ -2462,10 +2549,19 @@ namespace UOX3_INI_Editor
 		private System.Windows.Forms.DataGridView dataGridServerFeatures;
 		private System.Windows.Forms.GroupBox grpClientFeatures;
 		private System.Windows.Forms.DataGridView dataGridClientFeatures;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dgvClientFeature;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn dgvSFeature;
-		private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn2;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dgvSFeatureEnabled;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dgvClientFeature;
+		private System.Windows.Forms.DataGridViewCheckBoxColumn dgvClientFeatureEnabled;
+		private System.Windows.Forms.TabPage tabOther;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.DataGridView dataGridUncategorized;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+
+		ushort[] gumpText = new ushort[3];
+		ushort[] gumpButtons = new ushort[3];
+		private System.Windows.Forms.CheckBox chkLootIsCrime;
 	}
 }
 

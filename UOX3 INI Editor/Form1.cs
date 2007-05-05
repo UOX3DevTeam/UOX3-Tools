@@ -12,10 +12,13 @@ namespace UOX3_INI_Editor
 	{
         Dictionary< string, ControlData > iniControls;
         Dictionary<SectionNames, ArrayList> sectionTags;
+		string title = "UOX3 INI Editor v0.3";
 
 		public INIEditor()
 		{
 			InitializeComponent();
+
+			Text = title;
 
             openFileDialog1.InitialDirectory = Directory.GetCurrentDirectory();
             openFileDialog1.Filter = "INI Files (*.ini)|*.ini|All Files (*.*)|*.*";
@@ -48,6 +51,7 @@ namespace UOX3_INI_Editor
             AddTag("INTERNALACCOUNTCREATION", SectionNames.settings, "chkAutoAccount");
             AddTag("JOINPARTMSGS", SectionNames.system, "chkAnnLog");
             AddTag("LOOTDECAYSWITHCORPSE", SectionNames.settings, "chkLootDecay");
+			AddTag("LOOTINGISCRIME", SectionNames.settings, "chkLootIsCrime");
             AddTag("MONSTERSVSANIMALS", SectionNames.combat, "chkMonsterVsAnimals");
             AddTag("NPCTRAININGENABLED", SectionNames.settings, "chkNPCTrain");
             AddTag("OVERLOADPACKETS", SectionNames.settings, "chkOverloadPackets");
@@ -138,6 +142,8 @@ namespace UOX3_INI_Editor
             AddTag("TAXPERIOD", SectionNames.towns, "dataGridTimers", "Town Tax Interval");
             AddTag("WEATHERTIMER", SectionNames.timers, "dataGridSpeed", "Weather");
             #endregion
+
+			txtINIFile.Select();
         }
 
         public void AddTag(string mTag, SectionNames mSectType, string mCont, string mDesc)
@@ -196,21 +202,76 @@ namespace UOX3_INI_Editor
 			Close();
 		}
 
+		private void txtINIFile_KeyPress(object sender, KeyPressEventArgs e )
+		{
+			if( e.KeyChar == '\r' )
+				e.Handled = true;
+		}
+		private void txtINIFile_KeyDown(object sender, KeyEventArgs e)
+		{
+			if( e.KeyCode == Keys.Enter )
+				Browse();
+		}
+
 		private void btnBrowse_Click(object sender, EventArgs e)
 		{
-            if (Path.GetFileName(txtINIFile.Text) != "")
-                openFileDialog1.FileName = txtINIFile.Text;
-            else if (Directory.Exists(txtINIFile.Text))
-                openFileDialog1.InitialDirectory = txtINIFile.Text;
+			Browse();
+		}
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            string saveAs = Directory.GetCurrentDirectory() + "\\uox.ini";
+            if( Path.GetFileName( openFileDialog1.FileName ) != "" )
+                saveAs = openFileDialog1.FileName;
+
+            DoSave(saveAs);
+        }
+
+        private void btnSaveAs_Click(object sender, EventArgs e)
+        {
+            string saveAs = Directory.GetCurrentDirectory() + "\\uox.ini";
+            if( Path.GetFileName( openFileDialog1.FileName ) != "" )
+                saveAs = openFileDialog1.FileName ;
+
+            saveFileDialog1.FileName = saveAs;
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                openFileDialog1.FileName = saveFileDialog1.FileName;
+                DoSave(saveFileDialog1.FileName);
+				Text = title + " - " + Path.GetFileName(saveFileDialog1.FileName);
+            }
+        }
+
+		private void btnDefaults_Click(object sender, EventArgs e)
+		{
+			Clear();
+		}
+
+		private void Browse()
+		{
+			if( txtINIFile.Text != "" )
+			{
+				if (Directory.Exists( txtINIFile.Text ))
+					openFileDialog1.InitialDirectory = txtINIFile.Text;
+				else if( File.Exists( txtINIFile.Text ) && txtINIFile.Text != openFileDialog1.FileName )
+				{
+					openFileDialog1.FileName = txtINIFile.Text;
+					OpenFile( txtINIFile.Text );
+					return;
+				}
+			}
 
 			if( openFileDialog1.ShowDialog() == DialogResult.OK )
-			{
-                ClearControlValues(this);
+				OpenFile( openFileDialog1.FileName );
+		}
 
-				string fileName = openFileDialog1.FileName;
-				txtINIFile.Text = fileName;
+		private void OpenFile( string fileName )
+		{
+			Clear();
 
-                UOXData.Script.UOXIni iniFile = new UOXData.Script.UOXIni(fileName);
+			txtINIFile.Text = fileName;
+
+            UOXData.Script.UOXIni iniFile = new UOXData.Script.UOXIni(fileName);
 
                 foreach (UOXData.Script.ScriptSection mSect in iniFile.Sections)
 				{
@@ -283,6 +344,8 @@ namespace UOX3_INI_Editor
 										{ 
 											dataGridClientFeatures.Rows.Add(cEnum.ToString().Replace("_", " "), sCFeat[cmask]);
 											cmask = BitVector32.CreateMask(cmask);
+											if (cEnum.ToString().Contains("UNKNOWN"))
+												dataGridClientFeatures.Rows[dataGridClientFeatures.Rows.Count - 1].Visible = false;
 										}
 										break;
                                     case "LEFTTEXTCOLOUR":
@@ -298,6 +361,8 @@ namespace UOX3_INI_Editor
 										{
 											dataGridServerFeatures.Rows.Add(sEnum.ToString().Replace("_", " "), sSFeat[smask]);
 											smask = BitVector32.CreateMask(smask);
+											if (sEnum.ToString().Contains("UNKNOWN"))
+												dataGridServerFeatures.Rows[dataGridServerFeatures.Rows.Count - 1].Visible = false;
 										}
 										break;
                                     case "STARTGOLD":
@@ -315,6 +380,9 @@ namespace UOX3_INI_Editor
                                     case "TITLECOLOUR":
                                         gumpText[0] = mPair.Data.ToUInt16();
                                         break;
+									default:
+										dataGridUncategorized.Rows.Add( mPair.Tag.ToString(), mPair.Data.ToString() );
+										break;
                                 }
                             }
 						}
@@ -322,31 +390,9 @@ namespace UOX3_INI_Editor
 				}
 				comboGumpText.SelectedIndex = 0;
 				comboGumpButtons.SelectedIndex = 0;
-			}
+
+			Text = title + " - " + Path.GetFileName( txtINIFile.Text );
 		}
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            string saveAs = Directory.GetCurrentDirectory() + "\\uox.ini";
-            if( Path.GetFileName( openFileDialog1.FileName ) != "" )
-                saveAs = openFileDialog1.FileName;
-
-            DoSave(saveAs);
-        }
-
-        private void btnSaveAs_Click(object sender, EventArgs e)
-        {
-            string saveAs = Directory.GetCurrentDirectory() + "\\uox.ini";
-            if( Path.GetFileName( openFileDialog1.FileName ) != "" )
-                saveAs = openFileDialog1.FileName ;
-
-            saveFileDialog1.FileName = saveAs;
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                openFileDialog1.FileName = saveFileDialog1.FileName;
-                DoSave(saveFileDialog1.FileName);
-            }
-        }
 
         private void DoSave(string path)
         {
@@ -421,6 +467,16 @@ namespace UOX3_INI_Editor
             iniOut.WriteLine("}");
             iniOut.WriteLine();
 
+			iniOut.WriteLine("[other]");
+			iniOut.WriteLine("{");
+			foreach (DataGridViewRow dgRow in dataGridUncategorized.Rows)
+			{
+				if (dgRow.Cells.Count > 1)
+					iniOut.WriteLine(dgRow.Cells[0].Value.ToString() + "=" + dgRow.Cells[1].Value.ToString());
+			}
+			iniOut.WriteLine("}");
+			iniOut.WriteLine();
+
             iniOut.WriteLine();
 			iniOut.Flush();
             iniOut.Close();
@@ -494,6 +550,7 @@ namespace UOX3_INI_Editor
             iniOut.WriteLine("}");
             iniOut.WriteLine();
         }
+
         private void SaveSection( StreamWriter iniOut, SectionNames sect )
         {
             iniOut.WriteLine("[" + sect.ToString().Replace( "_", " " ) + "]");
@@ -540,144 +597,144 @@ namespace UOX3_INI_Editor
             return retVal;
         }
 
-        private class ControlData
+		private void Clear()
 		{
-			#region "Protected Data"
-			protected string ctrlName;
-            protected string ctrlDesc;
-			#endregion
-
-			#region "Public Properties"
-			public string CtrlName { get { return ctrlName; } set { ctrlName = value; } }
-            public string CtrlDesc { get { return ctrlDesc; } set { ctrlDesc = value; } }
-			#endregion
-
-			public ControlData(string cName)
-                : this()
-            {
-                ctrlName = cName;
-            }
-
-            public ControlData(string cName, string cDesc)
-                : this(cName)
-            {
-                ctrlDesc = cDesc;
-            }
-
-            public ControlData()
-            {
-                ctrlName = "";
-                ctrlDesc = "";
-            }
-        }
-
-		public enum StartPrivs
-        {
-            GM = 1,
-            Broadcast,
-            Invulnerable,
-            Show_Serials,
-            Skill_Titles,
-            GM_Pageable,
-            Snoop,
-            Counselor,
-            AllMove,
-            Frozen,
-            View_House_As_Icon,
-            Cast_Without_Mana,
-            Dispellable,
-            Permanent_Magic_Reflect,
-            Cast_Without_Reagents,
-            COUNT
-        }
-
-		public enum ClientFeatures
-		{
-			Chat_Button = 1,
-			Lord_Blackthorns_Revenge,
-			UNKNOWN1,
-			UNKNOWN2,
-			Age_Of_Shadows,
-			Six_Characters,
-			Samurai_Empire,
-			Mondains_Legacy,
-			UNKNOWN3,
-			UNKNOWN4,
-			UNKNOWN5,
-			UNKNOWN6,
-			UNKNOWN7,
-			UNKNOWN8,
-			UNKNOWN9,
-			Enable_Expansions = 16,
-			COUNT
+			for (byte i = 0; i < 3; ++i)
+			{
+				gumpText[i] = 0;
+				gumpButtons[i] = 0;
+			}
+			ClearControlValues(this);
 		}
-
-		public enum ServerFeatures
-		{
-			UNKNOWN1 = 1,
-			IGR_Client,
-			Limit_Characters,
-			Context_Menus,
-			One_Character,
-			Age_Of_Shadows,
-			Six_Characters,
-			Samurai_Empire,
-			Mondains_Legacy,
-			COUNT
-		}
-
-		public enum SectionNames
-        {
-            system = 0,
-            skills,
-            timers,
-            settings,
-            speedup,
-            escorts,
-            worldlight,
-            tracking,
-            reputation,
-            resources,
-            hunger,
-            combat,
-            towns,
-            COUNT
-        }
-
-        private void btnDefaults_Click(object sender, EventArgs e)
-        {
-            ClearControlValues(this);
-        }
 
 		private void ClearControlValues(System.Windows.Forms.Control Container)
-        {
-            try
-            {
-                foreach (Control ctrl in Container.Controls)
-                {
-                    if (ctrl.GetType() == typeof(TextBox))
-                        ((TextBox)ctrl).Text = "";
-                    else if (ctrl.GetType() == typeof(MaskedTextBox))
-                        ((MaskedTextBox)ctrl).Text = "";
-                    else if (ctrl.GetType() == typeof(ComboBox))
-                        ((ComboBox)ctrl).SelectedIndex = -1;
-                    else if (ctrl.GetType() == typeof(CheckBox))
-                        ((CheckBox)ctrl).Checked = false;
-                    else if (ctrl.GetType() == typeof(DataGridView))
-                        ((DataGridView)ctrl).Rows.Clear();
-                    else if (ctrl.Controls.Count > 0)
-                        ClearControlValues(ctrl);
-                }
-                for (byte i = 0; i < 3; ++i)
-                {
-                    gumpText[i] = 0;
-                    gumpButtons[i] = 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
+		{
+			try
+			{
+				foreach (Control ctrl in Container.Controls)
+				{
+					if (ctrl.GetType() == typeof(TextBox))
+						((TextBox)ctrl).Text = "";
+					else if (ctrl.GetType() == typeof(MaskedTextBox))
+						((MaskedTextBox)ctrl).Text = "";
+					else if (ctrl.GetType() == typeof(ComboBox))
+						((ComboBox)ctrl).SelectedIndex = -1;
+					else if (ctrl.GetType() == typeof(CheckBox))
+						((CheckBox)ctrl).Checked = false;
+					else if (ctrl.GetType() == typeof(DataGridView))
+						((DataGridView)ctrl).Rows.Clear();
+					else if (ctrl.Controls.Count > 0)
+						ClearControlValues(ctrl);
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.ToString());
+			}
+		}
+	}
+
+	public class ControlData
+	{
+		#region "Protected Data"
+		protected string ctrlName;
+		protected string ctrlDesc;
+		#endregion
+
+		#region "Public Properties"
+		public string CtrlName { get { return ctrlName; } set { ctrlName = value; } }
+		public string CtrlDesc { get { return ctrlDesc; } set { ctrlDesc = value; } }
+		#endregion
+
+		public ControlData(string cName)
+			: this()
+		{
+			ctrlName = cName;
+		}
+
+		public ControlData(string cName, string cDesc)
+			: this(cName)
+		{
+			ctrlDesc = cDesc;
+		}
+
+		public ControlData()
+		{
+			ctrlName = "";
+			ctrlDesc = "";
+		}
+	}
+
+	public enum StartPrivs
+	{
+		GM = 1,
+		Broadcast,
+		Invulnerable,
+		Show_Serials,
+		Skill_Titles,
+		GM_Pageable,
+		Snoop,
+		Counselor,
+		AllMove,
+		Frozen,
+		View_House_As_Icon,
+		Cast_Without_Mana,
+		Dispellable,
+		Permanent_Magic_Reflect,
+		Cast_Without_Reagents,
+		COUNT
+	}
+
+	public enum ClientFeatures
+	{
+		Chat_Button = 1,
+		Lord_Blackthorns_Revenge,
+		UNKNOWN1,
+		UNKNOWN2,
+		Age_Of_Shadows,
+		Six_Characters,
+		Samurai_Empire,
+		Mondains_Legacy,
+		UNKNOWN3,
+		UNKNOWN4,
+		UNKNOWN5,
+		UNKNOWN6,
+		UNKNOWN7,
+		UNKNOWN8,
+		UNKNOWN9,
+		Enable_Expansions = 16,
+		COUNT
+	}
+
+	public enum ServerFeatures
+	{
+		UNKNOWN1 = 1,
+		IGR_Client,
+		Limit_Characters,
+		Context_Menus,
+		One_Character,
+		Age_Of_Shadows,
+		Six_Characters,
+		Samurai_Empire,
+		Mondains_Legacy,
+		COUNT
+	}
+
+	public enum SectionNames
+	{
+		system = 0,
+		skills,
+		timers,
+		settings,
+		speedup,
+		escorts,
+		worldlight,
+		tracking,
+		reputation,
+		resources,
+		hunger,
+		combat,
+		towns,
+		COUNT
 	}
 }

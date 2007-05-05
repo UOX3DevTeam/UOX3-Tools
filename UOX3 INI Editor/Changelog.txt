@@ -1,3 +1,12 @@
+05/04/2007 - giwo (v0.3)
+	Added support for the new "LOOTISCRIME" tag.
+	Added the currently open filename to the titlebar to more easily identify the file being edited.
+	Added an "Other" tab to catch any unhandled tags.
+	Hid "UNKNOWN" flags for Server and Client features.
+	Added support for pressing ENTER in the Filename textbox, to load the file.
+	The browse button now automatically loads the file specified in the filename textbox
+		unless the box is empty or the filename is invalid.
+
 03/03/2007 - giwo (v0.2)
 	Added support for the CLIENTFEATURES and SERVERFEATURES tags.
 
