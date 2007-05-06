@@ -61,12 +61,14 @@ namespace AccountManager
 			this.lblTimeban = new System.Windows.Forms.Label();
 			this.btnEditChar = new System.Windows.Forms.Button();
 			this.grpAccountSettings = new System.Windows.Forms.GroupBox();
+			this.btnPath = new System.Windows.Forms.Button();
 			this.txtTimeban = new System.Windows.Forms.TextBox();
-			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+			this.fldrAccounts = new System.Windows.Forms.FolderBrowserDialog();
 			this.txtAccountStats = new System.Windows.Forms.TextBox();
 			this.txtBanStats = new System.Windows.Forms.TextBox();
 			this.txtPlayerStats = new System.Windows.Forms.TextBox();
 			this.btnRenumber = new System.Windows.Forms.Button();
+			this.fldrPath = new System.Windows.Forms.FolderBrowserDialog();
 			this.grpLevel.SuspendLayout();
 			this.grpStatus.SuspendLayout();
 			this.grpAccountSettings.SuspendLayout();
@@ -180,7 +182,7 @@ namespace AccountManager
 			this.txtName.Location = new System.Drawing.Point(69, 18);
 			this.txtName.MaxLength = 256;
 			this.txtName.Name = "txtName";
-			this.txtName.Size = new System.Drawing.Size(195, 20);
+			this.txtName.Size = new System.Drawing.Size(168, 20);
 			this.txtName.TabIndex = 9;
 			this.txtName.LostFocus += new System.EventHandler(this.txtName_LostFocus);
 			this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
@@ -199,7 +201,7 @@ namespace AccountManager
 			this.txtPass.Location = new System.Drawing.Point(69, 44);
 			this.txtPass.MaxLength = 256;
 			this.txtPass.Name = "txtPass";
-			this.txtPass.Size = new System.Drawing.Size(195, 20);
+			this.txtPass.Size = new System.Drawing.Size(168, 20);
 			this.txtPass.TabIndex = 10;
 			this.txtPass.UseSystemPasswordChar = true;
 			this.txtPass.TextChanged += new System.EventHandler(this.txtPass_TextChanged);
@@ -323,7 +325,7 @@ namespace AccountManager
 			// 
 			this.txtPath.Location = new System.Drawing.Point(69, 70);
 			this.txtPath.Name = "txtPath";
-			this.txtPath.Size = new System.Drawing.Size(195, 20);
+			this.txtPath.Size = new System.Drawing.Size(168, 20);
 			this.txtPath.TabIndex = 11;
 			this.txtPath.TextChanged += new System.EventHandler(this.txtPath_TextChanged);
 			// 
@@ -341,7 +343,7 @@ namespace AccountManager
 			this.txtContact.Location = new System.Drawing.Point(69, 96);
 			this.txtContact.MaxLength = 256;
 			this.txtContact.Name = "txtContact";
-			this.txtContact.Size = new System.Drawing.Size(195, 20);
+			this.txtContact.Size = new System.Drawing.Size(168, 20);
 			this.txtContact.TabIndex = 12;
 			this.txtContact.TextChanged += new System.EventHandler(this.txtContact_TextChanged);
 			// 
@@ -356,16 +358,17 @@ namespace AccountManager
 			// 
 			// btnEditChar
 			// 
-			this.btnEditChar.Location = new System.Drawing.Point(6, 116);
+			this.btnEditChar.Location = new System.Drawing.Point(6, 88);
 			this.btnEditChar.Name = "btnEditChar";
 			this.btnEditChar.Size = new System.Drawing.Size(84, 22);
 			this.btnEditChar.TabIndex = 6;
-			this.btnEditChar.Text = "Edit Chars";
+			this.btnEditChar.Text = "Characters";
 			this.btnEditChar.UseVisualStyleBackColor = true;
 			this.btnEditChar.Click += new System.EventHandler(this.btnEditChar_Click);
 			// 
 			// grpAccountSettings
 			// 
+			this.grpAccountSettings.Controls.Add(this.btnPath);
 			this.grpAccountSettings.Controls.Add(this.txtTimeban);
 			this.grpAccountSettings.Controls.Add(this.lblName);
 			this.grpAccountSettings.Controls.Add(this.txtName);
@@ -386,12 +389,22 @@ namespace AccountManager
 			this.grpAccountSettings.TabStop = false;
 			this.grpAccountSettings.Text = "Account Settings";
 			// 
+			// btnPath
+			// 
+			this.btnPath.Location = new System.Drawing.Point(243, 70);
+			this.btnPath.Name = "btnPath";
+			this.btnPath.Size = new System.Drawing.Size(25, 20);
+			this.btnPath.TabIndex = 36;
+			this.btnPath.Text = "...";
+			this.btnPath.UseVisualStyleBackColor = true;
+			this.btnPath.Click += new System.EventHandler(this.btnPath_Click);
+			// 
 			// txtTimeban
 			// 
 			this.txtTimeban.Location = new System.Drawing.Point(69, 140);
 			this.txtTimeban.MaxLength = 10;
 			this.txtTimeban.Name = "txtTimeban";
-			this.txtTimeban.Size = new System.Drawing.Size(195, 20);
+			this.txtTimeban.Size = new System.Drawing.Size(168, 20);
 			this.txtTimeban.TabIndex = 14;
 			this.txtTimeban.TextChanged += new System.EventHandler(this.txtTimeban_TextChanged);
 			// 
@@ -421,11 +434,11 @@ namespace AccountManager
 			// 
 			// btnRenumber
 			// 
-			this.btnRenumber.Location = new System.Drawing.Point(6, 88);
+			this.btnRenumber.Location = new System.Drawing.Point(6, 116);
 			this.btnRenumber.Name = "btnRenumber";
 			this.btnRenumber.Size = new System.Drawing.Size(84, 22);
 			this.btnRenumber.TabIndex = 5;
-			this.btnRenumber.Text = "Re-Number";
+			this.btnRenumber.Text = "AutoNumber";
 			this.btnRenumber.UseVisualStyleBackColor = true;
 			this.btnRenumber.Click += new System.EventHandler(this.btnRenumber_Click);
 			// 
@@ -453,7 +466,7 @@ namespace AccountManager
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "AccountManager";
-			this.Text = "UOX3 Account Manager v0.3";
+			this.Text = "UOX3 Account Manager v0.4";
 			this.grpLevel.ResumeLayout(false);
 			this.grpLevel.PerformLayout();
 			this.grpStatus.ResumeLayout(false);
@@ -497,14 +510,16 @@ namespace AccountManager
 		private System.Windows.Forms.Label lblTimeban;
 		private System.Windows.Forms.Button btnEditChar;
 		private System.Windows.Forms.GroupBox grpAccountSettings;
-		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+		private System.Windows.Forms.FolderBrowserDialog fldrAccounts;
 		private System.Windows.Forms.TextBox txtTimeban;
 		private System.Windows.Forms.TextBox txtAccountStats;
 		private System.Windows.Forms.TextBox txtBanStats;
 		private System.Windows.Forms.TextBox txtPlayerStats;
 		private System.Windows.Forms.Button btnRenumber;
+		private System.Windows.Forms.FolderBrowserDialog fldrPath;
+		private System.Windows.Forms.Button btnPath;
 
-		protected List<AccountObject> accountList;
+		protected Dictionary< string, AccountObject> accountList;
 		protected CharacterEditor myForm;
 		protected int nextAcct;
 		protected int numAccts;

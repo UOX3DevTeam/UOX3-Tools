@@ -14,6 +14,7 @@ namespace AccountManager
 			path		= "";
 			flags		= 0x0000;
 			timeban		= 0;
+			orphanChars = new List<OrphanObject>();
 			charSlots	= new List<SlotObject>();
 			for( byte i = 0; i < 6; ++i )
 				charSlots.Add( new SlotObject() );
@@ -28,6 +29,7 @@ namespace AccountManager
 		protected ushort			flags;
 		protected uint				timeban;
 		protected List<SlotObject>	charSlots;
+		protected List<OrphanObject> orphanChars;
 		#endregion
 
 		#region "Public Properties"
@@ -39,7 +41,16 @@ namespace AccountManager
 		public ushort			Flags			{ get { return flags;		}	set { flags = value;	}	}
 		public uint				TimeBan			{ get { return timeban;		}	set { timeban = value;	}	}
 		public List<SlotObject> CharSlots		{ get { return charSlots;	}								}
+		public List<OrphanObject> OrphanChars { get { return orphanChars; } }
 		#endregion
+
+		public void DeleteOrphan( OrphanObject toDelete )
+		{
+			if( orphanChars.Contains( toDelete ) )
+			{
+				orphanChars.Remove( toDelete );
+			}
+		}
 
 		public bool Save( StreamWriter ioStream )
 		{
@@ -89,6 +100,11 @@ namespace AccountManager
 			name	= "UNKNOWN";
 			serial	= 0xFFFFFFFF;
 		}
+		public SlotObject( string nName, uint nSer )
+		{
+			name = nName;
+			serial = nSer;
+		}
 
 		#region "Protected Data"
 		protected string name;
@@ -98,6 +114,35 @@ namespace AccountManager
 		#region "Public Properties"
 		public string Name			{ get { return name;	}	set { name = value;		} }
 		public uint Serial			{ get { return serial;	}	set { serial = value;	} }
+		#endregion
+	}
+
+	public class OrphanObject : SlotObject
+	{
+		public OrphanObject() : base()
+		{
+			x = 0;
+			y = 0;
+			z = 0;
+		}
+
+		public OrphanObject( string nName, uint nSer, ushort nX, ushort nY, sbyte nZ ) : base( nName, nSer )
+		{
+			x = nX;
+			y = nY;
+			z = nZ;
+		}
+
+		#region "Protected Data"
+		protected ushort x;
+		protected ushort y;
+		protected sbyte z;
+		#endregion
+
+		#region "Public Properties"
+		public ushort	X { get { return x; } set { x = value; } }
+		public ushort	Y { get { return y; } set { y = value; } }
+		public sbyte	Z { get { return z; } set { z = value; } }
 		#endregion
 	}
 }

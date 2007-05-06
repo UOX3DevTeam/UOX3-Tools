@@ -1,3 +1,7 @@
+05/06/2007 - giwo (v.04)
+	Added support for orphans.adm, allowing the user to re-associate orphan characters.
+	Added a "Browse" button for the Account Subfolder path.
+
 05/30/2006 - giwo (v.03)
 	Fixed an issue causing a blocked slot to automatically be unblocked.
 	Fixed an issue causing the character slot editor not to refresh when loading an empty accounts directory.

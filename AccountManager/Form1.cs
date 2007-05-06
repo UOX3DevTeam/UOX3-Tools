@@ -12,7 +12,7 @@ namespace AccountManager
 		public AccountManager()
 		{
 			InitializeComponent();
-			accountList = new List<AccountObject>();
+			accountList = new Dictionary< string, AccountObject>();
 			myForm		= new CharacterEditor();
 			selAcct		= null;
 			nextAcct	= 0;
@@ -42,21 +42,21 @@ namespace AccountManager
 
 			if( listAccounts.SelectedIndex > -1 )
 			{
-				myForm.UpdateList( accountList[listAccounts.SelectedIndex] );
+				myForm.UpdateList(accountList[listAccounts.SelectedItem.ToString().Split(' ')[0]]);
 			}
 		}
 
 		private void btnBrowse_Click(object sender, EventArgs e)
 		{
-			folderBrowserDialog.Description = "Please Select the UOX3 Accounts Directory to Load.";
-			if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+			fldrAccounts.Description = "Please Select the UOX3 Accounts Directory to Load.";
+			if (fldrAccounts.ShowDialog() == DialogResult.OK)
 			{
-				string dirPath = folderBrowserDialog.SelectedPath + "\\accounts.adm";
+				string dirPath = fldrAccounts.SelectedPath + "\\accounts.adm";
 				accountList.Clear();
 				listAccounts.Items.Clear();
 				if( myForm.Visible )
 					myForm.Clear();
-				txtAccountsDir.Text = folderBrowserDialog.SelectedPath;
+				txtAccountsDir.Text = fldrAccounts.SelectedPath;
 				listAccounts.Update();
 				txtAccountsDir.Update();
 
@@ -121,15 +121,17 @@ namespace AccountManager
 						}
 						if( toAdd.GetFlag( 0x0001 ) )
 							++numBans;
-						accountList.Add( toAdd );
+						accountList.Add( toAdd.Name, toAdd );
 						++numAccts;
 						listAccounts.Items.Add( toAdd.Name + " (" + mSect.SectionName + ")" );
 						progressBar.PerformStep();
 					}
 
+					LoadOrphans();
+
 					UpdateStats();
 
-					if( listAccounts.Items.Count > 0 )
+					if (listAccounts.Items.Count > 0)
 						listAccounts.SelectedIndex = 0;
 					else
 						listAccounts.Items.Add("No Accounts to Display");
@@ -139,9 +141,49 @@ namespace AccountManager
 			}
 		}
 
+		private void LoadOrphans()
+		{
+			string orphPath = fldrAccounts.SelectedPath + "\\orphans.adm";
+			if( File.Exists( orphPath ) )
+			{
+				AccountObject tmpAccount;
+				FileStream toRead		= File.OpenRead( orphPath );
+				StreamReader ioStream	= new StreamReader( toRead );
+				string curLine			= "";
+				while( curLine != null )
+				{
+					curLine = ioStream.ReadLine();
+					if( curLine != null && curLine != "" )
+					{
+						if( curLine != "" && !curLine.StartsWith( "//" ) )
+						{
+							string [] split	= curLine.Split( '=' );
+							string tag		= split[0];
+							if( tag.Length > 0 && accountList.ContainsKey( tag ) )
+							{
+								tmpAccount = accountList[tag];
+								string data		= "";
+								for( int i = 1; i < split.Length; ++i )
+								{
+									if( i > 1 )
+										data += " ";
+										data += split[i];
+								}
+								data = UOXData.Conversion.TrimCommentAndWhitespace( data );
+								string [] dSplit = data.Split( ',' );
+								if( dSplit.Length > 4 )
+									tmpAccount.OrphanChars.Add(new OrphanObject(dSplit[1], UOXData.Conversion.ToUInt32(dSplit[0]), UOXData.Conversion.ToUInt16( dSplit[2] ), UOXData.Conversion.ToUInt16( dSplit[3] ), UOXData.Conversion.ToInt08( dSplit[4] )));
+							}
+						}
+					}
+				}
+				toRead.Close();
+			}
+		}
+
 		private void txtAccountsDir_TextChanged(object sender, EventArgs e)
 		{
-			folderBrowserDialog.SelectedPath = txtAccountsDir.Text;
+			fldrAccounts.SelectedPath = txtAccountsDir.Text;
 		}
 
 		private void listAccounts_SelectedIndexChanged(object sender, EventArgs e)
@@ -164,7 +206,7 @@ namespace AccountManager
 				return;
 			}
 
-			AccountObject tmpAcct	= accountList[listAccounts.SelectedIndex];
+			AccountObject tmpAcct	= accountList[listAccounts.SelectedItem.ToString().Split( ' ' )[0]];
 			txtName.Text			= tmpAcct.Name;
 			txtPass.Text			= tmpAcct.Pass;
 			txtPath.Text			= tmpAcct.Path;
@@ -244,7 +286,7 @@ namespace AccountManager
 
 			newAcct.Name = name;
 			newAcct.Pass = name;
-			accountList.Add( newAcct );
+			accountList.Add( name, newAcct );
 			listAccounts.Items.Add( name + " (" + nextAcct.ToString() + ")" );
 			listAccounts.SelectedIndex = listAccounts.Items.Count-1;
 			++nextAcct;
@@ -269,7 +311,7 @@ namespace AccountManager
 				if( selAcct.Number == (nextAcct - 1) )
 					--nextAcct;
 				int index = listAccounts.SelectedIndex;
-				accountList.Remove( selAcct );
+				accountList.Remove( selAcct.Name );
 				listAccounts.Items.RemoveAt( index );
 
 				if( index > 0 )
@@ -289,26 +331,48 @@ namespace AccountManager
 				MessageBox.Show( "Error: Unable to save Accounts.adm, there are no accounts to save!", "Failure" );
 				return;
 			}
-			folderBrowserDialog.Description = "Please Select the a Directory to Save the Accounts.adm file to.";
-			if( folderBrowserDialog.ShowDialog() == DialogResult.OK )
+			fldrAccounts.Description = "Please Select the a Directory to Save the Accounts.adm file to.";
+			if( fldrAccounts.ShowDialog() == DialogResult.OK )
 			{
+				Dictionary<string, List<OrphanObject>> tmpOrphans = new Dictionary<string, List<OrphanObject>>();
 				int invalidCount	= 0;
-				string filePath		= folderBrowserDialog.SelectedPath + "\\accounts.adm";
+				string filePath		= fldrAccounts.SelectedPath + "\\accounts.adm";
 				progressBar.Minimum = 0;
 				progressBar.Value	= 1;
 				progressBar.Maximum = accountList.Count;
 				StreamWriter ioStream = new StreamWriter(filePath);
-				foreach( AccountObject mAcct in accountList )
+				foreach( AccountObject mAcct in accountList.Values )
 				{
 					if( !mAcct.Save( ioStream ) )
 						++invalidCount;
+					else
+						tmpOrphans.Add( mAcct.Name, mAcct.OrphanChars );
+
 					progressBar.PerformStep();
 				}
 				ioStream.Close();
 
+				SaveOrphans( tmpOrphans );
+
 				if( invalidCount > 0 )
 					MessageBox.Show( "Unable to save " + invalidCount.ToString() + " invalid accounts, check that all accounts have a name and password entry and are numbered below 65535.", "Warning" );
 			}
+		}
+
+		private void SaveOrphans(Dictionary<string, List<OrphanObject>> tmpOrphans)
+		{
+			string filePath		= fldrAccounts.SelectedPath + "\\orphans.adm";
+			StreamWriter ioStream = new StreamWriter( filePath );
+			foreach (KeyValuePair<string, List<OrphanObject>> mKey in tmpOrphans)
+			{
+				foreach (OrphanObject mSlot in mKey.Value)
+				{
+					ioStream.WriteLine(mKey.Key + "=" + mSlot.Name + "," + UOXData.Conversion.ToHexString(mSlot.Serial) + "," + mSlot.X.ToString() + "," + mSlot.Y.ToString() + "," + mSlot.Z.ToString());
+				}
+			}
+			ioStream.WriteLine();
+			ioStream.Flush();
+			ioStream.Close();
 		}
 
 		private void rdGM_CheckedChanged(object sender, EventArgs e)
@@ -368,7 +432,7 @@ namespace AccountManager
 				progressBar.Value	= 1;
 				progressBar.Maximum = accountList.Count;
 				int i				= 1;
-				foreach( AccountObject mAcct in accountList )
+				foreach( AccountObject mAcct in accountList.Values )
 				{
 					if( mAcct.Number != 0 )
 					{
@@ -393,6 +457,17 @@ namespace AccountManager
 					listAccounts.SelectedIndex = 0;
 
 				nextAcct = i;
+			}
+		}
+
+		private void btnPath_Click(object sender, EventArgs e)
+		{
+			if( txtPath.Text.Length > 0 )
+				fldrPath.SelectedPath = Path.GetFullPath( txtPath.Text );
+			fldrPath.Description = "Please Select the Subfolder for this Account.";
+			if (fldrPath.ShowDialog() == DialogResult.OK)
+			{
+				txtPath.Text = fldrPath.SelectedPath.Replace( "\\", "/" )+ "/";
 			}
 		}
 	}
