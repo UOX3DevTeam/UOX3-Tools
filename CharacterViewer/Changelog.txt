@@ -1,3 +1,6 @@
+08/03/2006 - giwo (v0.8)
+	Added a the close Messagebox warning to the X button.
+
 08/01/2006 - giwo (v0.7)
 	Made some minor performance improvements.
 	Added two new fields to display the total number of Characters and Items in a loaded world.

@@ -26,7 +26,18 @@ namespace CharacterExporter
 			totalItems			= 0;
 			totalChars			= 0;
 			exportAllToolStripMenuItem.Checked = true;
+
+			this.FormClosing += new FormClosingEventHandler(CharacterViewer_FormClosing);
         }
+
+
+		private void CharacterViewer_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if (worldHasChanged && MessageBox.Show("All unsaved changes to your worldfile will be lost if you close, Continue?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.No)
+			{
+				e.Cancel = true;
+			}
+		}
 
         private void txtDirPath_TextChanged(object sender, EventArgs e)
         {
@@ -61,7 +72,7 @@ namespace CharacterExporter
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-			CloseButton();
+			Close();
         }
 
 		private void radioAll_CheckedChanged(object sender, EventArgs e)
@@ -146,7 +157,7 @@ namespace CharacterExporter
 
 		private void closeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CloseButton();
+			Close();
 		}
 
 		private void ChangeExportSetting(KeepItemsState newVal)
@@ -180,14 +191,6 @@ namespace CharacterExporter
 				}
 				CheckItemsInCont(mItem, contChanged);
 				worldObjects.ItemList.Add(mItem);
-			}
-		}
-
-		private void CloseButton()
-		{
-			if (!worldHasChanged || MessageBox.Show("All unsaved changes to your worldfile will be lost if you close, Continue?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
-			{
-				Close();
 			}
 		}
 

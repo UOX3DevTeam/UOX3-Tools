@@ -430,6 +430,7 @@ namespace CharacterExporter
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.btnCancel;
 			this.ClientSize = new System.Drawing.Size(507, 319);
 			this.Controls.Add(this.txtTotalItems);
 			this.Controls.Add(this.txtTotalChars);
@@ -453,7 +454,7 @@ namespace CharacterExporter
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "CharacterViewer";
-			this.Text = "UOX3 Character Viewer v0.7";
+			this.Text = "UOX3 Character Viewer v0.8";
 			this.splitPanel.Panel1.ResumeLayout(false);
 			this.splitPanel.Panel2.ResumeLayout(false);
 			this.splitPanel.ResumeLayout(false);
